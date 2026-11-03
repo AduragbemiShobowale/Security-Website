@@ -626,17 +626,7 @@ function handleNewsletter(e){
     if(y < 400 && triggered){ sticky.classList.remove('visible'); triggered = false; }
     backTop && (y > 400 ? backTop.classList.add('visible') : backTop.classList.remove('visible'));
   });
-  // Active mobile nav
-  var here = location.pathname.split('/').pop() || 'index.html';
-  document.querySelectorAll('.mobile-bottom-nav a').forEach(function(a){
-    if(a.getAttribute('href') === here) a.classList.add('active');
-  });
 })();
-function handleNewsletter(e){
-  e.preventDefault();
-  var email = e.target.querySelector('input').value;
-  window.location.href = 'mailto:flamingsecurity@gmail.com?subject=Newsletter%20Subscription&body=Please%20add%20me%3A%20' + encodeURIComponent(email);
-}
 </script>
 
 <script src="js/main.js"></script>

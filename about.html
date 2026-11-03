@@ -115,6 +115,7 @@
       <li><a href="about.html">About</a></li>
       <li><a href="leadership.html">Leadership</a></li>
       <li><a href="units.html">Units &amp; KPIs</a></li>
+      <li><a href="operative-registration.html">Operative Registration</a></li>
       <li><a href="services.html" class="book-badge">Book Us</a></li>
       <li><a href="contact.html" class="cta">Contact</a></li>
     </ul>
@@ -465,16 +466,7 @@ function handleNewsletter(e){
     if(y<300&&triggered){sticky.classList.remove('visible');triggered=false;}
     if(backTop){y>400?backTop.classList.add('visible'):backTop.classList.remove('visible');}
   });
-  var here=location.pathname.split('/').pop()||'index.html';
-  document.querySelectorAll('.mobile-bottom-nav a').forEach(function(a){
-    if(a.getAttribute('href')===here)a.classList.add('active');
-  });
 })();
-function handleNewsletter(e){
-  e.preventDefault();
-  var email=e.target.querySelector('input').value;
-  window.location.href='mailto:flamingsecurity@gmail.com?subject=Newsletter%20Subscription&body=Please%20add%20me%3A%20'+encodeURIComponent(email);
-}
 </script>
 
 <script src="js/main.js"></script>

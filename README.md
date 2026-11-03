@@ -1,12 +1,15 @@
 # Flaming Security — Website v2
 
-A 5-page static site: Home, About, Leadership, Units & KPIs, Contact.
+Static site for the Flaming Security department.
+
+Public pages: Home, About, Leadership, Units & KPIs, Services (Book Us), Contact, Operative Registration.
+Admin: `portal.html` — Supabase-authenticated management portal (approvals, QR codes, attendance, Excel reports).
 
 ## Deploy to Vercel
 
 ### Option A — Drag & Drop (fastest)
 1. Go to https://vercel.com → **Add New Project → Deploy without Git**
-2. Drag the entire `flaming-security-v2` folder into the upload box
+2. Drag the entire project folder into the upload box
 3. Leave all settings as default and click Deploy
 4. Live in under a minute at e.g. `https://flaming-security.vercel.app`
 
@@ -29,11 +32,16 @@ All pages are plain HTML — open in any editor.
 
 - **Design tokens & layout:** `css/style.css`
 - **Shared JS:** `js/main.js` — nav, flame canvas, scroll reveal, counter animation, gallery lightbox
+- **Registration:** `js/registration.js` + `js/supabase-config.js` (Supabase URL and publishable key)
+- **Admin portal:** all logic is inline in `portal.html`
+
+The Supabase publishable key is public by design. Data is only protected by Row Level Security
+policies on the `operatives`, `attendance`, `programmes`, `units` and `admin_users` tables — keep those enabled.
 
 ## Adding real content
 
 ### Replace gallery placeholders (index.html)
-Find tiles `gi-1` through `gi-8` and replace the `gallery-placeholder` div with:
+Tiles `gi-1`–`gi-6` already have photos. Find tiles `gi-7` and `gi-8` and replace the `gallery-placeholder` div with:
 ```html
 <img src="assets/gallery/your-photo.jpg" alt="Description" loading="lazy">
 ```

@@ -7,6 +7,10 @@
 
     <title>Operative Registration | Flaming Security</title>
 
+    <meta name="description" content="Register as a Flaming Security operative and join your unit.">
+    <link rel="icon" href="assets/logo.png">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@500;600;700&family=Inter:wght@400;500;600;700&family=IBM+Plex+Mono:wght@500;600&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="css/style.css">
 
     <style>
@@ -52,6 +56,26 @@
 
 <body>
 
+<header class="site-header">
+  <nav class="nav">
+    <a href="index.html" class="brand">
+      <img src="assets/logo.png" alt="Flaming Security logo">
+      <span class="brand-text">Flaming Security<span>Serving with Excellence</span></span>
+    </a>
+    <button class="nav-toggle" aria-label="Toggle menu" aria-expanded="false">☰</button>
+    <ul class="nav-links">
+      <li><a href="index.html">Home</a></li>
+      <li><a href="about.html">About</a></li>
+      <li><a href="leadership.html">Leadership</a></li>
+      <li><a href="units.html">Units &amp; KPIs</a></li>
+      <li><a href="operative-registration.html">Operative Registration</a></li>
+      <li><a href="services.html" class="book-badge">Book Us</a></li>
+      <li><a href="contact.html" class="cta">Contact</a></li>
+    </ul>
+  </nav>
+</header>
+
+<main>
 <section class="registration-section">
     <div class="card">
         <div class="eyebrow">Flaming Security</div>
@@ -137,10 +161,12 @@
         </form>
     </div>
 </section>
+</main>
 
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.js"></script>
 <script src="js/supabase-config.js"></script>
 <script src="js/registration.js"></script>
+<script src="js/main.js"></script>
 
 </body>
 </html>
