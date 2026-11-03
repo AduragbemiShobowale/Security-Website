@@ -1,0 +1,147 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Operative Registration | Flaming Security</title>
+
+    <link rel="stylesheet" href="css/style.css">
+
+    <style>
+        .registration-section {
+            max-width: 750px;
+            margin: 50px auto;
+            padding: 25px;
+        }
+
+        .registration-form {
+            display: grid;
+            gap: 18px;
+        }
+
+        .registration-form label {
+            display: block;
+            margin-bottom: 7px;
+            font-weight: 600;
+        }
+
+        .registration-form input,
+        .registration-form select,
+        .registration-form textarea {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #ccc;
+            border-radius: 6px;
+            font: inherit;
+            box-sizing: border-box;
+        }
+
+        .registration-form button {
+            padding: 14px;
+            cursor: pointer;
+        }
+
+        #registration-message {
+            margin-top: 15px;
+            font-weight: 600;
+        }
+    </style>
+</head>
+
+<body>
+
+<section class="registration-section">
+    <div class="card">
+        <div class="eyebrow">Flaming Security</div>
+
+        <h1>Operative Registration</h1>
+
+        <p>Complete the form below to register under your preferred unit.</p>
+
+        <form id="registration-form" class="registration-form">
+
+            <div>
+                <label for="full_name">Full Name</label>
+                <input
+                    type="text"
+                    id="full_name"
+                    name="full_name"
+                    required
+                    minlength="3"
+                    autocomplete="name">
+            </div>
+
+            <div>
+                <label for="email">Email Address</label>
+                <input
+                    type="email"
+                    id="email"
+                    name="email"
+                    required
+                    autocomplete="email">
+            </div>
+
+            <div>
+                <label for="phone">Phone Number</label>
+                <input
+                    type="tel"
+                    id="phone"
+                    name="phone"
+                    required
+                    minlength="7"
+                    autocomplete="tel">
+            </div>
+
+            <div>
+                <label for="date_of_birth">Date of Birth</label>
+                <input
+                    type="date"
+                    id="date_of_birth"
+                    name="date_of_birth"
+                    required>
+            </div>
+
+            <div>
+                <label for="residential_address">Residential Address</label>
+                <textarea
+                    id="residential_address"
+                    name="residential_address"
+                    rows="3"
+                    required
+                    autocomplete="street-address"></textarea>
+            </div>
+
+            <div>
+                <label for="sub_unit">Select Your Unit</label>
+                <select id="sub_unit" name="sub_unit" required>
+                    <option value="">Choose a unit</option>
+                    <option value="Central Intelligence">Central Intelligence</option>
+                    <option value="Advance Team">Advance Team</option>
+                    <option value="Access Control">Access Control</option>
+                    <option value="Ground Control">Ground Control</option>
+                    <option value="Market Control">Market Control</option>
+                    <option value="Traffic">Traffic</option>
+                    <option value="Management & Welfare">Management & Welfare</option>
+                    <option value="All Personnel">All Personnel</option>
+                </select>
+            </div>
+
+            <button type="submit" class="btn btn-primary" id="submit-button">
+                Submit Registration
+            </button>
+
+            <p id="registration-message" role="status" aria-live="polite"></p>
+
+        </form>
+    </div>
+</section>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="js/supabase-config.js"></script>
+<script src="js/registration.js"></script>
+
+</body>
+</html>
+

@@ -1,0 +1,2537 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Flaming Security | Management Portal</title>
+
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+    <script src="https://unpkg.com/html5-qrcode"></script>
+
+    <style>
+        :root {
+            --bg: #0b1020;
+            --sidebar: #101729;
+            --panel: #141c30;
+            --border: #27334b;
+            --text: #f1f5f9;
+            --muted: #9ba9c0;
+            --accent: #e63946;
+            --green: #22c55e;
+            --yellow: #facc15;
+            --blue: #60a5fa;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        [hidden] {
+            display: none !important;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            min-height: 100vh;
+        }
+
+        button, input, select {
+            font: inherit;
+        }
+
+        button {
+            cursor: pointer;
+        }
+
+        button:disabled {
+            opacity: .5;
+            cursor: not-allowed;
+        }
+
+        .login-wrap {
+            max-width: 430px;
+            margin: 70px auto;
+            padding: 20px;
+        }
+
+        .login-card {
+            background: var(--panel);
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            padding: 30px;
+        }
+
+        .login-card h1 {
+            font-size: 23px;
+            margin-bottom: 8px;
+        }
+
+        .login-card > p {
+            color: var(--muted);
+            font-size: 14px;
+            line-height: 1.6;
+            margin-bottom: 25px;
+        }
+
+        .brand {
+            color: var(--accent);
+            font-size: 13px;
+            font-weight: bold;
+            letter-spacing: 1.5px;
+            margin-bottom: 15px;
+        }
+
+        label {
+            display: block;
+            font-size: 13px;
+            margin: 15px 0 7px;
+            color: #dbe4f0;
+        }
+
+        input, select {
+            width: 100%;
+            min-width: 0;
+            padding: 12px;
+            border-radius: 7px;
+            border: 1px solid var(--border);
+            background: #0b1223;
+            color: white;
+            outline: none;
+        }
+
+        input:focus, select:focus {
+            border-color: var(--blue);
+        }
+
+        .primary, .secondary, .danger {
+            border: 0;
+            padding: 11px 15px;
+            border-radius: 7px;
+            font-weight: bold;
+            font-size: 13px;
+        }
+
+        .primary {
+            background: var(--accent);
+            color: white;
+        }
+
+        .secondary {
+            background: #26334b;
+            color: white;
+        }
+
+        .danger {
+            background: #7f1d1d;
+            color: white;
+        }
+
+        .login-card .primary {
+            width: 100%;
+            margin-top: 20px;
+            padding: 13px;
+        }
+
+        .layout {
+            display: flex;
+            min-height: 100vh;
+        }
+
+        .sidebar {
+            width: 250px;
+            flex-shrink: 0;
+            background: var(--sidebar);
+            border-right: 1px solid var(--border);
+            padding: 25px 15px;
+        }
+
+        .sidebar-brand {
+            font-weight: bold;
+            font-size: 18px;
+            margin: 0 8px 6px;
+        }
+
+        .sidebar-brand span {
+            color: var(--accent);
+        }
+
+        .sidebar-subtitle {
+            color: var(--muted);
+            font-size: 11px;
+            margin: 0 8px 28px;
+        }
+
+        .menu-label {
+            color: var(--muted);
+            font-size: 10px;
+            text-transform: uppercase;
+            letter-spacing: 1.2px;
+            margin: 23px 10px 9px;
+        }
+
+        .nav-btn {
+            display: block;
+            width: 100%;
+            text-align: left;
+            padding: 12px 10px;
+            margin: 4px 0;
+            border: 0;
+            border-radius: 7px;
+            background: transparent;
+            color: var(--muted);
+            font-size: 13px;
+        }
+
+        .nav-btn:hover, .nav-btn.active {
+            background: #263047;
+            color: white;
+        }
+
+        .nav-btn.active {
+            border-left: 3px solid var(--accent);
+        }
+
+        .main {
+            flex: 1;
+            min-width: 0;
+        }
+
+        .topbar {
+            min-height: 80px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 15px;
+            padding: 20px 28px;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .topbar h1 {
+            font-size: 21px;
+        }
+
+        .topbar p {
+            color: var(--muted);
+            font-size: 12px;
+            margin-top: 5px;
+        }
+
+        .top-actions {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .admin-badge {
+            padding: 9px 12px;
+            border-radius: 20px;
+            background: #263047;
+            font-size: 11px;
+        }
+
+        .menu-toggle {
+            display: none;
+        }
+
+        .content {
+            padding: 28px;
+        }
+
+        .section {
+            display: none;
+        }
+
+        .section.active {
+            display: block;
+        }
+
+        .welcome {
+            margin-bottom: 24px;
+        }
+
+        .welcome h2 {
+            font-size: 23px;
+            margin-bottom: 8px;
+        }
+
+        .welcome p, .muted {
+            color: var(--muted);
+            font-size: 13px;
+            line-height: 1.6;
+        }
+
+        .stats {
+            display: grid;
+            grid-template-columns: repeat(4, minmax(0, 1fr));
+            gap: 15px;
+            margin-bottom: 24px;
+        }
+
+        .stat-card, .panel {
+            background: var(--panel);
+            border: 1px solid var(--border);
+            border-radius: 11px;
+            padding: 20px;
+            min-width: 0;
+        }
+
+        .stat-card p {
+            font-size: 12px;
+            color: var(--muted);
+            margin-bottom: 15px;
+        }
+
+        .stat-card h3 {
+            font-size: 28px;
+        }
+
+        .panel {
+            margin-bottom: 20px;
+        }
+
+        .panel h2, .panel h3 {
+            font-size: 17px;
+            margin-bottom: 8px;
+        }
+
+        .panel-description {
+            color: var(--muted);
+            font-size: 13px;
+            line-height: 1.6;
+            margin-bottom: 18px;
+        }
+
+        .quick-actions {
+            display: grid;
+            grid-template-columns: repeat(3, minmax(0, 1fr));
+            gap: 12px;
+            margin-top: 20px;
+        }
+
+        .quick-btn {
+            text-align: left;
+            padding: 17px;
+            background: #19243a;
+            border: 1px solid var(--border);
+            color: white;
+            border-radius: 9px;
+        }
+
+        .quick-btn strong {
+            display: block;
+            margin-bottom: 8px;
+        }
+
+        .quick-btn span {
+            color: var(--muted);
+            font-size: 12px;
+            line-height: 1.5;
+        }
+
+        .section-heading {
+            margin-bottom: 20px;
+        }
+
+        .section-heading h2 {
+            font-size: 23px;
+            margin-bottom: 8px;
+        }
+
+        .section-heading p {
+            color: var(--muted);
+            font-size: 13px;
+            line-height: 1.6;
+        }
+
+        .toolbar {
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            gap: 10px;
+            margin: 18px 0;
+        }
+
+        .toolbar input, .toolbar select {
+            flex: 1 1 170px;
+        }
+
+        .table-wrapper {
+            width: 100%;
+            overflow-x: auto;
+            margin-top: 18px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            min-width: 650px;
+            font-size: 12px;
+        }
+
+        th, td {
+            padding: 13px 12px;
+            border-bottom: 1px solid var(--border);
+            text-align: left;
+            vertical-align: middle;
+        }
+
+        th {
+            color: var(--muted);
+            font-size: 10px;
+            text-transform: uppercase;
+            letter-spacing: .5px;
+            background: #111a2c;
+        }
+
+        td {
+            line-height: 1.5;
+        }
+
+        .status-badge {
+            display: inline-block;
+            padding: 5px 8px;
+            border-radius: 20px;
+            font-size: 10px;
+            text-transform: capitalize;
+        }
+
+        .status-approved {
+            background: #14532d;
+            color: #bbf7d0;
+        }
+
+        .status-pending {
+            background: #713f12;
+            color: #fef08a;
+        }
+
+        .status-rejected {
+            background: #7f1d1d;
+            color: #fecaca;
+        }
+
+        .action-buttons {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 6px;
+        }
+
+        .action-buttons button {
+            padding: 7px 9px;
+            border: 0;
+            border-radius: 5px;
+            color: white;
+            font-size: 11px;
+        }
+
+        .approve-button {
+            background: #166534;
+        }
+
+        .reject-button {
+            background: #991b1b;
+        }
+
+        .message {
+            margin-top: 14px;
+            color: var(--muted);
+            font-size: 13px;
+            line-height: 1.6;
+            overflow-wrap: anywhere;
+        }
+
+        .success-text {
+            color: #86efac;
+        }
+
+        .error-text {
+            color: #fca5a5;
+        }
+
+        .scanner-area {
+            max-width: 520px;
+        }
+
+        #reader {
+            width: 100%;
+            max-width: 450px;
+            margin: 20px auto;
+            overflow: hidden;
+            border-radius: 10px;
+        }
+
+        #reader video {
+            max-width: 100%;
+        }
+
+        .result-box {
+            margin-top: 20px;
+            padding: 17px;
+            background: #0b1223;
+            border: 1px solid var(--border);
+            border-radius: 9px;
+            overflow-wrap: anywhere;
+        }
+
+        .result-box p {
+            font-size: 13px;
+            line-height: 1.8;
+        }
+
+        #qrCode {
+            margin: 20px 0;
+            padding: 15px;
+            background: white;
+            display: inline-block;
+            min-height: 0;
+            max-width: 100%;
+        }
+
+        #qrCode img, #qrCode canvas {
+            max-width: 100%;
+            height: auto;
+        }
+
+        .manual-form {
+            max-width: 600px;
+        }
+
+        .manual-form button {
+            margin-top: 18px;
+        }
+
+        .footer {
+            padding: 22px;
+            text-align: center;
+            color: var(--muted);
+            font-size: 11px;
+        }
+
+        @media (max-width: 1100px) {
+            .stats {
+                grid-template-columns: repeat(2, minmax(0, 1fr));
+            }
+
+            .quick-actions {
+                grid-template-columns: repeat(2, minmax(0, 1fr));
+            }
+        }
+
+        @media (max-width: 720px) {
+            .layout {
+                display: block;
+            }
+
+            .sidebar {
+                display: none;
+                width: 100%;
+                border-right: 0;
+                border-bottom: 1px solid var(--border);
+            }
+
+            .sidebar.open {
+                display: block;
+            }
+
+            .menu-toggle {
+                display: inline-block;
+                background: #263047;
+                color: white;
+                border: 0;
+                border-radius: 6px;
+                padding: 10px 12px;
+            }
+
+            .topbar {
+                padding: 15px;
+                flex-wrap: wrap;
+            }
+
+            .topbar h1 {
+                font-size: 17px;
+            }
+
+            .admin-badge {
+                display: none;
+            }
+
+            .content {
+                padding: 15px;
+            }
+
+            .stats, .quick-actions {
+                grid-template-columns: 1fr;
+            }
+
+            .stat-card {
+                padding: 17px;
+            }
+        }
+        @media (max-width: 720px) {
+    body {
+        overflow-x: hidden;
+    }
+
+    .login-wrap {
+        margin: 24px auto;
+        padding: 14px;
+    }
+
+    .login-card {
+        padding: 22px 18px;
+    }
+
+    .layout {
+        display: block;
+        width: 100%;
+    }
+
+    .sidebar {
+        position: relative;
+        width: 100%;
+        padding: 16px 14px;
+        border-right: 0;
+        border-bottom: 1px solid var(--border);
+    }
+
+    .sidebar.open {
+        display: block;
+    }
+
+    .sidebar-subtitle {
+        margin-bottom: 16px;
+    }
+
+    .menu-label {
+        margin: 16px 10px 7px;
+    }
+
+    .nav-btn {
+        padding: 12px;
+        min-height: 44px;
+    }
+
+    .topbar {
+        display: flex;
+        align-items: flex-start;
+        justify-content: space-between;
+        gap: 10px;
+        padding: 13px 14px;
+    }
+
+    .topbar > div:first-child {
+        flex: 1;
+        min-width: 0;
+        align-items: flex-start !important;
+        gap: 9px !important;
+    }
+
+    .topbar h1 {
+        font-size: 16px;
+        line-height: 1.35;
+        overflow-wrap: anywhere;
+    }
+
+    .topbar p {
+        font-size: 11px;
+        line-height: 1.45;
+        overflow-wrap: anywhere;
+    }
+
+    .menu-toggle {
+        flex: 0 0 auto;
+        min-width: 42px;
+        min-height: 42px;
+        padding: 9px 11px;
+    }
+
+    .top-actions {
+        flex: 0 0 auto;
+        gap: 6px;
+    }
+
+    #refreshAllButton {
+        padding: 10px;
+        min-height: 42px;
+        font-size: 12px;
+    }
+
+    .content {
+        padding: 14px 12px;
+    }
+
+    .welcome {
+        margin-bottom: 17px;
+    }
+
+    .welcome h2,
+    .section-heading h2 {
+        font-size: 20px;
+        line-height: 1.35;
+    }
+
+    .welcome p,
+    .section-heading p {
+        font-size: 12px;
+    }
+
+    .stats {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 10px;
+        margin-bottom: 16px;
+    }
+
+    .stat-card,
+    .panel {
+        padding: 14px;
+        border-radius: 9px;
+    }
+
+    .stat-card p {
+        font-size: 11px;
+        line-height: 1.4;
+        margin-bottom: 10px;
+        overflow-wrap: anywhere;
+    }
+
+    .stat-card h3 {
+        font-size: 24px;
+    }
+
+    .panel {
+        margin-bottom: 14px;
+    }
+
+    .panel h2,
+    .panel h3 {
+        font-size: 16px;
+        line-height: 1.4;
+    }
+
+    .panel-description {
+        font-size: 12px;
+        margin-bottom: 14px;
+    }
+
+    .quick-actions {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 9px;
+        margin-top: 14px;
+    }
+
+    .quick-btn {
+        min-width: 0;
+        padding: 12px 10px;
+        overflow-wrap: anywhere;
+    }
+
+    .quick-btn strong {
+        font-size: 12px;
+        line-height: 1.4;
+        margin-bottom: 6px;
+    }
+
+    .quick-btn span {
+        display: block;
+        font-size: 11px;
+        line-height: 1.45;
+    }
+
+    .toolbar {
+        display: flex;
+        flex-direction: column;
+        align-items: stretch;
+        gap: 9px;
+        margin: 14px 0;
+    }
+
+    .toolbar input,
+    .toolbar select,
+    .toolbar button {
+        width: 100%;
+        min-height: 43px;
+        flex: none;
+    }
+
+    input,
+    select {
+        font-size: 16px;
+    }
+
+    .primary,
+    .secondary,
+    .danger {
+        min-height: 42px;
+        padding: 11px 13px;
+    }
+
+    .table-wrapper {
+        margin-top: 13px;
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch;
+        border-radius: 7px;
+    }
+
+    table {
+        min-width: 620px;
+    }
+
+    th,
+    td {
+        padding: 11px 10px;
+    }
+
+    .action-buttons {
+        min-width: 120px;
+    }
+
+    .action-buttons button {
+        min-height: 34px;
+    }
+
+    .scanner-area {
+        max-width: 100%;
+    }
+
+    #reader {
+        width: 100%;
+        max-width: 100%;
+    }
+
+    #reader video {
+        width: 100% !important;
+        height: auto !important;
+    }
+
+    .result-box {
+        padding: 13px;
+    }
+
+    #qrCode {
+        padding: 10px;
+        max-width: 100%;
+        overflow: hidden;
+    }
+
+    #qrCode canvas,
+    #qrCode img {
+        max-width: 100%;
+        height: auto;
+    }
+
+    .manual-form {
+        max-width: 100%;
+    }
+
+    .footer {
+        padding: 18px 12px;
+        line-height: 1.5;
+    }
+}
+
+@media (max-width: 380px) {
+    .topbar {
+        flex-wrap: wrap;
+    }
+
+    .topbar > div:first-child {
+        width: 100%;
+        flex: 1 1 100%;
+    }
+
+    .top-actions {
+        width: 100%;
+        justify-content: flex-end;
+    }
+
+    .stats {
+        gap: 8px;
+    }
+
+    .stat-card {
+        padding: 11px;
+    }
+
+    .stat-card h3 {
+        font-size: 22px;
+    }
+
+    .quick-actions {
+        gap: 8px;
+    }
+
+    .quick-btn {
+        padding: 11px 9px;
+    }
+}
+
+    </style>
+</head>
+
+<body>
+
+<!-- ADMIN LOGIN -->
+
+<section id="loginView" class="login-wrap">
+    <div class="login-card">
+        <div class="brand">FLAMING SECURITY</div>
+        <h1>Management Portal</h1>
+        <p>Sign in with your authorised administrator account to manage operatives and programme attendance.</p>
+
+        <form id="loginForm">
+            <label for="loginEmail">Email address</label>
+            <input id="loginEmail" type="email" autocomplete="username" required>
+
+            <label for="loginPassword">Password</label>
+            <input id="loginPassword" type="password" autocomplete="current-password" required>
+
+            <button class="primary" id="loginButton" type="submit">
+                Sign In
+            </button>
+
+            <p id="loginMessage" class="message" role="status"></p>
+        </form>
+    </div>
+</section>
+
+<!-- MANAGEMENT PORTAL -->
+
+<div id="portalView" class="layout" hidden>
+
+    <aside id="sidebar" class="sidebar">
+        <div class="sidebar-brand">FLAMING <span>SECURITY</span></div>
+        <div class="sidebar-subtitle">Personnel Management System</div>
+
+        <div class="menu-label">Main Menu</div>
+
+        <button class="nav-btn active" data-section="overview">🏠 Overview</button>
+        <button class="nav-btn" data-section="operatives">👮 Operatives</button>
+        <button class="nav-btn" data-section="qr">🪪 QR Generator</button>
+        <button class="nav-btn" data-section="scanner">📷 Scan Attendance</button>
+        <button class="nav-btn" data-section="manual">✅ Manual Attendance</button>
+        <button class="nav-btn" data-section="sessions">📅 Programme Sessions</button>
+
+        <div class="menu-label">Reports</div>
+
+        <button class="nav-btn" data-section="reports">📊 Attendance Reports</button>
+
+        <div class="menu-label">Account</div>
+
+        <button class="nav-btn" id="logoutButton">🚪 Sign Out</button>
+    </aside>
+
+    <main class="main">
+
+        <header class="topbar">
+            <div style="display:flex;align-items:center;gap:12px;">
+                <button id="menuToggle" class="menu-toggle" type="button">☰</button>
+                <div>
+                    <h1 id="pageTitle">Management Overview</h1>
+                    <p id="adminWelcome">Flaming Security Operations Portal</p>
+                </div>
+            </div>
+
+            <div class="top-actions">
+                <span class="admin-badge">🛡️ Administrator</span>
+                <button class="secondary" id="refreshAllButton" type="button">Refresh</button>
+            </div>
+        </header>
+
+        <div class="content">
+
+            <!-- OVERVIEW -->
+
+            <section id="overview" class="section active">
+                <div class="welcome">
+                    <h2>Welcome to Flaming Security</h2>
+                    <p>Manage operative registrations, QR identification, attendance, and reports from one place.</p>
+                </div>
+
+                <div class="stats">
+                    <article class="stat-card">
+                        <p>Total Operatives</p>
+                        <h3 id="totalCount">—</h3>
+                    </article>
+
+                    <article class="stat-card">
+                        <p>Approved Operatives</p>
+                        <h3 id="approvedCount">—</h3>
+                    </article>
+
+                    <article class="stat-card">
+                        <p>Pending Applications</p>
+                        <h3 id="pendingCount">—</h3>
+                    </article>
+
+                    <article class="stat-card">
+                        <p>Attendance Records</p>
+                        <h3 id="attendanceCount">—</h3>
+                    </article>
+                </div>
+
+                <div class="stats">
+                    <article class="stat-card">
+                        <p>Rejected Applications</p>
+                        <h3 id="rejectedCount">—</h3>
+                    </article>
+
+                    <article class="stat-card">
+                        <p>Attendance Today</p>
+                        <h3 id="todayCount">—</h3>
+                    </article>
+                </div>
+
+                <div class="panel">
+                    <h2>Quick Actions</h2>
+                    <p class="panel-description">Open a management tool without navigating to another website.</p>
+
+                    <div class="quick-actions">
+                        <button class="quick-btn" data-section="operatives">
+                            <strong>👮 Operatives</strong>
+                            <span>Review applications and approve or reject personnel.</span>
+                        </button>
+
+                        <button class="quick-btn" data-section="scanner">
+                            <strong>📷 Scan QR Code</strong>
+                            <span>Record attendance for the selected programme session.</span>
+                        </button>
+
+                        <button class="quick-btn" data-section="manual">
+                            <strong>✅ Manual Attendance</strong>
+                            <span>Mark an approved operative present without scanning.</span>
+                        </button>
+
+                        <button class="quick-btn" data-section="qr">
+                            <strong>🪪 Generate QR</strong>
+                            <span>Generate and download an operative identification QR code.</span>
+                        </button>
+
+                        <button class="quick-btn" data-section="sessions">
+                            <strong>📅 Programme Sessions</strong>
+                            <span>View the YMR 2026 attendance sessions.</span>
+                        </button>
+
+                        <button class="quick-btn" data-section="reports">
+                            <strong>📊 Reports</strong>
+                            <span>Filter attendance and export an Excel workbook.</span>
+                        </button>
+                    </div>
+                </div>
+            </section>
+
+            <!-- OPERATIVES -->
+
+            <section id="operatives" class="section">
+                <div class="section-heading">
+                    <h2>Operative Management</h2>
+                    <p>Review registrations, approve or reject pending applications, and view personnel statuses.</p>
+                </div>
+
+                <div class="panel">
+                    <div class="toolbar">
+                        <input id="operativeSearch" type="search" placeholder="Search name, phone or unit">
+                        <select id="statusFilter">
+                            <option value="">All statuses</option>
+                            <option value="pending">Pending</option>
+                            <option value="approved">Approved</option>
+                            <option value="rejected">Rejected</option>
+                        </select>
+                        <button class="secondary" id="refreshOperatives" type="button">Refresh Records</button>
+                    </div>
+
+                    <p id="operativeMessage" class="message" role="status"></p>
+
+                    <div class="table-wrapper">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Operative</th>
+                                    <th>Phone</th>
+                                    <th>Unit</th>
+                                    <th>Registration Date</th>
+                                    <th>Status</th>
+                                    <th>Action</th>
+                                </tr>
+                            </thead>
+                            <tbody id="operativesTable">
+                                <tr><td colspan="6">Loading records...</td></tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </section>
+
+            <!-- QR GENERATOR -->
+
+            <section id="qr" class="section">
+                <div class="section-heading">
+                    <h2>QR Code Generator</h2>
+                    <p>Generate identification QR codes for approved operatives.</p>
+                </div>
+
+                <div class="panel">
+                    <label for="qrOperativeSelect">Approved operative</label>
+                    <select id="qrOperativeSelect">
+                        <option value="">Loading approved operatives...</option>
+                    </select>
+
+                    <div class="toolbar">
+                        <button class="primary" id="generateQrButton" type="button">Generate QR Code</button>
+                        <button class="secondary" id="downloadQrButton" type="button" disabled>Download PNG</button>
+                    </div>
+
+                    <div id="qrResult" class="result-box" hidden>
+                        <h3 id="qrOperativeName"></h3>
+                        <div id="qrCode"></div>
+                        <p id="qrOperativeUnit" class="muted"></p>
+                    </div>
+
+                    <p id="qrMessage" class="message" role="status"></p>
+                </div>
+            </section>
+
+            <!-- QR ATTENDANCE SCANNER -->
+
+            <section id="scanner" class="section">
+                <div class="section-heading">
+                    <h2>Scan Attendance</h2>
+                    <p>Scan an approved operative's QR code to record attendance for a specific session.</p>
+                </div>
+
+                <div class="panel scanner-area">
+                    <label for="programmeSelect">Programme session</label>
+                    <select id="programmeSelect">
+                        <option value="">Loading sessions...</option>
+                    </select>
+
+                    <div id="reader"></div>
+
+                    <div class="toolbar">
+                        <button class="primary" id="startScanner" type="button" disabled>Start Camera</button>
+                        <button class="secondary" id="stopScanner" type="button" disabled>Stop Camera</button>
+                    </div>
+
+                    <p id="scanMessage" class="message" role="status">Checking administrator access...</p>
+
+                    <div id="attendanceResult" class="result-box" aria-live="polite">
+                        <p>No operative scanned yet.</p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- MANUAL ATTENDANCE -->
+
+            <section id="manual" class="section">
+                <div class="section-heading">
+                    <h2>Manual Attendance</h2>
+                    <p>Record attendance if an operative's QR code cannot be scanned.</p>
+                </div>
+
+                <div class="panel manual-form">
+                    <form id="manualAttendanceForm">
+                        <label for="manualProgramme">Programme session</label>
+                        <select id="manualProgramme" required>
+                            <option value="">Select session</option>
+                        </select>
+
+                        <label for="manualOperative">Approved operative</label>
+                        <select id="manualOperative" required>
+                            <option value="">Select operative</option>
+                        </select>
+
+                        <button class="primary" id="markManualButton" type="submit">
+                            Mark Attendance
+                        </button>
+                    </form>
+
+                    <p id="manualMessage" class="message" role="status"></p>
+                </div>
+            </section>
+
+            <!-- PROGRAMME SESSIONS -->
+
+            <section id="sessions" class="section">
+                <div class="section-heading">
+                    <h2>Programme Sessions</h2>
+                    <p>View the YMR 2026 — CITY TAKERS sessions available in your database.</p>
+                </div>
+
+                <div class="panel">
+                    <button class="secondary" id="refreshSessions" type="button">Refresh Sessions</button>
+
+                    <div class="table-wrapper">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Session</th>
+                                    <th>Programme Date</th>
+                                </tr>
+                            </thead>
+                            <tbody id="sessionsTable">
+                                <tr><td colspan="2">Loading sessions...</td></tr>
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <p id="sessionsMessage" class="message" role="status"></p>
+                </div>
+            </section>
+
+            <!-- REPORTS -->
+
+            <section id="reports" class="section">
+                <div class="section-heading">
+                    <h2>Attendance Reports</h2>
+                    <p>Review attendance by operative, unit, programme, and date. Export the filtered records to Excel.</p>
+                </div>
+
+                <div class="panel">
+                    <div class="stats">
+                        <article class="stat-card">
+                            <p>All Attendance Records</p>
+                            <h3 id="reportTotal">—</h3>
+                        </article>
+                        <article class="stat-card">
+                            <p>Filtered Records</p>
+                            <h3 id="reportFiltered">—</h3>
+                        </article>
+                    </div>
+
+                    <div class="toolbar">
+                        <input id="reportSearch" type="search" placeholder="Search operative name">
+                        <select id="reportUnitFilter">
+                            <option value="">All Units</option>
+                        </select>
+                        <select id="reportProgrammeFilter">
+                            <option value="">All Sessions</option>
+                        </select>
+                        <button class="secondary" id="refreshReports" type="button">Refresh</button>
+                        <button class="primary" id="exportButton" type="button">Export Excel</button>
+                    </div>
+
+                    <p id="reportMessage" class="message" role="status"></p>
+
+                    <div class="table-wrapper">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Operative</th>
+                                    <th>Unit</th>
+                                    <th>Programme</th>
+                                    <th>Programme Date</th>
+                                    <th>Attendance Time</th>
+                                    <th>Method</th>
+                                </tr>
+                            </thead>
+                            <tbody id="attendanceTable">
+                                <tr><td colspan="6">Loading attendance...</td></tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </section>
+
+        </div>
+
+        <footer class="footer">
+            Flaming Security &copy; <span id="year"></span> | Authorised Personnel Only
+        </footer>
+
+    </main>
+</div>
+
+<script>
+"use strict";
+
+// ================================================
+// SUPABASE CONFIGURATION
+// ================================================
+
+const SUPABASE_URL = "https://zhxkwivfvxqrnlfvxcum.supabase.co";
+
+const SUPABASE_KEY =
+    "sb_publishable_RyxqpWZa4ZjTVbSt5pY8vQ_myKplV7A";
+
+const db = window.supabase.createClient(
+    SUPABASE_URL,
+    SUPABASE_KEY
+);
+
+const $ = id => document.getElementById(id);
+
+let currentUser = null;
+let allOperatives = [];
+let approvedOperatives = [];
+let allProgrammes = [];
+let allAttendance = [];
+
+let scanner = null;
+let scannerRunning = false;
+let scanLocked = false;
+
+const sectionTitles = {
+    overview: "Management Overview",
+    operatives: "Operative Management",
+    qr: "QR Code Generator",
+    scanner: "Scan Attendance",
+    manual: "Manual Attendance",
+    sessions: "Programme Sessions",
+    reports: "Attendance Reports"
+};
+
+$("year").textContent = new Date().getFullYear();
+
+// ================================================
+// COMMON HELPERS
+// ================================================
+
+function setMessage(id, text, type = "") {
+    const element = $(id);
+    if (!element) return;
+
+    element.textContent = text;
+    element.className = "message" + (type ? " " + type + "-text" : "");
+}
+
+function escapeHTML(value) {
+    return String(value ?? "").replace(/[&<>"']/g, character => ({
+        "&": "&amp;",
+        "<": "&lt;",
+        ">": "&gt;",
+        '"': "&quot;",
+        "'": "&#39;"
+    })[character]);
+}
+
+function showLogin(message = "") {
+    $("portalView").hidden = true;
+    $("loginView").hidden = false;
+    $("loginPassword").value = "";
+    setMessage("loginMessage", message);
+}
+
+function showPortal() {
+    $("loginView").hidden = true;
+    $("portalView").hidden = false;
+}
+
+function navigate(sectionId) {
+    if (!$(sectionId)) return;
+
+    document.querySelectorAll(".section").forEach(section => {
+        section.classList.toggle("active", section.id === sectionId);
+    });
+
+    document.querySelectorAll(".nav-btn[data-section]").forEach(button => {
+        button.classList.toggle(
+            "active",
+            button.dataset.section === sectionId
+        );
+    });
+
+    $("pageTitle").textContent =
+        sectionTitles[sectionId] || "Management Portal";
+
+    $("sidebar").classList.remove("open");
+
+    if (sectionId === "scanner") {
+        updateScannerControls();
+    }
+}
+
+document.querySelectorAll("[data-section]").forEach(button => {
+    button.addEventListener("click", () => {
+        navigate(button.dataset.section);
+    });
+});
+
+$("menuToggle").addEventListener("click", () => {
+    $("sidebar").classList.toggle("open");
+});
+
+// ================================================
+// AUTHORIZATION
+// ================================================
+
+
+async function verifyAdmin() {
+    const { data, error } = await db.auth.getUser();
+
+    if (error || !data.user) {
+        currentUser = null;
+        showLogin();
+        return false;
+    }
+
+    const { data: admin, error: adminError } = await db
+        .from("admin_users")
+        .select("email, role")
+        .eq("user_id", data.user.id)
+        .maybeSingle();
+
+    if (
+        adminError ||
+        !admin ||
+        !["admin", "super_admin"].includes(admin.role)
+    ) {
+        currentUser = null;
+
+        await db.auth.signOut();
+
+        showLogin(
+            "Access denied. An authorised administrator account is required."
+        );
+
+        return false;
+    }
+
+    currentUser = data.user;
+
+    $("adminWelcome").textContent =
+        "Welcome, " + (admin.email || "Administrator");
+
+    showPortal();
+
+    await loadAllData();
+
+    return true;
+}
+
+$("loginForm").addEventListener("submit", async event => {
+    event.preventDefault();
+
+    const button = $("loginButton");
+
+    button.disabled = true;
+    button.textContent = "Identify ya self...";
+    setMessage("loginMessage", "");
+
+    try {
+        const { error } = await db.auth.signInWithPassword({
+            email: $("loginEmail").value.trim(),
+            password: $("loginPassword").value
+        });
+
+        if (error) {
+            setMessage(
+                "loginMessage",
+                "You go tell me when you turn Admin.",
+                "error"
+            );
+            return;
+        }
+
+        await verifyAdmin();
+
+    } catch (error) {
+        console.error("Login error:", error);
+
+        setMessage(
+            "loginMessage",
+            "Could not connect to the authentication service.",
+            "error"
+        );
+
+    } finally {
+        button.disabled = false;
+        button.textContent = "Sign In";
+    }
+});
+
+async function logout() {
+    await stopCamera();
+
+    const { error } = await db.auth.signOut();
+
+    if (error) {
+        alert("Could not sign out. Please try again.");
+        return;
+    }
+
+    currentUser = null;
+    showLogin("Bye Bye oo");
+}
+
+$("logoutButton").addEventListener("click", logout);
+
+
+
+// ================================================
+// LOAD ALL PORTAL DATA
+// ================================================
+
+async function loadAllData() {
+    if (!currentUser) return;
+
+    await Promise.all([
+        loadOperatives(),
+        loadProgrammes(),
+        loadAttendance()
+    ]);
+
+    updateStatistics();
+    populateOperativeDropdowns();
+    updateScannerControls();
+}
+
+// ================================================
+// OPERATIVES AND APPROVALS
+// ================================================
+
+async function loadOperatives() {
+    setMessage("operativeMessage", "Loading operative records...");
+
+    const { data, error } = await db
+        .from("operatives")
+        .select(`
+            id,
+            full_name,
+            phone,
+            registered_at,
+            status,
+            qr_token,
+            units(name)
+        `)
+        .order("registered_at", { ascending: false });
+
+    if (error) {
+        console.error("Operative loading error:", error);
+
+        $("operativesTable").innerHTML =
+            '<tr><td colspan="6">Could not load operative records.</td></tr>';
+
+        setMessage(
+            "operativeMessage",
+            "Check database permissions and try again.",
+            "error"
+        );
+
+        return;
+    }
+
+    allOperatives = data || [];
+
+    approvedOperatives = allOperatives.filter(
+        operative => operative.status === "approved"
+    );
+
+    renderOperatives();
+    loadQrDropdown();
+    populateOperativeDropdowns();
+    updateStatistics();
+
+    setMessage(
+        "operativeMessage",
+        `${allOperatives.length} operative record(s) loaded.`
+    );
+}
+
+function renderOperatives() {
+    const search = $("operativeSearch").value.toLowerCase().trim();
+    const statusFilter = $("statusFilter").value;
+
+    const records = allOperatives.filter(operative => {
+        const name = operative.full_name || "";
+        const phone = operative.phone || "";
+        const unit = operative.units?.name || "";
+
+        return (
+            `${name} ${phone} ${unit}`.toLowerCase().includes(search) &&
+            (!statusFilter || operative.status === statusFilter)
+        );
+    });
+
+    if (!records.length) {
+        $("operativesTable").innerHTML =
+            '<tr><td colspan="6">No matching operative records.</td></tr>';
+        return;
+    }
+
+    $("operativesTable").innerHTML = records.map(operative => {
+        const status = ["pending", "approved", "rejected"].includes(
+            operative.status
+        ) ? operative.status : "pending";
+
+        const date = operative.registered_at
+            ? new Date(operative.registered_at).toLocaleDateString()
+            : "Unknown";
+
+        let action = "Reviewed";
+
+        if (status === "pending") {
+            action = `
+                <div class="action-buttons">
+                    <button class="approve-button" data-action="approve"
+                        data-id="${escapeHTML(operative.id)}">Approve</button>
+                    <button class="reject-button" data-action="reject"
+                        data-id="${escapeHTML(operative.id)}">Reject</button>
+                </div>`;
+        }
+
+        return `
+            <tr>
+                <td>${escapeHTML(operative.full_name)}</td>
+                <td>${escapeHTML(operative.phone)}</td>
+                <td>${escapeHTML(operative.units?.name || "Unknown unit")}</td>
+                <td>${escapeHTML(date)}</td>
+                <td><span class="status-badge status-${status}">
+                    ${escapeHTML(status)}
+                </span></td>
+                <td>${action}</td>
+            </tr>`;
+    }).join("");
+}
+
+$("operativeSearch").addEventListener("input", renderOperatives);
+$("statusFilter").addEventListener("change", renderOperatives);
+
+$("operativesTable").addEventListener("click", async event => {
+    const button = event.target.closest("button[data-action][data-id]");
+    if (!button || !currentUser) return;
+
+    const operativeId = button.dataset.id;
+    const newStatus = button.dataset.action === "approve"
+        ? "approved"
+        : "rejected";
+
+    if (!confirm(`Are you sure you want to ${newStatus} this application?`)) {
+        return;
+    }
+
+    button.disabled = true;
+
+    setMessage("operativeMessage", "Updating application...");
+
+    const { data, error } = await db
+        .from("operatives")
+        .update({ status: newStatus })
+        .eq("id", operativeId)
+        .eq("status", "pending")
+        .select("id");
+
+    if (error) {
+        console.error("Approval update error:", error);
+
+        setMessage(
+            "operativeMessage",
+            "Could not update this application.",
+            "error"
+        );
+
+        button.disabled = false;
+        return;
+    }
+
+    if (!data || data.length === 0) {
+        setMessage(
+            "operativeMessage",
+            "The application may already have been reviewed.",
+            "error"
+        );
+
+        await loadOperatives();
+        return;
+    }
+
+    if (newStatus === "approved") {
+        setMessage("operativeMessage", "Approved. Refreshing records...");
+
+        try {
+            const { data: result, error: functionError } =
+                await db.functions.invoke("send-operative-qr", {
+                    body: { operative_id: operativeId }
+                });
+
+            if (functionError || result?.error) {
+                console.warn(
+                    "QR email was not delivered:",
+                    functionError || result
+                );
+
+                setMessage(
+                    "operativeMessage",
+                    "Operative approved. QR email delivery failed or is not configured."
+                );
+            } else {
+                setMessage(
+                    "operativeMessage",
+                    "Operative approved. Email function returned successfully."
+                );
+            }
+        } catch (error) {
+            console.error("QR email function error:", error);
+
+            setMessage(
+                "operativeMessage",
+                "Operative approved, but QR email delivery is unavailable."
+            );
+        }
+    } else {
+        setMessage("operativeMessage", "Application rejected.");
+    }
+
+    await loadOperatives();
+    await loadAttendance();
+});
+
+// ================================================
+// STATISTICS
+// ================================================
+
+function getTodayRange() {
+    const now = new Date();
+
+    const start = new Date(
+        now.getFullYear(),
+        now.getMonth(),
+        now.getDate()
+    );
+
+    const end = new Date(
+        now.getFullYear(),
+        now.getMonth(),
+        now.getDate() + 1
+    );
+
+    return {
+        start: start.toISOString(),
+        end: end.toISOString()
+    };
+}
+
+async function updateStatistics() {
+    const { start, end } = getTodayRange();
+
+    const { count, error } = await db
+        .from("attendance")
+        .select("id", { count: "exact", head: true });
+
+    if (error) {
+        console.error("Attendance count error:", error);
+    }
+
+    const { count: today, error: todayError } = await db
+        .from("attendance")
+        .select("id", { count: "exact", head: true })
+        .gte("attendance_time", start)
+        .lt("attendance_time", end);
+
+    if (todayError) {
+        console.error("Today's attendance count error:", todayError);
+    }
+
+    $("totalCount").textContent = allOperatives.length;
+    $("approvedCount").textContent = allOperatives.filter(
+        item => item.status === "approved"
+    ).length;
+
+    $("pendingCount").textContent = allOperatives.filter(
+        item => item.status === "pending"
+    ).length;
+
+    $("rejectedCount").textContent = allOperatives.filter(
+        item => item.status === "rejected"
+    ).length;
+
+    $("attendanceCount").textContent = count ?? "—";
+    $("todayCount").textContent = today ?? "—";
+}
+
+// ================================================
+// PROGRAMME SESSIONS
+// ================================================
+
+async function loadProgrammes() {
+    setMessage("sessionsMessage", "Loading programme sessions...");
+
+    const { data, error } = await db
+        .from("programmes")
+        .select("id, name, programme_date")
+        .like("name", "YMR 2026%")
+        .order("programme_date", { ascending: true })
+        .order("name", { ascending: true });
+
+    if (error) {
+        console.error("Programme loading error:", error);
+
+        $("sessionsTable").innerHTML =
+            '<tr><td colspan="2">Could not load sessions.</td></tr>';
+
+        setMessage("sessionsMessage", "Check database permissions.", "error");
+        return;
+    }
+
+    allProgrammes = data || [];
+
+    const selects = [
+        $("programmeSelect"),
+        $("manualProgramme")
+    ];
+
+    selects.forEach(select => {
+        const oldValue = select.value;
+
+        select.innerHTML = '<option value="">Select a session</option>';
+
+        allProgrammes.forEach(programme => {
+            const option = document.createElement("option");
+            option.value = programme.id;
+            option.textContent = programme.name;
+            select.appendChild(option);
+        });
+
+        if (allProgrammes.some(item => item.id === oldValue)) {
+            select.value = oldValue;
+        }
+    });
+
+    $("sessionsTable").innerHTML = allProgrammes.length
+        ? allProgrammes.map(programme => `
+            <tr>
+                <td>${escapeHTML(programme.name)}</td>
+                <td>${escapeHTML(programme.programme_date || "Not set")}</td>
+            </tr>`).join("")
+        : '<tr><td colspan="2">No YMR 2026 sessions found.</td></tr>';
+
+    populateReportFilters();
+    updateScannerControls();
+
+    setMessage(
+        "sessionsMessage",
+        `${allProgrammes.length} session(s) loaded.`
+    );
+}
+
+$("refreshSessions").addEventListener("click", loadProgrammes);
+
+// ================================================
+// QR CODE GENERATOR
+// ================================================
+
+function loadQrDropdown() {
+    const select = $("qrOperativeSelect");
+    const oldValue = select.value;
+
+    select.innerHTML = '<option value="">Choose an approved operative</option>';
+
+    approvedOperatives.forEach(operative => {
+        const option = document.createElement("option");
+        option.value = operative.id;
+        option.textContent =
+            `${operative.full_name} — ${operative.units?.name || "Unknown unit"}`;
+
+        select.appendChild(option);
+    });
+
+    if (approvedOperatives.some(item => item.id === oldValue)) {
+        select.value = oldValue;
+    }
+
+    if (!approvedOperatives.length) {
+        setMessage("qrMessage", "No approved operatives available.");
+    }
+}
+
+$("generateQrButton").addEventListener("click", async () => {
+    const operativeId = $("qrOperativeSelect").value;
+
+    if (!operativeId) {
+        setMessage("qrMessage", "Select an approved operative first.", "error");
+        return;
+    }
+
+    if (typeof window.QRCode !== "function") {
+        setMessage("qrMessage", "QR library failed to load.", "error");
+        return;
+    }
+
+    const operative = approvedOperatives.find(item => item.id === operativeId);
+
+    if (!operative || !operative.qr_token) {
+        setMessage("qrMessage", "Could not find a valid QR token.", "error");
+        return;
+    }
+
+    $("qrCode").innerHTML = "";
+
+    new QRCode($("qrCode"), {
+        text: operative.qr_token,
+        width: 220,
+        height: 220,
+        colorDark: "#000000",
+        colorLight: "#ffffff",
+        correctLevel: QRCode.CorrectLevel.H
+    });
+
+    $("qrOperativeName").textContent = operative.full_name;
+    $("qrOperativeUnit").textContent =
+        "Sub-unit: " + (operative.units?.name || "Unknown unit");
+
+    $("qrResult").hidden = false;
+    $("downloadQrButton").disabled = false;
+
+    setMessage("qrMessage", "QR code generated successfully.", "success");
+});
+
+$("downloadQrButton").addEventListener("click", () => {
+    const canvas = $("qrCode").querySelector("canvas");
+    const image = $("qrCode").querySelector("img");
+
+    let url = "";
+
+    if (canvas) {
+        url = canvas.toDataURL("image/png");
+    } else if (image) {
+        url = image.src;
+    }
+
+    if (!url) {
+        setMessage("qrMessage", "Generate a QR code first.", "error");
+        return;
+    }
+
+    const link = document.createElement("a");
+    link.href = url;
+    link.download = "Flaming-Security-QR.png";
+    document.body.appendChild(link);
+    link.click();
+    link.remove();
+});
+
+// ================================================
+// MANUAL ATTENDANCE DROPDOWN
+// ================================================
+
+function populateOperativeDropdowns() {
+    const select = $("manualOperative");
+    const oldValue = select.value;
+
+    select.innerHTML = '<option value="">Select an approved operative</option>';
+
+    approvedOperatives.forEach(operative => {
+        const option = document.createElement("option");
+
+        option.value = operative.id;
+        option.textContent =
+            `${operative.full_name} — ${operative.units?.name || "Unknown unit"}`;
+
+        select.appendChild(option);
+    });
+
+    if (approvedOperatives.some(item => item.id === oldValue)) {
+        select.value = oldValue;
+    }
+}
+
+// ================================================
+// ATTENDANCE SCANNER
+// ================================================
+
+function updateScannerControls() {
+    const authorized = Boolean(currentUser);
+    const sessionSelected = Boolean($("programmeSelect").value);
+
+    $("startScanner").disabled =
+        !authorized ||
+        !sessionSelected ||
+        scannerRunning ||
+        scanLocked;
+
+    $("stopScanner").disabled = !scannerRunning;
+}
+
+$("programmeSelect").addEventListener("change", () => {
+    updateScannerControls();
+
+    setMessage(
+        "scanMessage",
+        $("programmeSelect").value
+            ? "Session selected. Start the camera to scan."
+            : "Select an attendance session first."
+    );
+});
+
+async function stopCamera() {
+    if (scanner && scannerRunning) {
+        try {
+            await scanner.stop();
+        } catch (error) {
+            console.warn("Camera stop error:", error);
+        }
+    }
+
+    scannerRunning = false;
+    updateScannerControls();
+}
+
+$("startScanner").addEventListener("click", async () => {
+    if (!currentUser) {
+        setMessage("scanMessage", "Please sign in first.", "error");
+        return;
+    }
+
+    if (!$("programmeSelect").value) {
+        setMessage("scanMessage", "Select a session first.", "error");
+        return;
+    }
+
+    if (scannerRunning || scanLocked) return;
+
+    if (typeof Html5Qrcode === "undefined") {
+        setMessage("scanMessage", "QR scanner library failed to load.", "error");
+        return;
+    }
+
+    $("startScanner").disabled = true;
+
+    try {
+        if (!scanner) {
+            scanner = new Html5Qrcode("reader");
+        }
+
+        setMessage(
+            "scanMessage",
+            "Starting camera. Allow camera access if prompted."
+        );
+
+        await scanner.start(
+            { facingMode: "environment" },
+            {
+                fps: 10,
+                qrbox: { width: 250, height: 250 }
+            },
+            async decodedText => {
+                if (scanLocked) return;
+
+                scanLocked = true;
+                updateScannerControls();
+
+                try {
+                    await stopCamera();
+                    await recordAttendance(decodedText.trim(), "qr");
+                } catch (error) {
+                    console.error("Attendance scan error:", error);
+
+                    setMessage(
+                        "scanMessage",
+                        "An error occurred while recording attendance.",
+                        "error"
+                    );
+                } finally {
+                    scanLocked = false;
+                    updateScannerControls();
+                }
+            },
+            () => {}
+        );
+
+        scannerRunning = true;
+        updateScannerControls();
+
+        setMessage(
+            "scanMessage",
+            "Camera active. Scan an operative's QR code."
+        );
+
+    } catch (error) {
+        console.error("Camera error:", error);
+
+        scannerRunning = false;
+        updateScannerControls();
+
+        setMessage(
+            "scanMessage",
+            "Camera failed. Allow camera access and use HTTPS or localhost.",
+            "error"
+        );
+    }
+});
+
+$("stopScanner").addEventListener("click", async () => {
+    await stopCamera();
+
+    setMessage("scanMessage", "Camera stopped.");
+});
+
+// ================================================
+// RECORD QR OR MANUAL ATTENDANCE
+// ================================================
+
+async function recordAttendance(value, method) {
+    const programmeId = method === "manual"
+        ? $("manualProgramme").value
+        : $("programmeSelect").value;
+
+    if (!programmeId) {
+        const target = method === "manual" ? "manualMessage" : "scanMessage";
+        setMessage(target, "Select a programme session first.", "error");
+        return false;
+    }
+
+    let operative;
+
+    if (method === "manual") {
+        operative = approvedOperatives.find(item => item.id === value);
+
+        if (!operative) {
+            setMessage(
+                "manualMessage",
+                "Select an approved operative.",
+                "error"
+            );
+            return false;
+        }
+    } else {
+        $("attendanceResult").textContent = "Verifying QR code...";
+
+        const { data, error } = await db
+            .from("operatives")
+            .select("id, full_name, status, units(name)")
+            .eq("qr_token", value)
+            .eq("status", "approved")
+            .maybeSingle();
+
+        if (error) {
+            console.error("QR lookup error:", error);
+
+            $("attendanceResult").textContent =
+                "Could not verify the QR code.";
+
+            setMessage("scanMessage", "Attendance was not recorded.", "error");
+            return false;
+        }
+
+        operative = data;
+    }
+
+    if (!operative) {
+        $("attendanceResult").textContent =
+            "Invalid QR code or operative not approved.";
+
+        setMessage("scanMessage", "Attendance was not recorded.", "error");
+        return false;
+    }
+
+    const { error: insertError } = await db
+        .from("attendance")
+        .insert({
+            operative_id: operative.id,
+            programme_id: programmeId,
+            marking_method: method
+        });
+
+    if (insertError) {
+        console.error("Attendance insertion error:", insertError);
+
+        if (insertError.code === "23505") {
+            const message =
+                `${operative.full_name} already has attendance for this session.`;
+
+            $("attendanceResult").textContent = message;
+            setMessage("scanMessage", message, "error");
+            setMessage("manualMessage", message, "error");
+        } else {
+            const message = "Attendance could not be saved. Check permissions.";
+
+            $("attendanceResult").textContent = message;
+            setMessage("scanMessage", message, "error");
+            setMessage("manualMessage", message, "error");
+        }
+
+        return false;
+    }
+
+    const programme = allProgrammes.find(item => item.id === programmeId);
+
+    const message =
+        `${operative.full_name} — attendance recorded for ${programme?.name || "selected session"}.`;
+
+    $("attendanceResult").innerHTML = "";
+
+    const heading = document.createElement("h3");
+    heading.className = "success-text";
+    heading.textContent = "Attendance recorded successfully!";
+
+    const details = [
+        "Operative: " + operative.full_name,
+        "Unit: " + (operative.units?.name || "Unknown unit"),
+        "Session: " + (programme?.name || "Selected session"),
+        "Method: " + method.toUpperCase(),
+        "Time: " + new Date().toLocaleString()
+    ];
+
+    $("attendanceResult").appendChild(heading);
+
+    details.forEach(detail => {
+        const paragraph = document.createElement("p");
+        paragraph.textContent = detail;
+        $("attendanceResult").appendChild(paragraph);
+    });
+
+    setMessage("scanMessage", message, "success");
+    setMessage("manualMessage", message, "success");
+
+    await loadAttendance();
+    await updateStatistics();
+
+    return true;
+}
+
+$("manualAttendanceForm").addEventListener("submit", async event => {
+    event.preventDefault();
+
+    const button = $("markManualButton");
+
+    button.disabled = true;
+    button.textContent = "Saving...";
+
+    try {
+        await recordAttendance($("manualOperative").value, "manual");
+    } catch (error) {
+        console.error("Manual attendance error:", error);
+
+        setMessage(
+            "manualMessage",
+            "An unexpected error occurred.",
+            "error"
+        );
+    } finally {
+        button.disabled = false;
+        button.textContent = "Mark Attendance";
+    }
+});
+
+// ================================================
+// ATTENDANCE REPORTS
+// ================================================
+
+async function loadAttendance() {
+    setMessage("reportMessage", "Loading attendance records...");
+
+    const { data, error } = await db
+        .from("attendance")
+        .select(`
+            id,
+            attendance_time,
+            marking_method,
+            operatives(full_name, units(name)),
+            programmes(name, programme_date)
+        `)
+        .order("attendance_time", { ascending: false });
+
+    if (error) {
+        console.error("Attendance loading error:", error);
+
+        $("attendanceTable").innerHTML =
+            '<tr><td colspan="6">Could not load attendance records.</td></tr>';
+
+        setMessage("reportMessage", "Could not load attendance records.", "error");
+        return;
+    }
+
+    allAttendance = data || [];
+
+    populateReportFilters();
+    renderAttendance();
+
+    setMessage(
+        "reportMessage",
+        `${allAttendance.length} attendance record(s) loaded.`
+    );
+}
+
+function populateReportFilters() {
+    const selectedUnit = $("reportUnitFilter").value;
+    const selectedProgramme = $("reportProgrammeFilter").value;
+
+    const units = new Set();
+    const programmes = new Set();
+
+    allAttendance.forEach(record => {
+        const unit = record.operatives?.units?.name;
+        const programme = record.programmes?.name;
+
+        if (unit) units.add(unit);
+        if (programme) programmes.add(programme);
+    });
+
+    $("reportUnitFilter").innerHTML = '<option value="">All Units</option>';
+
+    [...units].sort().forEach(unit => {
+        const option = document.createElement("option");
+        option.value = unit;
+        option.textContent = unit;
+        $("reportUnitFilter").appendChild(option);
+    });
+
+    $("reportProgrammeFilter").innerHTML =
+        '<option value="">All Sessions</option>';
+
+    [...programmes].sort().forEach(programme => {
+        const option = document.createElement("option");
+        option.value = programme;
+        option.textContent = programme;
+        $("reportProgrammeFilter").appendChild(option);
+    });
+
+    $("reportUnitFilter").value = selectedUnit;
+    $("reportProgrammeFilter").value = selectedProgramme;
+}
+
+function getFilteredAttendance() {
+    const search = $("reportSearch").value.toLowerCase().trim();
+    const unit = $("reportUnitFilter").value;
+    const programme = $("reportProgrammeFilter").value;
+
+    return allAttendance.filter(record => {
+        const name = record.operatives?.full_name || "";
+        const unitName = record.operatives?.units?.name || "";
+        const programmeName = record.programmes?.name || "";
+
+        return (
+            name.toLowerCase().includes(search) &&
+            (!unit || unitName === unit) &&
+            (!programme || programmeName === programme)
+        );
+    });
+}
+
+function renderAttendance() {
+    const records = getFilteredAttendance();
+
+    $("reportTotal").textContent = allAttendance.length;
+    $("reportFiltered").textContent = records.length;
+
+    if (!records.length) {
+        $("attendanceTable").innerHTML =
+            '<tr><td colspan="6">No matching attendance records.</td></tr>';
+        return;
+    }
+
+    $("attendanceTable").innerHTML = records.map(record => `
+        <tr>
+            <td>${escapeHTML(record.operatives?.full_name || "Unknown operative")}</td>
+            <td>${escapeHTML(record.operatives?.units?.name || "Unknown unit")}</td>
+            <td>${escapeHTML(record.programmes?.name || "Unknown programme")}</td>
+            <td>${escapeHTML(record.programmes?.programme_date || "")}</td>
+            <td>${escapeHTML(record.attendance_time ? new Date(record.attendance_time).toLocaleString() : "N/A")}</td>
+            <td>${escapeHTML(record.marking_method || "N/A")}</td>
+        </tr>
+    `).join("");
+}
+
+$("reportSearch").addEventListener("input", renderAttendance);
+$("reportUnitFilter").addEventListener("change", renderAttendance);
+$("reportProgrammeFilter").addEventListener("change", renderAttendance);
+
+$("refreshReports").addEventListener("click", async () => {
+    await loadAttendance();
+    await updateStatistics();
+});
+
+// ================================================
+// EXCEL EXPORT
+// ================================================
+
+async function loadExcelJS() {
+    if (window.ExcelJS) return window.ExcelJS;
+
+    await new Promise((resolve, reject) => {
+        const script = document.createElement("script");
+
+        script.src =
+            "https://cdn.jsdelivr.net/npm/exceljs@4.4.0/dist/exceljs.min.js";
+
+        script.onload = resolve;
+        script.onerror = reject;
+
+        document.head.appendChild(script);
+    });
+
+    if (!window.ExcelJS) {
+        throw new Error("ExcelJS failed to load.");
+    }
+
+    return window.ExcelJS;
+}
+
+$("exportButton").addEventListener("click", async () => {
+    const records = getFilteredAttendance();
+    const button = $("exportButton");
+
+    if (!records.length) {
+        setMessage("reportMessage", "No records to export.", "error");
+        return;
+    }
+
+    button.disabled = true;
+    button.textContent = "Preparing Excel...";
+
+    try {
+        const ExcelJS = await loadExcelJS();
+        const workbook = new ExcelJS.Workbook();
+
+        workbook.creator = "Flaming Security";
+        workbook.title = "Flaming Security Attendance Report";
+
+        const worksheet = workbook.addWorksheet("Attendance Report");
+
+        worksheet.columns = [
+            { header: "No.", key: "number", width: 8 },
+            { header: "Operative", key: "operative", width: 32 },
+            { header: "Unit", key: "unit", width: 30 },
+            { header: "Programme", key: "programme", width: 42 },
+            { header: "Programme Date", key: "programmeDate", width: 20 },
+            { header: "Attendance Time", key: "attendanceTime", width: 25 },
+            { header: "Method", key: "method", width: 15 }
+        ];
+
+        worksheet.addRow([]);
+        worksheet.insertRow(1, [
+            "FLAMING SECURITY — OPERATIVE ATTENDANCE REPORT"
+        ]);
+
+        worksheet.mergeCells("A1:G1");
+
+        worksheet.getCell("A1").font = {
+            bold: true,
+            size: 16
+        };
+
+        worksheet.getCell("A1").alignment = {
+            horizontal: "center"
+        };
+
+        worksheet.getRow(2).values = [
+            "No.",
+            "Operative",
+            "Unit",
+            "Programme",
+            "Programme Date",
+            "Attendance Time",
+            "Method"
+        ];
+
+        worksheet.getRow(2).font = { bold: true };
+
+        records.forEach((record, index) => {
+            worksheet.addRow({
+                number: index + 1,
+                operative: record.operatives?.full_name || "Unknown operative",
+                unit: record.operatives?.units?.name || "Unknown unit",
+                programme: record.programmes?.name || "Unknown programme",
+                programmeDate: record.programmes?.programme_date || "",
+                attendanceTime: record.attendance_time
+                    ? new Date(record.attendance_time).toLocaleString()
+                    : "",
+                method: record.marking_method || "N/A"
+            });
+        });
+
+        worksheet.autoFilter = {
+            from: "A2",
+            to: "G" + (records.length + 2)
+        };
+
+        worksheet.views = [{ state: "frozen", ySplit: 2 }];
+
+        const buffer = await workbook.xlsx.writeBuffer();
+
+        const blob = new Blob([buffer], {
+            type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
+        });
+
+        const url = URL.createObjectURL(blob);
+        const link = document.createElement("a");
+
+        link.href = url;
+        link.download = "Flaming_Security_Attendance_Report.xlsx";
+
+        document.body.appendChild(link);
+        link.click();
+        link.remove();
+
+        setTimeout(() => URL.revokeObjectURL(url), 2000);
+
+        setMessage(
+            "reportMessage",
+            `Excel report downloaded: ${records.length} records.`,
+            "success"
+        );
+
+    } catch (error) {
+        console.error("Excel export error:", error);
+
+        setMessage(
+            "reportMessage",
+            "Excel export failed. Check your internet connection.",
+            "error"
+        );
+    } finally {
+        button.disabled = false;
+        button.textContent = "Export Excel";
+    }
+});
+
+// ================================================
+// REFRESH
+// ================================================
+
+$("refreshOperatives").addEventListener("click", loadOperatives);
+
+$("refreshAllButton").addEventListener("click", async () => {
+    $("refreshAllButton").disabled = true;
+
+    try {
+        await loadAllData();
+    } finally {
+        $("refreshAllButton").disabled = false;
+    }
+});
+
+// ================================================
+// INITIALIZE AND RESTORE SESSION
+// ================================================
+
+window.addEventListener("beforeunload", () => {
+    if (scannerRunning && scanner) {
+        scanner.stop().catch(() => {});
+    }
+});
+
+async function initialize() {
+    $("startScanner").disabled = true;
+    $("stopScanner").disabled = true;
+
+    try {
+        const { data, error } = await db.auth.getSession();
+
+        if (error) {
+            showLogin("Could not check your session. Please sign in.");
+            return;
+        }
+
+        if (data.session) {
+            await verifyAdmin();
+        } else {
+            showLogin();
+        }
+
+    } catch (error) {
+        console.error("Portal initialization error:", error);
+
+        showLogin("Unable to connect. Check your internet connection.");
+    }
+}
+
+initialize();
+</script>
+
+</body>
+</html>
