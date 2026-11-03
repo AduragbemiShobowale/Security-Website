@@ -1409,7 +1409,7 @@ $("loginForm").addEventListener("submit", async event => {
     const button = $("loginButton");
 
     button.disabled = true;
-    button.textContent = "Identify ya self...";
+    button.textContent = "Signing in...";
     setMessage("loginMessage", "");
 
     try {
@@ -1421,7 +1421,7 @@ $("loginForm").addEventListener("submit", async event => {
         if (error) {
             setMessage(
                 "loginMessage",
-                "You go tell me when you turn Admin.",
+                "Incorrect email or password.",
                 "error"
             );
             return;
@@ -1455,7 +1455,7 @@ async function logout() {
     }
 
     currentUser = null;
-    showLogin("Bye Bye oo");
+    showLogin("You have been signed out.");
 }
 
 $("logoutButton").addEventListener("click", logout);

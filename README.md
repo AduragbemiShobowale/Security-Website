@@ -37,6 +37,7 @@ All pages are plain HTML — open in any editor.
 
 The Supabase publishable key is public by design. Data is only protected by Row Level Security
 policies on the `operatives`, `attendance`, `programmes`, `units` and `admin_users` tables — keep those enabled.
+The intended policies are in `supabase/rls-policies.sql` — read the instructions at the top before running it in the Supabase SQL Editor.
 
 ## Adding real content
 
