@@ -47,6 +47,32 @@
             cursor: pointer;
         }
 
+        .registration-form .declaration {
+            display: flex;
+            gap: 10px;
+            align-items: flex-start;
+        }
+
+        .registration-form .declaration input {
+            width: 20px;
+            height: 20px;
+            flex: 0 0 auto;
+            margin-top: 2px;
+        }
+
+        .registration-form .declaration label {
+            margin: 0;
+            font-weight: 400;
+            line-height: 1.5;
+        }
+
+        @media (max-width: 600px) {
+            .registration-section {
+                margin: 24px auto;
+                padding: 0 16px;
+            }
+        }
+
         #registration-message {
             margin-top: 15px;
             font-weight: 600;
@@ -150,6 +176,11 @@
                     <option value="Management & Welfare">Management & Welfare</option>
                     <option value="All Personnel">All Personnel</option>
                 </select>
+            </div>
+
+            <div class="declaration">
+                <input type="checkbox" id="declaration" name="declaration" required>
+                <label for="declaration">I confirm that the information above is accurate and I agree to serve with Flaming Security under its code of conduct.</label>
             </div>
 
             <button type="submit" class="btn btn-primary" id="submit-button">

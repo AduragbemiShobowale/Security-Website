@@ -37,7 +37,11 @@ All pages are plain HTML — open in any editor.
 
 The Supabase publishable key is public by design. Data is only protected by Row Level Security
 policies on the `operatives`, `attendance`, `programmes`, `units` and `admin_users` tables — keep those enabled.
-The intended policies are in `supabase/rls-policies.sql` — read the instructions at the top before running it in the Supabase SQL Editor.
+Database changes are kept in `supabase/migrations/`. The approval-email Edge Function is in
+`supabase/functions/send-operative-qr/` (needs the `RESEND_API_KEY` and `EMAIL_FROM` secrets).
+
+**Admins:** a person is an admin when their auth user id is in `public.admin_users` with role
+`admin` or `super_admin`. That single table controls both portal login and data access.
 
 ## Adding real content
 
