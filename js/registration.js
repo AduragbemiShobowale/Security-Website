@@ -103,8 +103,20 @@ if (form && message && button) {
                 console.error("Registration error:", insertError);
 
                 if (insertError.code === "23505") {
+                    const detail = String(insertError.message || "");
+                    const which = detail.includes("operatives_phone_unique")
+                        ? "phone number"
+                        : "email address";
+
                     throw new Error(
-                        "This email address is already registered. Contact your unit head if you need to update your details."
+                        `This ${which} is already registered, so you do not need to register again. ` +
+                        "Contact your unit head if you need to update your details."
+                    );
+                }
+
+                if (insertError.code === "23514") {
+                    throw new Error(
+                        "Please enter a full phone number (at least 10 digits)."
                     );
                 }
 

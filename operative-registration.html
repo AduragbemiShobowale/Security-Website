@@ -140,7 +140,10 @@
                     id="phone"
                     name="phone"
                     required
-                    minlength="7"
+                    pattern="[+]?[0-9][0-9 \-]{9,17}"
+                    title="Enter a full phone number, e.g. 08031234567 or +2348031234567"
+                    placeholder="08031234567"
+                    inputmode="tel"
                     autocomplete="tel">
             </div>
 
