@@ -12,7 +12,7 @@ const whatsappGroups = {
     "Access Control": "https://chat.whatsapp.com/J1I8XsO5OjX8So8LG3u29d",
     "Market Control": "https://chat.whatsapp.com/KVv1rqRBATI76E5W1aGgke",
     "Traffic": "https://chat.whatsapp.com/KVv1rqRBATI76E5W1aGgke",
-    "Management & Welfare": "https://chat.whatsapp.com/H5mjlhiOGqX2sTWTX7NyXG?s=cl&p=i&ilr=4&iam=0",
+    "Management & Welfare": "https://chat.whatsapp.com/H5mjlhiOGqX2sTWTX7NyXG",
     "Advance Team": "https://chat.whatsapp.com/K0a2f9UdAsyDVn4nkdlgb4"
 };
 
@@ -35,6 +35,7 @@ if (form && message && button) {
         const dateOfBirth = document.getElementById("date_of_birth").value;
         const address = document.getElementById("residential_address").value.trim();
         const selectedUnit = document.getElementById("sub_unit").value.trim();
+        const declared = document.getElementById("declaration").checked;
 
         try {
             // Load the original database's available units.
@@ -91,7 +92,7 @@ if (form && message && button) {
                 residential_address: address,
                 unit_id: matchingUnit.id,
                 status: "pending",
-                declaration: true
+                declaration: declared
             };
 
             const { error: insertError } = await supabaseClient
@@ -103,7 +104,7 @@ if (form && message && button) {
 
                 if (insertError.code === "23505") {
                     throw new Error(
-                        "This email or phone number may already be registered."
+                        "This email address is already registered. Contact your unit head if you need to update your details."
                     );
                 }
 

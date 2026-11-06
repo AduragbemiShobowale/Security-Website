@@ -15,10 +15,14 @@
   }
 
   /* ── Active nav link ──────────────────────────── */
-  var here = location.pathname.split('/').pop() || 'index.html';
-  document.querySelectorAll('.nav-links a').forEach(function(a){
-    var href = a.getAttribute('href');
-    if(href === here || (here === '' && href === 'index.html')){
+  /* Vercel cleanUrls serves /about instead of /about.html, so compare without the extension */
+  function pageName(path){
+    var name = (path || '').split('/').pop().replace(/\.html$/, '');
+    return name === '' ? 'index' : name;
+  }
+  var here = pageName(location.pathname);
+  document.querySelectorAll('.nav-links a, .mobile-bottom-nav a').forEach(function(a){
+    if(pageName(a.getAttribute('href')) === here){
       a.classList.add('active');
     }
   });

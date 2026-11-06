@@ -6,9 +6,9 @@
 
     <title>Flaming Security | Management Portal</title>
 
-    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
-    <script src="https://unpkg.com/html5-qrcode"></script>
+    <script src="https://unpkg.com/html5-qrcode@2.3.8/html5-qrcode.min.js"></script>
 
     <style>
         :root {
@@ -1409,7 +1409,7 @@ $("loginForm").addEventListener("submit", async event => {
     const button = $("loginButton");
 
     button.disabled = true;
-    button.textContent = "Identify ya self...";
+    button.textContent = "Signing in...";
     setMessage("loginMessage", "");
 
     try {
@@ -1421,7 +1421,7 @@ $("loginForm").addEventListener("submit", async event => {
         if (error) {
             setMessage(
                 "loginMessage",
-                "You go tell me when you turn Admin.",
+                "Incorrect email or password.",
                 "error"
             );
             return;
@@ -1455,7 +1455,7 @@ async function logout() {
     }
 
     currentUser = null;
-    showLogin("Bye Bye oo");
+    showLogin("You have been signed out.");
 }
 
 $("logoutButton").addEventListener("click", logout);
@@ -1469,14 +1469,13 @@ $("logoutButton").addEventListener("click", logout);
 async function loadAllData() {
     if (!currentUser) return;
 
+    // loadOperatives() already refreshes statistics and dropdowns.
     await Promise.all([
         loadOperatives(),
         loadProgrammes(),
         loadAttendance()
     ]);
 
-    updateStatistics();
-    populateOperativeDropdowns();
     updateScannerControls();
 }
 
@@ -2382,20 +2381,21 @@ $("exportButton").addEventListener("click", async () => {
 
         const worksheet = workbook.addWorksheet("Attendance Report");
 
+        // Row 1: title, Row 2: column headers, data starts at row 3.
+        // Set widths/keys without `header` so ExcelJS doesn't write its own header row.
         worksheet.columns = [
-            { header: "No.", key: "number", width: 8 },
-            { header: "Operative", key: "operative", width: 32 },
-            { header: "Unit", key: "unit", width: 30 },
-            { header: "Programme", key: "programme", width: 42 },
-            { header: "Programme Date", key: "programmeDate", width: 20 },
-            { header: "Attendance Time", key: "attendanceTime", width: 25 },
-            { header: "Method", key: "method", width: 15 }
+            { key: "number", width: 8 },
+            { key: "operative", width: 32 },
+            { key: "unit", width: 30 },
+            { key: "programme", width: 42 },
+            { key: "programmeDate", width: 20 },
+            { key: "attendanceTime", width: 25 },
+            { key: "method", width: 15 }
         ];
 
-        worksheet.addRow([]);
-        worksheet.insertRow(1, [
+        worksheet.getRow(1).values = [
             "FLAMING SECURITY — OPERATIVE ATTENDANCE REPORT"
-        ]);
+        ];
 
         worksheet.mergeCells("A1:G1");
 

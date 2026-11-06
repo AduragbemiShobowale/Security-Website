@@ -1077,8 +1077,8 @@ footer a:hover{color:var(--gold);}
 }
 .pricing-note-icon svg{fill:#fff;width:24px;height:24px;}
 
-/* ── Mobile bottom nav ── */
-@media(max-width:640px){
+/* ── Mobile bottom nav (same breakpoint as the hamburger menu) ── */
+@media(max-width:860px){
   .mobile-bottom-nav{
     position:fixed;bottom:0;left:0;right:0;z-index:350;
     background:var(--navy);border-top:1px solid rgba(255,255,255,.1);
@@ -1097,7 +1097,7 @@ footer a:hover{color:var(--gold);}
   .mobile-bottom-nav a.book-now{background:var(--ember);color:#fff;border-radius:0;}
   body{padding-bottom:60px;}
 }
-@media(min-width:641px){.mobile-bottom-nav{display:none;}}
+@media(min-width:861px){.mobile-bottom-nav{display:none;}}
 
 /* ── Back to top ── */
 .back-top{
@@ -1887,43 +1887,23 @@ video {
     flex-shrink: 0;
   }
 }
-/* MOBILE: REMOVE STACKED FLOATING ELEMENTS */
+/* MOBILE: ONE FLOATING ELEMENT ONLY
+   On phones/tablets the bottom nav already has "Book Us", so the sliding
+   booking bar and back-to-top button are hidden; the WhatsApp bubble sits
+   above the bottom nav instead of on top of it. */
 @media (max-width: 860px) {
-  /* Keep the bottom navigation */
+  .sticky-book,
+  .back-top {
+    display: none !important;
+  }
+
+  .wa-float {
+    right: 16px;
+    bottom: calc(76px + env(safe-area-inset-bottom, 0px));
+  }
+
   .mobile-bottom-nav {
-    display: flex !important;
-  }
-
-  /* Keep the WhatsApp bubble */
-  .whatsapp-float,
-  .whatsapp-button,
-  .whatsapp-widget {
-    display: flex !important;
-  }
-
-  /* Hide the sticky security/booking bar */
-  .sticky-security,
-  .sticky-booking,
-  .need-security,
-  .security-sticky-bar,
-  .mobile-cta-bar {
-    display: none !important;
-  }
-
-  /* Hide the scroll-to-top button */
-  .scroll-to-top,
-  .scroll-top,
-  .back-to-top,
-  #scrollToTop,
-  #backToTop {
-    display: none !important;
-  }
-
-  /* Hide the Netlify badge */
-  #netlify-badge,
-  .netlify-badge,
-  [data-netlify-badge] {
-    display: none !important;
+    padding-bottom: env(safe-area-inset-bottom, 0px);
   }
 }
 @media (max-width: 860px) {
@@ -1998,3 +1978,23 @@ video {
   }
 }
 
+
+/* DESKTOP: lift the WhatsApp and back-to-top buttons above the booking bar while it is showing */
+@media (min-width: 861px) {
+  .wa-float,
+  .back-top {
+    transition: bottom .3s ease, opacity .3s, transform .3s, box-shadow .2s;
+  }
+
+  .sticky-book { flex-wrap: nowrap; }
+  .sticky-book-text { flex: 1 1 auto; min-width: 0; }
+  .sticky-book-actions { flex: 0 0 auto; }
+
+  body:has(.sticky-book.visible) .wa-float {
+    bottom: 96px;
+  }
+
+  body:has(.sticky-book.visible) .back-top {
+    bottom: 166px;
+  }
+}
