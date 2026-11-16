@@ -1,33 +1,48 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <title>Operative Registration | Flaming Security</title>
+    <title>YMR 2026 Volunteer Registration | Flaming Security</title>
 
     <link rel="stylesheet" href="css/style.css">
 
     <style>
         .registration-section {
-            max-width: 750px;
+            max-width: 850px;
             margin: 50px auto;
             padding: 25px;
         }
 
         .registration-form {
             display: grid;
-            gap: 18px;
+            gap: 22px;
         }
 
-        .registration-form label {
+        .form-section {
+            border: 1px solid rgba(255,255,255,0.12);
+            border-radius: 10px;
+            padding: 22px;
+            margin-top: 15px;
+        }
+
+        .form-section h2 {
+            margin-bottom: 18px;
+        }
+
+        .form-field {
+            margin-bottom: 20px;
+        }
+
+        .registration-form label,
+        .question-title {
             display: block;
-            margin-bottom: 7px;
+            margin-bottom: 8px;
             font-weight: 600;
         }
 
-        .registration-form input,
+        .registration-form input:not([type="checkbox"]):not([type="radio"]),
         .registration-form select,
         .registration-form textarea {
             width: 100%;
@@ -36,6 +51,25 @@
             border-radius: 6px;
             font: inherit;
             box-sizing: border-box;
+        }
+
+        .registration-form input[type="checkbox"],
+        .registration-form input[type="radio"] {
+            margin-right: 9px;
+        }
+
+        .choice {
+            display: flex !important;
+            align-items: center;
+            gap: 5px;
+            margin: 10px 0;
+            font-weight: 400 !important;
+        }
+
+        .form-note {
+            font-size: 0.9rem;
+            line-height: 1.6;
+            opacity: 0.85;
         }
 
         .registration-form button {
@@ -47,6 +81,38 @@
             margin-top: 15px;
             font-weight: 600;
         }
+
+        #whatsapp-group-result {
+            display: none;
+            margin-top: 20px;
+            padding: 20px;
+            border-radius: 8px;
+            border: 1px solid rgba(37, 211, 102, 0.4);
+        }
+
+        #whatsapp-group-result a {
+            display: inline-block;
+            margin-top: 12px;
+        }
+
+        .declaration-box {
+            line-height: 1.8;
+            padding: 15px;
+            border-radius: 8px;
+            background: rgba(128,128,128,0.08);
+            margin-bottom: 15px;
+        }
+
+        @media (max-width: 600px) {
+            .registration-section {
+                margin: 20px auto;
+                padding: 12px;
+            }
+
+            .form-section {
+                padding: 15px;
+            }
+        }
     </style>
 </head>
 
@@ -54,85 +120,578 @@
 
 <section class="registration-section">
     <div class="card">
+
         <div class="eyebrow">Flaming Security</div>
 
-        <h1>Operative Registration</h1>
+        <h1>YMR 2026 Volunteer Registration & Biodata Form</h1>
 
-        <p>Complete the form below to register under your preferred unit.</p>
+        <p>
+            Welcome to the FLAMING Security YMR 2026 Volunteer Registration
+            & Biodata Form.
+        </p>
+
+        <p class="form-note">
+            This form is designed to collect the personal, church, emergency,
+            welfare, and service information required for the registration,
+            screening, accreditation, deployment, communication, and effective
+            coordination of volunteers serving under FLAMING Security during
+            YMR 2026.
+        </p>
+
+        <p class="form-note">
+            All prospective volunteers are expected to provide accurate,
+            complete, and up-to-date information. Information supplied through
+            this form will be treated with appropriate confidentiality and
+            used primarily for YMR 2026 volunteer administration, verification,
+            communication, deployment, accreditation, welfare, and emergency
+            response purposes.
+        </p>
 
         <form id="registration-form" class="registration-form">
 
-            <div>
-                <label for="full_name">Full Name</label>
-                <input
-                    type="text"
-                    id="full_name"
-                    name="full_name"
-                    required
-                    minlength="3"
-                    autocomplete="name">
+            <!-- QUESTION 1 -->
+            <div class="form-section">
+                <div class="form-field">
+                    <label for="contact_email">1. Email</label>
+                    <input type="email" id="contact_email" name="contact_email" required>
+                </div>
+
+                <!-- QUESTION 2 -->
+                <div class="form-field">
+                    <label for="passport_photo">2. Passport Photograph</label>
+
+                    <p class="form-note">
+                        Please upload a recent, clear passport photograph suitable
+                        for official identification and accreditation.
+                        Your face should be clearly visible.
+                    </p>
+
+                    <p class="form-note">
+                        Please do not upload:
+                        <br>- Group photographs
+                        <br>- Photographs with sunglasses
+                        <br>- Heavily filtered or edited photographs
+                        <br>- Blurred photographs
+                        <br>- Photographs where the face is partially covered
+                    </p>
+
+                    <input
+                        type="file"
+                        id="passport_photo"
+                        name="passport_photo"
+                        accept="image/jpeg,image/png,image/webp"
+                        required>
+                </div>
             </div>
 
-            <div>
-                <label for="email">Email Address</label>
-                <input
-                    type="email"
-                    id="email"
-                    name="email"
-                    required
-                    autocomplete="email">
+            <!-- SECTION A -->
+            <div class="form-section">
+                <h2>Section A — Personal Information</h2>
+
+                <div class="form-field">
+                    <label for="full_name">3. Full Name (SURNAME FIRST)</label>
+                    <p class="form-note">
+                        Please enter your name as you would like it to appear
+                        on official records.
+                    </p>
+                    <input type="text" id="full_name" name="full_name" required>
+                </div>
+
+                <div class="form-field">
+                    <span class="question-title">4. Gender</span>
+                    <label class="choice"><input type="radio" name="gender" value="Male" required> Male</label>
+                    <label class="choice"><input type="radio" name="gender" value="Female"> Female</label>
+                </div>
+
+                <div class="form-field">
+                    <label for="date_of_birth">5. Date of Birth (MM-DD-YYY)</label>
+                    <input type="date" id="date_of_birth" name="date_of_birth" required>
+                </div>
+
+                <div class="form-field">
+                    <label for="phone">6. Phone Number</label>
+                    <input type="tel" id="phone" name="phone" required>
+                </div>
+
+                <div class="form-field">
+                    <label for="alternate_phone">7. Alternate Phone Number</label>
+                    <input type="tel" id="alternate_phone" name="alternate_phone">
+                </div>
+
+                <div class="form-field">
+                    <label for="email_address">8. Email Address</label>
+                    <input type="email" id="email_address" name="email_address" required>
+                </div>
+
+                <div class="form-field">
+                    <label for="residential_address">9. Residential Address</label>
+                    <textarea id="residential_address" name="residential_address" rows="3" required></textarea>
+                </div>
+
+                <div class="form-field">
+                    <label for="local_government_area">10. Local Government Area</label>
+                    <input type="text" id="local_government_area" name="local_government_area" required>
+                </div>
+
+                <div class="form-field">
+                    <label for="state_of_origin">11. State of Origin</label>
+                    <input type="text" id="state_of_origin" name="state_of_origin" required>
+                </div>
+
+                <div class="form-field">
+                    <label for="nationality">12. Nationality</label>
+                    <input type="text" id="nationality" name="nationality" required>
+                </div>
+
+                <div class="form-field">
+                    <label for="occupation">13. Occupation</label>
+                    <input type="text" id="occupation" name="occupation" required>
+                </div>
             </div>
 
-            <div>
-                <label for="phone">Phone Number</label>
-                <input
-                    type="tel"
-                    id="phone"
-                    name="phone"
-                    required
-                    minlength="7"
-                    autocomplete="tel">
+            <!-- SECTION B -->
+            <div class="form-section">
+                <h2>Section B — Church & Spiritual Information</h2>
+
+                <div class="form-field">
+                    <label for="church_name">14. Church Name</label>
+                    <input type="text" id="church_name" name="church_name" required>
+                </div>
+
+                <div class="form-field">
+                    <label for="parish_or_province">15. Parish / Province</label>
+                    <input type="text" id="parish_or_province" name="parish_or_province">
+                </div>
+
+                <div class="form-field">
+                    <label for="pastor_name">16. Pastor's Name</label>
+                    <input type="text" id="pastor_name" name="pastor_name">
+                </div>
+
+                <div class="form-field">
+                    <span class="question-title">17. Are You Born Again?</span>
+                    <label class="choice"><input type="radio" name="born_again" value="Yes" required> Yes</label>
+                    <label class="choice"><input type="radio" name="born_again" value="No"> No</label>
+                    <label class="choice"><input type="radio" name="born_again" value="Not Sure"> Not Sure</label>
+                </div>
+
+                <div class="form-field">
+                    <label for="born_again_since">
+                        18. If Yes, When Did You Become Born Again?
+                        (If you do not know the exact date, you may provide
+                        the approximate date or year in the description.)
+                    </label>
+                    <p class="form-note">Example: January 7, 2019</p>
+                    <input type="text" id="born_again_since" name="born_again_since">
+                </div>
+
+                <div class="form-field">
+                    <span class="question-title">19. Have You Been Baptized by Immersion?</span>
+                    <label class="choice"><input type="radio" name="immersion_baptism" value="Yes" required> Yes</label>
+                    <label class="choice"><input type="radio" name="immersion_baptism" value="No"> No</label>
+                    <label class="choice"><input type="radio" name="immersion_baptism" value="Maybe"> Maybe</label>
+                </div>
+
+                <div class="form-field">
+                    <span class="question-title">20. Are You an Active Church Worker?</span>
+                    <label class="choice"><input type="radio" name="active_church_worker" value="Yes" required> Yes</label>
+                    <label class="choice"><input type="radio" name="active_church_worker" value="No"> No</label>
+                    <label class="choice"><input type="radio" name="active_church_worker" value="Maybe"> Maybe</label>
+                </div>
+
+                <div class="form-field">
+                    <label for="church_department">21. Department / Unit in Church</label>
+                    <input type="text" id="church_department" name="church_department">
+                </div>
+
+                <div class="form-field">
+                    <span class="question-title">22. Previous YMR Attendance</span>
+
+                    <label class="choice"><input type="checkbox" name="previous_ymr_attendance" value="2025"> 2025</label>
+                    <label class="choice"><input type="checkbox" name="previous_ymr_attendance" value="2024"> 2024</label>
+                    <label class="choice"><input type="checkbox" name="previous_ymr_attendance" value="2023"> 2023</label>
+                    <label class="choice"><input type="checkbox" name="previous_ymr_attendance" value="2022"> 2022</label>
+                    <label class="choice"><input type="checkbox" name="previous_ymr_attendance" value="This will be my first YMR"> This will be my first YMR</label>
+                    <label class="choice"><input type="checkbox" name="previous_ymr_attendance" value="Others (Please specify)"> Others (Please specify)</label>
+
+                    <input type="text" name="previous_ymr_other" placeholder="Please specify other attendance">
+                </div>
             </div>
 
-            <div>
-                <label for="date_of_birth">Date of Birth</label>
-                <input
-                    type="date"
-                    id="date_of_birth"
-                    name="date_of_birth"
-                    required>
+            <!-- SECTION C -->
+            <div class="form-section">
+                <h2>Section C — FLAMING SECURITY & VOLUNTEER SERVICE INFORMATION</h2>
+
+                <div class="form-field">
+                    <span class="question-title">23. Have You Previously Served With FLAMING Security?</span>
+                    <label class="choice"><input type="radio" name="previous_fl_service" value="Yes" required> Yes</label>
+                    <label class="choice"><input type="radio" name="previous_fl_service" value="No"> No</label>
+                </div>
+
+                <div class="form-field">
+                    <label for="years_of_service">24. If Yes, How Many Years Have You Served With FLAMING Security?</label>
+                    <input type="number" id="years_of_service" name="years_of_service" min="0" step="0.5">
+                </div>
+
+                <div class="form-field">
+                    <label for="previous_deployment_area">25. Previous Deployment Area / Unit</label>
+                    <input type="text" id="previous_deployment_area" name="previous_deployment_area">
+                </div>
+
+                <div class="form-field">
+                    <label for="preferred_deployment_unit">26. Preferred Deployment Unit</label>
+                    <select id="preferred_deployment_unit" name="preferred_deployment_unit" required>
+                        <option value="">Select preferred unit</option>
+                        <option value="Access Control & Crowd Management">Access Control & Crowd Management</option>
+                        <option value="Central Intelligence">Central Intelligence</option>
+                        <option value="Market Control">Market Control</option>
+                        <option value="Traffic Control">Traffic Control</option>
+                        <option value="Advance Unit">Advance Unit</option>
+                        <option value="Ground Control">Ground Control</option>
+                        <option value="Management & Welfare">Management & Welfare</option>
+                        <option value="All Personnel Unit">All Personnel Unit</option>
+                    </select>
+                </div>
+
+                <div class="form-field">
+                    <label for="reason_for_joining">27. Why Are You Interested in Serving in Your Preferred Unit?</label>
+                    <textarea id="reason_for_joining" name="reason_for_joining" rows="4" required></textarea>
+                </div>
+
+                <div class="form-field">
+                    <span class="question-title">
+                        28. Do You Have Previous Security, Military, Law Enforcement,
+                        Emergency Response, Medical, Crowd Management or Related Experience?
+                    </span>
+                    <label class="choice"><input type="radio" name="experience" value="Yes" required> Yes</label>
+                    <label class="choice"><input type="radio" name="experience" value="No"> No</label>
+                    <label class="choice"><input type="radio" name="experience" value="Maybe"> Maybe</label>
+                </div>
+
+                <div class="form-field">
+                    <label for="experience_details">29. If Yes, Please Briefly Describe Your Experience</label>
+                    <textarea id="experience_details" name="experience_details" rows="4"></textarea>
+                </div>
             </div>
 
-            <div>
-                <label for="residential_address">Residential Address</label>
-                <textarea
-                    id="residential_address"
-                    name="residential_address"
-                    rows="3"
-                    required
-                    autocomplete="street-address"></textarea>
+            <!-- SECTION D -->
+            <div class="form-section">
+                <h2>Section D — AVAILABILITY, LOGISTICS & ACCOMMODATION</h2>
+
+                <div class="form-field">
+                    <span class="question-title">30. Which Days Will You Be Available to Serve During YMR 2026?</span>
+
+                    <label class="choice"><input type="checkbox" name="availability_days" value="December 26"> December 26</label>
+                    <label class="choice"><input type="checkbox" name="availability_days" value="December 27"> December 27</label>
+                    <label class="choice"><input type="checkbox" name="availability_days" value="December 28"> December 28</label>
+                    <label class="choice"><input type="checkbox" name="availability_days" value="December 29"> December 29</label>
+                    <label class="choice"><input type="checkbox" name="availability_days" value="December 30"> December 30</label>
+                    <label class="choice"><input type="checkbox" name="availability_days" value="All Days"> All Days</label>
+                </div>
+
+                <div class="form-field">
+                    <span class="question-title">31. Are You Available for Briefings, Training or Pre-YMR Activities Before the Event?</span>
+                    <label class="choice"><input type="radio" name="briefing_training_availability" value="Yes" required> Yes</label>
+                    <label class="choice"><input type="radio" name="briefing_training_availability" value="No"> No</label>
+                    <label class="choice"><input type="radio" name="briefing_training_availability" value="Depending on the schedule"> Depending on the schedule</label>
+                </div>
+
+                <div class="form-field">
+                    <span class="question-title">32. Do You Require Paid Accommodation?</span>
+                    <label class="choice"><input type="radio" name="accommodation_required" value="Yes" required> Yes</label>
+                    <label class="choice"><input type="radio" name="accommodation_required" value="No"> No</label>
+                </div>
+
+                <div class="form-field">
+                    <label for="accommodation_type">33. If Yes, What Type of Accommodation Would You Require?</label>
+
+                    <div class="declaration-box">
+                        <strong>🏠 Accommodation Disclaimer: 2000 CHALET</strong>
+                        <p class="form-note">
+                            All accommodation options and prices listed are tentative
+                            estimates for budgeting purposes only. Prices are subject
+                            to change (increase or decrease) based on availability and
+                            final booking arrangements. Final prices will be communicated
+                            once confirmed. Please budget with some flexibility.
+                        </p>
+                    </div>
+
+                    <select id="accommodation_type" name="accommodation_type">
+                        <option value="">Select accommodation</option>
+                        <option value="3in 1 room with fan - Budget at least 20k per person">3in 1 room with fan - Budget at least 20k per person</option>
+                        <option value="2in 1 room - Budget at least 30k per person or 60k if you want the whole room">2in 1 room - Budget at least 30k per person or 60k if you want the whole room</option>
+                        <option value="Corner suite (personal room) - 75k - 100k">Corner suite (personal room) - 75k - 100k</option>
+                        <option value="others (Please Specify)">others (Please Specify)</option>
+                    </select>
+                </div>
+
+                <div class="form-field">
+                    <label for="accommodation_notes">34. Do You Have Any Accommodation or Logistics Considerations We Should Be Aware Of?</label>
+                    <textarea id="accommodation_notes" name="accommodation_notes" rows="3"></textarea>
+                </div>
             </div>
 
-            <div>
-                <label for="sub_unit">Select Your Unit</label>
-                <select id="sub_unit" name="sub_unit" required>
-                    <option value="">Choose a unit</option>
-                    <option value="Central Intelligence">Central Intelligence</option>
-                    <option value="Advance Team">Advance Team</option>
-                    <option value="Access Control">Access Control</option>
-                    <option value="Ground Control">Ground Control</option>
-                    <option value="Market Control">Market Control</option>
-                    <option value="Traffic">Traffic</option>
-                    <option value="Management & Welfare">Management & Welfare</option>
-                    <option value="All Personnel">All Personnel</option>
-                </select>
+            <!-- SECTION E -->
+            <div class="form-section">
+                <h2>Section E — EMERGENCY & WELFARE INFORMATION</h2>
+
+                <div class="declaration-box">
+                    <strong>Privacy & Welfare Notice:</strong>
+
+                    <p class="form-note">
+                        The following information is requested solely for volunteer
+                        welfare, emergency preparedness, medical assistance, and
+                        appropriate response during YMR 2026.
+                    </p>
+
+                    <p class="form-note">
+                        Some of the information requested in this section, including
+                        blood group, genotype, medical conditions, and allergies,
+                        is sensitive personal information. You are encouraged to
+                        provide accurate information so that FLAMING Security's
+                        welfare and leadership teams can respond appropriately if
+                        an emergency or welfare situation arises.
+                    </p>
+
+                    <p class="form-note">
+                        Your information will be handled with appropriate confidentiality
+                        and should only be accessed by authorized personnel with a
+                        legitimate need to know, particularly for welfare, emergency
+                        response, deployment, or administrative purposes.
+                    </p>
+
+                    <p class="form-note">
+                        By proceeding with this section, you acknowledge that you
+                        understand why this information is being requested and
+                        consent to its use for the stated YMR 2026 volunteer welfare
+                        and emergency purposes.
+                    </p>
+                </div>
+
+                <div class="form-field">
+                    <span class="question-title">35. Do You Understand and Consent to the Use of Your Welfare Information for YMR 2026 Emergency and Welfare Purposes?</span>
+                    <label class="choice"><input type="radio" name="welfare_consent" value="true" required> Yes, I understand and consent</label>
+                    <label class="choice"><input type="radio" name="welfare_consent" value="false"> No</label>
+                </div>
+<div id="welfare-details">
+
+    <div class="form-field">
+        <label for="next_of_kin_name">36. Next of Kin — Full Name</label>
+        <input type="text" id="next_of_kin_name" name="next_of_kin_name" required>
+    </div>
+
+    <div class="form-field">
+        <label for="next_of_kin_relationship">37. Relationship With Next of Kin</label>
+        <input type="text" id="next_of_kin_relationship" name="next_of_kin_relationship" required>
+    </div>
+
+    <div class="form-field">
+        <label for="next_of_kin_phone">38. Next of Kin — Phone Number</label>
+        <input type="tel" id="next_of_kin_phone" name="next_of_kin_phone" required>
+    </div>
+
+    <div class="form-field">
+        <label for="next_of_kin_address">39. Next of Kin — Address</label>
+        <textarea id="next_of_kin_address" name="next_of_kin_address" rows="3" required></textarea>
+    </div>
+
+    <div class="form-field">
+        <label for="blood_group">40. Blood Group</label>
+        <select id="blood_group" name="blood_group" required>
+            <option value="">Select blood group</option>
+            <option value="A+">A+</option>
+            <option value="A-">A-</option>
+            <option value="B+">B+</option>
+            <option value="B-">B-</option>
+            <option value="AB+">AB+</option>
+            <option value="AB-">AB-</option>
+            <option value="O+">O+</option>
+            <option value="O-">O-</option>
+            <option value="Unknown / Not Sure">Unknown / Not Sure</option>
+        </select>
+    </div>
+
+    <div class="form-field">
+        <label for="genotype">41. Genotype</label>
+        <select id="genotype" name="genotype" required>
+            <option value="">Select genotype</option>
+            <option value="AA">AA</option>
+            <option value="AS">AS</option>
+            <option value="AC">AC</option>
+            <option value="SS">SS</option>
+            <option value="SC">SC</option>
+            <option value="Other">Other</option>
+            <option value="Unknown / Not Sure">Unknown / Not Sure</option>
+        </select>
+    </div>
+
+    <div class="form-field">
+        <span class="question-title">42. Do You Have Any Existing Medical Condition That the Welfare Team Should Be Aware Of?</span>
+        <label class="choice"><input type="radio" name="medical_condition" value="true" required> Yes</label>
+        <label class="choice"><input type="radio" name="medical_condition" value="false"> No</label>
+    </div>
+
+    <div class="form-field">
+        <label for="medical_condition_details">43. If Yes, Please Provide Relevant Details</label>
+        <textarea id="medical_condition_details" name="medical_condition_details" rows="3"></textarea>
+    </div>
+
+    <div class="form-field">
+        <span class="question-title">44. Do You Have Any Allergies?</span>
+        <label class="choice"><input type="radio" name="allergies" value="true" required> Yes</label>
+        <label class="choice"><input type="radio" name="allergies" value="false"> No</label>
+    </div>
+
+    <div class="form-field">
+        <label for="allergy_details">45. If Yes, Please Specify Your Allergies</label>
+        <textarea id="allergy_details" name="allergy_details" rows="3"></textarea>
+    </div>
+
+    <div class="form-field">
+        <label for="dietary_restrictions">46. Do You Have Any Dietary Restrictions or Food Allergies?</label>
+        <textarea id="dietary_restrictions" name="dietary_restrictions" rows="3"></textarea>
+    </div>
+
+    <div class="form-field">
+        <label for="dietary_details">47. If Yes, Please Specify</label>
+        <textarea id="dietary_details" name="dietary_details" rows="3"></textarea>
+    </div>
+
+    <div class="form-field">
+        <label for="other_welfare_information">48. Is There Any Other Welfare or Emergency Information We Should Know About?</label>
+        <textarea id="other_welfare_information" name="other_welfare_information" rows="4"></textarea>
+    </div>
+
+</div>
+               
+
+                
+
+            <!-- SECTION F -->
+            <div class="form-section">
+                <h2>Section F — REFERENCES</h2>
+
+                <p class="form-note">
+                    Please provide references who can reasonably confirm your
+                    character, conduct, church involvement, work ethic, or
+                    previous service experience.
+                </p>
+
+                <div class="form-field">
+                    <label for="referee_one_name">49. Referees 1 Name and Phone Number</label>
+                    <input type="text" id="referee_one_name" name="referee_one_name" placeholder="Full name" required>
+                    <input type="tel" id="referee_one_phone" name="referee_one_phone" placeholder="Phone number" required>
+                </div>
+
+                <div class="form-field">
+                    <label for="referee_one_relationship_duration">50. How Long Have You Known Your Personal Reference?</label>
+                    <input type="text" id="referee_one_relationship_duration" name="referee_one_relationship_duration" required>
+                </div>
+
+                <div class="form-field">
+                    <label for="referee_two_name">51. Referees 2 Name and Phone Number</label>
+                    <input type="text" id="referee_two_name" name="referee_two_name" placeholder="Full name" required>
+                    <input type="tel" id="referee_two_phone" name="referee_two_phone" placeholder="Phone number" required>
+                </div>
+
+                <div class="form-field">
+                    <label for="referee_two_relationship_duration">52. How Long Have You Known Your Personal Reference?</label>
+                    <input type="text" id="referee_two_relationship_duration" name="referee_two_relationship_duration" required>
+                </div>
             </div>
 
-            <button type="submit" class="btn btn-primary" id="submit-button">
-                Submit Registration
-            </button>
+            <!-- SECTION G -->
+            <div class="form-section">
+                <h2>Section G — VOLUNTEER DECLARATION & CONSENT</h2>
 
-            <p id="registration-message" role="status" aria-live="polite"></p>
+                <div class="declaration-box">
+                    <p>
+                        I understand that FLAMING Security is a volunteer service
+                        ministry for YMR 2026.
+                    </p>
+
+                    <p>
+                        I commit to uphold Christian values, respect constituted
+                        leadership and authority, maintain confidentiality where
+                        required, serve diligently, be punctual, follow lawful
+                        instructions, and conduct myself in a manner worthy of
+                        Christ throughout the event.
+                    </p>
+
+                    <p>
+                        I confirm that the information provided in this registration
+                        form is true and accurate to the best of my knowledge.
+                    </p>
+
+                    <p>
+                        I understand that providing false or misleading information
+                        may affect my eligibility for registration, accreditation,
+                        or deployment.
+                    </p>
+
+                    <p>
+                        I also understand that submission of this form does not
+                        automatically guarantee selection or deployment and that
+                        final deployment remains subject to FLAMING Security's
+                        screening, verification, accreditation, operational
+                        requirements, and leadership approval.
+                    </p>
+                </div>
+
+                <div class="form-field">
+                    <label class="choice">
+                        <input type="checkbox" name="declaration" value="true" required>
+                        53. I have read, understood, and agree to the Volunteer Declaration above.
+                    </label>
+                </div>
+
+                <div class="form-field">
+                    <label class="choice">
+                        <input type="checkbox" name="consent_to_verification" value="true" required>
+                        54. I consent to FLAMING Security using the information I have
+                        provided for YMR 2026 registration, verification, accreditation,
+                        communication, deployment, welfare, and emergency purposes.
+                    </label>
+                </div>
+
+                <div class="form-field">
+                    <label class="choice">
+                        <input type="checkbox" name="information_accuracy_confirmed" value="true" required>
+                        55. I confirm that the information provided in this form is
+                        accurate and complete to the best of my knowledge.
+                    </label>
+                </div>
+            </div>
+
+            <div class="form-section">
+                <p class="form-note">
+                    Submission of this form does not automatically guarantee
+                    selection, accreditation, or deployment. All registrations
+                    are subject to the required screening, verification,
+                    accreditation, and final approval by FLAMING Security leadership.
+                </p>
+
+                <p class="form-note">
+                    Please review your responses carefully before submitting.
+                </p>
+
+                <button type="submit" class="btn btn-primary" id="submit-button">
+                    Submit Registration
+                </button>
+
+                <p id="registration-message" role="status" aria-live="polite"></p>
+
+                <div id="whatsapp-group-result">
+                    <h3>Registration Successful</h3>
+                    <p>
+                        Your registration has been received. Join your selected
+                        unit's WhatsApp group using the button below.
+                    </p>
+                    <a id="whatsapp-group-link" href="#" target="_blank" rel="noopener noreferrer">
+                        Join WhatsApp Group
+                    </a>
+                </div>
+            </div>
 
         </form>
     </div>
@@ -144,4 +703,3 @@
 
 </body>
 </html>
-
