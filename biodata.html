@@ -1,0 +1,1050 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <meta name="theme-color" content="#ffffff">
+    <meta name="description" content="Biodata and Welfare Completion - Flaming Security.">
+
+    <title>Biodata & Welfare | Flaming Security</title>
+
+    <style>
+        :root {
+            --bg: #f5f6f8;
+            --surface: #ffffff;
+            --border: #e3e5e9;
+            --text: #20232a;
+            --muted: #707783;
+            --accent: #b58a45;
+            --accent-dark: #967039;
+            --danger: #c83f46;
+            --success: #24834b;
+            --input: #ffffff;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            background: var(--bg);
+            color: var(--text);
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+        }
+
+        .header {
+            padding: 20px 6%;
+            background: #ffffff;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .brand {
+            font-size: 19px;
+            font-weight: 800;
+            letter-spacing: 1.3px;
+        }
+
+        .brand span {
+            color: var(--accent);
+        }
+
+        .header p {
+            color: var(--muted);
+            font-size: 12px;
+            margin-top: 3px;
+        }
+
+        .container {
+            width: min(900px, 92%);
+            margin: 38px auto;
+        }
+
+        .intro {
+            margin-bottom: 25px;
+        }
+
+        .intro small {
+            color: var(--accent-dark);
+            font-weight: 700;
+            letter-spacing: 1.5px;
+            text-transform: uppercase;
+            font-size: 11px;
+        }
+
+        .intro h1 {
+            font-size: clamp(26px, 5vw, 36px);
+            margin: 8px 0;
+            line-height: 1.2;
+        }
+
+        .intro p {
+            color: var(--muted);
+            max-width: 650px;
+            font-size: 14px;
+        }
+
+        .notice {
+            padding: 15px 17px;
+            border: 1px solid #eadcc3;
+            background: #fbf7ef;
+            border-radius: 9px;
+            color: #73582e;
+            margin-bottom: 22px;
+            font-size: 13px;
+        }
+
+        .form-section {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 27px;
+            margin-bottom: 19px;
+            box-shadow: 0 3px 14px rgba(0, 0, 0, .025);
+        }
+
+        .section-heading {
+            margin-bottom: 21px;
+            padding-bottom: 13px;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .section-heading h2 {
+            font-size: 18px;
+        }
+
+        .section-heading p {
+            color: var(--muted);
+            font-size: 12px;
+            margin-top: 3px;
+        }
+
+        .form-grid {
+            display: grid;
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            gap: 18px;
+        }
+
+        .field {
+            min-width: 0;
+        }
+
+        .full {
+            grid-column: 1 / -1;
+        }
+
+        label,
+        .field-label {
+            display: block;
+            font-size: 13px;
+            font-weight: 600;
+            margin-bottom: 7px;
+        }
+
+        .required {
+            color: var(--danger);
+        }
+
+        input,
+        select,
+        textarea {
+            width: 100%;
+            background: var(--input);
+            color: var(--text);
+            border: 1px solid #d8dce2;
+            border-radius: 7px;
+            padding: 13px 12px;
+            font-size: 14px;
+            outline: none;
+            font-family: inherit;
+            min-height: 46px;
+        }
+
+        input:focus,
+        select:focus,
+        textarea:focus {
+            border-color: var(--accent);
+            box-shadow: 0 0 0 3px rgba(181, 138, 69, .10);
+        }
+
+        input::placeholder,
+        textarea::placeholder {
+            color: #9aa0a9;
+        }
+
+        textarea {
+            resize: vertical;
+            min-height: 95px;
+        }
+
+        select option {
+            background: #ffffff;
+            color: var(--text);
+        }
+
+        .hint {
+            color: var(--muted);
+            font-size: 11px;
+            margin-top: 6px;
+        }
+
+        .subheading {
+            font-size: 14px;
+            margin: 22px 0 13px;
+        }
+
+        .photo-upload {
+            border: 1px dashed #c9b18a;
+            border-radius: 10px;
+            padding: 22px 15px;
+            text-align: center;
+            background: #fdfbf7;
+        }
+
+        .photo-upload input {
+            max-width: 100%;
+            border: none;
+            background: transparent;
+            padding: 10px 0;
+        }
+
+        .photo-preview {
+            display: none;
+            width: 130px;
+            height: 150px;
+            object-fit: cover;
+            border-radius: 8px;
+            margin: 12px auto 0;
+            border: 2px solid var(--accent);
+        }
+
+        .consent-box {
+            background: #f8f8f9;
+            border: 1px solid var(--border);
+            padding: 14px;
+            border-radius: 8px;
+            margin-bottom: 12px;
+        }
+
+        .consent-box label {
+            display: flex;
+            align-items: flex-start;
+            gap: 10px;
+            font-weight: normal;
+            line-height: 1.5;
+            margin: 0;
+        }
+
+        .consent-box input {
+            width: 17px;
+            height: 17px;
+            min-height: 17px;
+            flex-shrink: 0;
+            margin-top: 3px;
+            accent-color: var(--accent);
+        }
+
+        .submit-btn {
+            width: 100%;
+            background: var(--accent);
+            color: #ffffff;
+            border: none;
+            padding: 16px;
+            border-radius: 8px;
+            font-size: 14px;
+            font-weight: 800;
+            cursor: pointer;
+            transition: .2s;
+        }
+
+        .submit-btn:hover {
+            background: var(--accent-dark);
+        }
+
+        .submit-btn:disabled {
+            opacity: .6;
+            cursor: not-allowed;
+        }
+
+        .message {
+            display: none;
+            padding: 14px;
+            border-radius: 8px;
+            margin-bottom: 18px;
+            font-size: 13px;
+        }
+
+        .message.error {
+            display: block;
+            background: #fff0f0;
+            border: 1px solid #f0caca;
+            color: #a42d35;
+        }
+
+        .message.success {
+            display: block;
+            background: #edf8f0;
+            border: 1px solid #c7e6d0;
+            color: #246c3d;
+        }
+
+        .success-screen {
+            display: none;
+            text-align: center;
+            padding: 40px 20px;
+            background: #ffffff;
+            border: 1px solid var(--border);
+            border-radius: 12px;
+        }
+
+        .success-screen h2 {
+            color: var(--success);
+            margin-bottom: 10px;
+        }
+
+        .success-screen p {
+            color: var(--muted);
+            font-size: 14px;
+        }
+
+        footer {
+            text-align: center;
+            padding: 25px 15px;
+            color: var(--muted);
+            border-top: 1px solid var(--border);
+            font-size: 11px;
+            background: #ffffff;
+        }
+
+        @media (max-width: 650px) {
+            .header {
+                padding: 17px 5%;
+            }
+
+            .container {
+                width: 92%;
+                margin: 25px auto;
+            }
+
+            .intro {
+                margin-bottom: 20px;
+            }
+
+            .form-section {
+                padding: 20px 15px;
+                margin-bottom: 15px;
+                border-radius: 10px;
+            }
+
+            .form-grid {
+                grid-template-columns: minmax(0, 1fr);
+                gap: 15px;
+            }
+
+            .full {
+                grid-column: auto;
+            }
+
+            input,
+            select,
+            textarea {
+                font-size: 16px;
+                min-height: 48px;
+            }
+
+            textarea {
+                min-height: 100px;
+            }
+
+            .submit-btn {
+                min-height: 52px;
+            }
+
+            .photo-upload {
+                padding: 18px 12px;
+            }
+
+            footer {
+                padding: 22px 12px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+<header class="header">
+    <div class="brand">FLAMING <span>SECURITY</span></div>
+    <p>Serving with Excellence</p>
+</header>
+
+<main class="container">
+
+    <div class="intro">
+        <small>Operative Information</small>
+        <h1>Biodata & Welfare Completion</h1>
+        <p>
+            Congratulations on your registration approval.
+            Complete your biodata and welfare information carefully.
+            Please ensure that the information supplied is accurate.
+        </p>
+    </div>
+
+    <div class="notice">
+        This form is exclusively for approved operatives who have
+        received a completion invitation. Your personal and welfare
+        information will be handled according to authorised access permissions.
+    </div>
+
+    <div id="message" class="message" role="alert" aria-live="polite"></div>
+
+    <form id="biodata-form" enctype="multipart/form-data">
+
+        <section class="form-section">
+            <div class="section-heading">
+                <h2>Personal Information</h2>
+                <p>Additional personal and contact details.</p>
+            </div>
+
+            <div class="form-grid">
+                <div class="field">
+                    <label>Alternate Phone Number</label>
+                    <input type="tel" name="alternate_phone" placeholder="Additional phone number">
+                </div>
+
+                <div class="field">
+                    <label>Nationality</label>
+                    <input type="text" name="nationality" placeholder="e.g. Nigerian">
+                </div>
+
+                <div class="field">
+                    <label>Local Government Area</label>
+                    <input type="text" name="local_government_area">
+                </div>
+
+                <div class="field">
+                    <label>Occupation</label>
+                    <input type="text" name="occupation">
+                </div>
+            </div>
+        </section>
+
+        <section class="form-section">
+            <div class="section-heading">
+                <h2>Church & Spiritual Information</h2>
+                <p>Information about your church involvement.</p>
+            </div>
+
+            <div class="form-grid">
+                <div class="field">
+                    <label>Church Name</label>
+                    <input type="text" name="church_name">
+                </div>
+
+                <div class="field">
+                    <label>Parish / Province</label>
+                    <input type="text" name="parish_or_province">
+                </div>
+
+                <div class="field">
+                    <label>Pastor's Name</label>
+                    <input type="text" name="pastor_name">
+                </div>
+
+                <div class="field">
+                    <label>Are you born again?</label>
+                    <select name="born_again">
+                        <option value="">Select an option</option>
+                        <option value="Yes">Yes</option>
+                        <option value="No">No</option>
+                    </select>
+                </div>
+
+                <div class="field">
+                    <label>If yes, since when?</label>
+                    <input type="text" name="born_again_since">
+                </div>
+
+                <div class="field">
+                    <label>Have you undergone water baptism by immersion?</label>
+                    <select name="immersion_baptism">
+                        <option value="">Select an option</option>
+                        <option value="Yes">Yes</option>
+                        <option value="No">No</option>
+                    </select>
+                </div>
+
+                <div class="field">
+                    <label>Are you an active church worker?</label>
+                    <select name="active_church_worker">
+                        <option value="">Select an option</option>
+                        <option value="Yes">Yes</option>
+                        <option value="No">No</option>
+                    </select>
+                </div>
+
+                <div class="field">
+                    <label>Church Department</label>
+                    <input type="text" name="church_department">
+                </div>
+            </div>
+        </section>
+
+        <section class="form-section">
+            <div class="section-heading">
+                <h2>Previous Service & Experience</h2>
+                <p>Tell us about your previous participation.</p>
+            </div>
+
+            <div class="form-grid">
+                <div class="field">
+                    <label>Have you attended YMR before?</label>
+                    <select name="previous_ymr_attendance">
+                        <option value="">Select an option</option>
+                        <option value="Yes">Yes</option>
+                        <option value="No">No</option>
+                    </select>
+                </div>
+
+                <div class="field">
+                    <label>Have you served with Flaming Security before?</label>
+                    <select name="previous_fl_service">
+                        <option value="">Select an option</option>
+                        <option value="Yes">Yes</option>
+                        <option value="No">No</option>
+                    </select>
+                </div>
+
+                <div class="field">
+                    <label>Years of Service</label>
+                    <input type="number" name="years_of_service" min="0" step="0.5" placeholder="e.g. 2">
+                </div>
+
+                <div class="field">
+                    <label>Previous Deployment Area</label>
+                    <input type="text" name="previous_deployment_area">
+                </div>
+
+                <div class="field full">
+                    <label>Previous Service Details</label>
+                    <textarea name="previous_service_details" placeholder="Describe your previous service experience..."></textarea>
+                </div>
+
+                <div class="field full">
+                    <label>Why do you want to join Flaming Security?</label>
+                    <textarea name="reason_for_joining"></textarea>
+                </div>
+
+                <div class="field">
+                    <label>Preferred Deployment Unit</label>
+                    <input type="text" name="preferred_deployment_unit">
+                </div>
+            </div>
+        </section>
+
+        <section class="form-section">
+            <div class="section-heading">
+                <h2>Accommodation Information</h2>
+                <p>Provide your accommodation requirements.</p>
+            </div>
+
+            <div class="form-grid">
+                <div class="field">
+                    <label>Do you require accommodation? <span class="required">*</span></label>
+                    <select name="accommodation_required" required>
+                        <option value="">Select an option</option>
+                        <option value="true">Yes</option>
+                        <option value="false">No</option>
+                    </select>
+                </div>
+
+                <div class="field">
+                    <label>Accommodation Type</label>
+                    <input type="text" name="accommodation_type">
+                </div>
+
+                <div class="field">
+                    <label>Accommodation Price (if applicable)</label>
+                    <input type="number" name="accommodation_price" min="0" step="0.01">
+                </div>
+
+                <div class="field full">
+                    <label>Accommodation Notes</label>
+                    <textarea name="accommodation_notes"></textarea>
+                </div>
+            </div>
+        </section>
+
+        <section class="form-section">
+            <div class="section-heading">
+                <h2>Emergency & Welfare Information</h2>
+                <p>
+                    This information helps the welfare team respond
+                    appropriately when support or assistance is needed.
+                    Access to these records is restricted to authorised super admins.
+                </p>
+            </div>
+
+            <h3 class="subheading">Next of Kin</h3>
+
+            <div class="form-grid">
+                <div class="field">
+                    <label>Next of Kin Full Name</label>
+                    <input type="text" name="next_of_kin_name">
+                </div>
+
+                <div class="field">
+                    <label>Relationship</label>
+                    <input type="text" name="next_of_kin_relationship" placeholder="e.g. Parent, sibling">
+                </div>
+
+                <div class="field">
+                    <label>Next of Kin Phone Number</label>
+                    <input type="tel" name="next_of_kin_phone">
+                </div>
+
+                <div class="field">
+                    <label>Next of Kin Address</label>
+                    <input type="text" name="next_of_kin_address">
+                </div>
+            </div>
+
+            <h3 class="subheading">Medical Information</h3>
+
+            <div class="form-grid">
+                <div class="field">
+                    <label>Blood Group</label>
+                    <select name="blood_group">
+                        <option value="">Select blood group</option>
+                        <option value="A+">A+</option>
+                        <option value="A-">A-</option>
+                        <option value="B+">B+</option>
+                        <option value="B-">B-</option>
+                        <option value="AB+">AB+</option>
+                        <option value="AB-">AB-</option>
+                        <option value="O+">O+</option>
+                        <option value="O-">O-</option>
+                        <option value="Unknown">Unknown</option>
+                    </select>
+                </div>
+
+                <div class="field">
+                    <label>Genotype</label>
+                    <select name="genotype">
+                        <option value="">Select genotype</option>
+                        <option value="AA">AA</option>
+                        <option value="AS">AS</option>
+                        <option value="SS">SS</option>
+                        <option value="AC">AC</option>
+                        <option value="SC">SC</option>
+                        <option value="Unknown">Unknown</option>
+                    </select>
+                </div>
+
+                <div class="field">
+                    <label>Do you have any medical condition?</label>
+                    <select name="medical_condition">
+                        <option value="">Select an option</option>
+                        <option value="true">Yes</option>
+                        <option value="false">No</option>
+                    </select>
+                </div>
+
+                <div class="field">
+                    <label>Medical Condition Details</label>
+                    <textarea name="medical_condition_details" placeholder="Provide details where applicable"></textarea>
+                </div>
+
+                <div class="field">
+                    <label>Do you have any allergies?</label>
+                    <select name="allergies">
+                        <option value="">Select an option</option>
+                        <option value="true">Yes</option>
+                        <option value="false">No</option>
+                    </select>
+                </div>
+
+                <div class="field">
+                    <label>Allergy Details</label>
+                    <textarea name="allergy_details" placeholder="List any known allergies"></textarea>
+                </div>
+
+                <div class="field full">
+                    <label>Dietary Restrictions</label>
+                    <textarea name="dietary_restrictions" placeholder="Describe any dietary restrictions or requirements"></textarea>
+                </div>
+
+                <div class="field full">
+                    <label>Other Welfare Information</label>
+                    <textarea name="other_welfare_information" placeholder="Any other information the welfare team should know"></textarea>
+                </div>
+            </div>
+
+            <div class="consent-box" style="margin-top:20px">
+                <label>
+                    <input type="checkbox" name="welfare_consent" value="true" required>
+                    <span>
+                        I consent to providing this emergency and welfare
+                        information to Flaming Security for appropriate
+                        welfare and emergency support.
+                    </span>
+                </label>
+            </div>
+        </section>
+
+        <section class="form-section">
+            <div class="section-heading">
+                <h2>Referee Information</h2>
+                <p>Provide details of two people who can serve as referees.</p>
+            </div>
+
+            <h3 class="subheading">First Referee</h3>
+
+            <div class="form-grid">
+                <div class="field">
+                    <label>Full Name</label>
+                    <input type="text" name="referee_one_name">
+                </div>
+
+                <div class="field">
+                    <label>Phone Number</label>
+                    <input type="tel" name="referee_one_phone">
+                </div>
+
+                <div class="field full">
+                    <label>How long have you known this person?</label>
+                    <input type="text" name="referee_one_relationship_duration">
+                </div>
+            </div>
+
+            <h3 class="subheading">Second Referee</h3>
+
+            <div class="form-grid">
+                <div class="field">
+                    <label>Full Name</label>
+                    <input type="text" name="referee_two_name">
+                </div>
+
+                <div class="field">
+                    <label>Phone Number</label>
+                    <input type="tel" name="referee_two_phone">
+                </div>
+
+                <div class="field full">
+                    <label>How long have you known this person?</label>
+                    <input type="text" name="referee_two_relationship_duration">
+                </div>
+            </div>
+        </section>
+
+        <section class="form-section">
+            <div class="section-heading">
+                <h2>Passport Photograph</h2>
+                <p>Upload a clear, recent passport photograph.</p>
+            </div>
+
+            <div class="photo-upload">
+                <label for="passport-photo">
+                    Select Passport Photograph <span class="required">*</span>
+                </label>
+
+                <input
+                    type="file"
+                    id="passport-photo"
+                    name="passport_photo"
+                    accept="image/jpeg,image/png,image/webp"
+                    required
+                >
+
+                <p class="hint">JPEG, PNG or WebP. Maximum file size: 5 MB.</p>
+
+                <img id="photo-preview" class="photo-preview" alt="Passport preview">
+            </div>
+        </section>
+
+        <section class="form-section">
+            <div class="section-heading">
+                <h2>Declaration & Consent</h2>
+                <p>Please read and confirm the following.</p>
+            </div>
+
+            <div class="consent-box">
+                <label>
+                    <input type="checkbox" name="consent_to_verification" value="true" required>
+                    <span>
+                        I consent to Flaming Security verifying the
+                        information supplied in this biodata form.
+                    </span>
+                </label>
+            </div>
+
+            <div class="consent-box">
+                <label>
+                    <input type="checkbox" name="information_accuracy_confirmed" value="true" required>
+                    <span>
+                        I confirm that the information provided is
+                        accurate and complete to the best of my knowledge.
+                    </span>
+                </label>
+            </div>
+        </section>
+
+        <button type="submit" class="submit-btn" id="submit-btn">
+            SUBMIT BIODATA & WELFARE
+        </button>
+
+    </form>
+
+    <div class="success-screen" id="success-screen">
+        <h2>Information Submitted Successfully</h2>
+        <p>
+            Your biodata, welfare information and passport photograph
+            have been received.
+        </p>
+        <p style="margin-top:12px">
+            You may now close this page.
+        </p>
+    </div>
+
+</main>
+
+<footer>
+    Flaming Security | Serving with Excellence
+    <br>
+    YMR 2026
+</footer>
+
+<script src="js/supabase-config.js"></script>
+
+<script>
+    const form = document.getElementById("biodata-form");
+    const message = document.getElementById("message");
+    const submitBtn = document.getElementById("submit-btn");
+    const photoInput = document.getElementById("passport-photo");
+    const photoPreview = document.getElementById("photo-preview");
+
+    const token = new URLSearchParams(window.location.search).get("token");
+
+    const endpoint = `${SUPABASE_URL}/functions/v1/submit-operative-biodata`;
+
+    function showMessage(text, type) {
+        message.textContent = text;
+        message.className = `message ${type}`;
+        message.scrollIntoView({
+            behavior: "smooth",
+            block: "center"
+        });
+    }
+
+    photoInput.addEventListener("change", () => {
+        const file = photoInput.files[0];
+
+        if (!file) {
+            photoPreview.style.display = "none";
+            photoPreview.removeAttribute("src");
+            return;
+        }
+
+        const allowedTypes = [
+            "image/jpeg",
+            "image/png",
+            "image/webp"
+        ];
+
+        if (!allowedTypes.includes(file.type)) {
+            photoInput.value = "";
+            photoPreview.style.display = "none";
+            showMessage("Please select a JPEG, PNG or WebP image.", "error");
+            return;
+        }
+
+        if (file.size < 1 || file.size > 5 * 1024 * 1024) {
+            photoInput.value = "";
+            photoPreview.style.display = "none";
+            showMessage("Your photograph must be greater than 0 bytes and must not exceed 5 MB.", "error");
+            return;
+        }
+
+        const reader = new FileReader();
+
+        reader.onload = (event) => {
+            photoPreview.src = event.target.result;
+            photoPreview.style.display = "block";
+        };
+
+        reader.onerror = () => {
+            photoInput.value = "";
+            photoPreview.style.display = "none";
+            showMessage("Unable to preview this photograph. Please try another image.", "error");
+        };
+
+        reader.readAsDataURL(file);
+    });
+
+    const biodataFields = [
+        "alternate_phone",
+        "local_government_area",
+        "nationality",
+        "occupation",
+        "church_name",
+        "parish_or_province",
+        "pastor_name",
+        "born_again",
+        "born_again_since",
+        "immersion_baptism",
+        "active_church_worker",
+        "church_department",
+        "previous_ymr_attendance",
+        "previous_fl_service",
+        "years_of_service",
+        "previous_deployment_area",
+        "previous_service_details",
+        "reason_for_joining",
+        "accommodation_required",
+        "accommodation_type",
+        "accommodation_price",
+        "accommodation_notes",
+        "referee_one_name",
+        "referee_one_phone",
+        "referee_one_relationship_duration",
+        "referee_two_name",
+        "referee_two_phone",
+        "referee_two_relationship_duration",
+        "preferred_deployment_unit",
+        "consent_to_verification",
+        "information_accuracy_confirmed"
+    ];
+
+    const welfareFields = [
+        "next_of_kin_name",
+        "next_of_kin_relationship",
+        "next_of_kin_phone",
+        "next_of_kin_address",
+        "blood_group",
+        "genotype",
+        "medical_condition",
+        "medical_condition_details",
+        "allergies",
+        "allergy_details",
+        "dietary_restrictions",
+        "other_welfare_information",
+        "welfare_consent"
+    ];
+
+    function collectFields(fields, destination) {
+        fields.forEach((field) => {
+            const element = form.elements.namedItem(field);
+
+            if (!element) return;
+
+            if (element.type === "checkbox") {
+                destination[field] = element.checked;
+                return;
+            }
+
+            const value = element.value.trim();
+
+            destination[field] = value === "" ? null : value;
+        });
+    }
+
+    form.addEventListener("submit", async (event) => {
+        event.preventDefault();
+
+        if (!token || !/^[a-f0-9]{64}$/i.test(token)) {
+            showMessage(
+                "Your invitation link is missing or invalid. Please contact Flaming Security Administration.",
+                "error"
+            );
+            return;
+        }
+
+        if (!form.reportValidity()) return;
+
+        const file = photoInput.files[0];
+
+        if (!file) {
+            showMessage("Please upload your passport photograph.", "error");
+            return;
+        }
+
+        if (file.size < 1 || file.size > 5 * 1024 * 1024) {
+            showMessage("Your photograph must not exceed 5 MB.", "error");
+            return;
+        }
+
+        const biodata = {};
+        const welfare = {};
+
+        collectFields(biodataFields, biodata);
+        collectFields(welfareFields, welfare);
+
+        if (welfare.welfare_consent !== true) {
+            showMessage(
+                "Please confirm your welfare information consent.",
+                "error"
+            );
+            return;
+        }
+
+        const payload = new FormData();
+
+        payload.append("token", token);
+        payload.append("biodata", JSON.stringify(biodata));
+        payload.append("welfare", JSON.stringify(welfare));
+        payload.append("passport_photo", file);
+
+        submitBtn.disabled = true;
+        submitBtn.textContent = "SUBMITTING...";
+
+        message.className = "message";
+        message.textContent = "";
+
+        try {
+            const response = await fetch(endpoint, {
+                method: "POST",
+                headers: {
+                    "apikey": SUPABASE_KEY
+                },
+                body: payload
+            });
+
+            let result;
+
+            try {
+                result = await response.json();
+            } catch {
+                throw new Error("The server returned an invalid response. Please try again.");
+            }
+
+            if (!response.ok) {
+                throw new Error(result.error || "Submission failed. Please try again.");
+            }
+
+            form.style.display = "none";
+
+            const successScreen = document.getElementById("success-screen");
+            successScreen.style.display = "block";
+
+            successScreen.scrollIntoView({
+                behavior: "smooth",
+                block: "center"
+            });
+
+        } catch (error) {
+            showMessage(
+                error.message || "Something went wrong. Please try again.",
+                "error"
+            );
+
+            submitBtn.disabled = false;
+            submitBtn.textContent = "SUBMIT BIODATA & WELFARE";
+        }
+    });
+</script>
+
+</body>
+</html>

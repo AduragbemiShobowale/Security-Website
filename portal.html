@@ -9,6 +9,7 @@
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
     <script src="https://unpkg.com/html5-qrcode"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
 
     <style>
         :root {
@@ -188,7 +189,8 @@
             font-size: 13px;
         }
 
-        .nav-btn:hover, .nav-btn.active {
+        .nav-btn:hover,
+        .nav-btn.active {
             background: #263047;
             color: white;
         }
@@ -438,6 +440,15 @@
             background: #991b1b;
         }
 
+        .invitation-button {
+            background: #1d4ed8;
+            color: white;
+            padding: 7px 9px;
+            border: 0;
+            border-radius: 5px;
+            font-size: 11px;
+        }
+
         .message {
             margin-top: 14px;
             color: var(--muted);
@@ -452,6 +463,19 @@
 
         .error-text {
             color: #fca5a5;
+        }
+
+        .invitation-result {
+            margin-top: 15px;
+            padding: 15px;
+            background: #0b1223;
+            border: 1px solid var(--border);
+            border-radius: 9px;
+            overflow-wrap: anywhere;
+        }
+
+        .invitation-result input {
+            margin: 12px 0;
         }
 
         .scanner-area {
@@ -524,13 +548,19 @@
         }
 
         @media (max-width: 720px) {
+            body {
+                overflow-x: hidden;
+            }
+
             .layout {
                 display: block;
+                width: 100%;
             }
 
             .sidebar {
                 display: none;
                 width: 100%;
+                padding: 16px 14px;
                 border-right: 0;
                 border-bottom: 1px solid var(--border);
             }
@@ -546,337 +576,256 @@
                 border: 0;
                 border-radius: 6px;
                 padding: 10px 12px;
+                min-width: 42px;
+                min-height: 42px;
             }
 
             .topbar {
-                padding: 15px;
+                display: flex;
+                align-items: flex-start;
+                justify-content: space-between;
+                gap: 10px;
+                padding: 13px 14px;
                 flex-wrap: wrap;
             }
 
+            .topbar > div:first-child {
+                flex: 1;
+                min-width: 0;
+                align-items: flex-start !important;
+                gap: 9px !important;
+            }
+
             .topbar h1 {
-                font-size: 17px;
+                font-size: 16px;
+                line-height: 1.35;
+                overflow-wrap: anywhere;
+            }
+
+            .topbar p {
+                font-size: 11px;
+                line-height: 1.45;
             }
 
             .admin-badge {
                 display: none;
             }
 
-            .content {
-                padding: 15px;
+            .top-actions {
+                flex: 0 0 auto;
+                gap: 6px;
             }
 
-            .stats, .quick-actions {
-                grid-template-columns: 1fr;
+            #refreshAllButton {
+                padding: 10px;
+                min-height: 42px;
+                font-size: 12px;
+            }
+
+            .content {
+                padding: 14px 12px;
+            }
+
+            .welcome {
+                margin-bottom: 17px;
+            }
+
+            .welcome h2,
+            .section-heading h2 {
+                font-size: 20px;
+                line-height: 1.35;
+            }
+
+            .welcome p,
+            .section-heading p {
+                font-size: 12px;
+            }
+
+            .stats {
+                grid-template-columns: repeat(2, minmax(0, 1fr));
+                gap: 10px;
+                margin-bottom: 16px;
+            }
+
+            .stat-card, .panel {
+                padding: 14px;
+                border-radius: 9px;
+            }
+
+            .stat-card p {
+                font-size: 11px;
+                line-height: 1.4;
+                margin-bottom: 10px;
+            }
+
+            .stat-card h3 {
+                font-size: 24px;
+            }
+
+            .panel {
+                margin-bottom: 14px;
+            }
+
+            .panel h2, .panel h3 {
+                font-size: 16px;
+                line-height: 1.4;
+            }
+
+            .panel-description {
+                font-size: 12px;
+                margin-bottom: 14px;
+            }
+
+            .quick-actions {
+                grid-template-columns: repeat(2, minmax(0, 1fr));
+                gap: 9px;
+                margin-top: 14px;
+            }
+
+            .quick-btn {
+                min-width: 0;
+                padding: 12px 10px;
+                overflow-wrap: anywhere;
+            }
+
+            .quick-btn strong {
+                font-size: 12px;
+                line-height: 1.4;
+                margin-bottom: 6px;
+            }
+
+            .quick-btn span {
+                display: block;
+                font-size: 11px;
+                line-height: 1.45;
+            }
+
+            .toolbar {
+                display: flex;
+                flex-direction: column;
+                align-items: stretch;
+                gap: 9px;
+                margin: 14px 0;
+            }
+
+            .toolbar input,
+            .toolbar select,
+            .toolbar button {
+                width: 100%;
+                min-height: 43px;
+                flex: none;
+            }
+
+            input, select {
+                font-size: 16px;
+            }
+
+            .primary, .secondary, .danger {
+                min-height: 42px;
+                padding: 11px 13px;
+            }
+
+            .table-wrapper {
+                margin-top: 13px;
+                overflow-x: auto;
+                -webkit-overflow-scrolling: touch;
+                border-radius: 7px;
+            }
+
+            table {
+                min-width: 620px;
+            }
+
+            th, td {
+                padding: 11px 10px;
+            }
+
+            .action-buttons {
+                min-width: 120px;
+            }
+
+            .action-buttons button {
+                min-height: 34px;
+            }
+
+            .scanner-area {
+                max-width: 100%;
+            }
+
+            #reader {
+                width: 100%;
+                max-width: 100%;
+            }
+
+            #reader video {
+                width: 100% !important;
+                height: auto !important;
+            }
+
+            .result-box {
+                padding: 13px;
+            }
+
+            #qrCode {
+                padding: 10px;
+                max-width: 100%;
+                overflow: hidden;
+            }
+
+            #qrCode canvas, #qrCode img {
+                max-width: 100%;
+                height: auto;
+            }
+
+            .manual-form {
+                max-width: 100%;
+            }
+
+            .footer {
+                padding: 18px 12px;
+                line-height: 1.5;
+            }
+
+            .invitation-result {
+                padding: 12px;
+            }
+        }
+
+        @media (max-width: 380px) {
+            .topbar > div:first-child {
+                width: 100%;
+                flex: 1 1 100%;
+            }
+
+            .top-actions {
+                width: 100%;
+                justify-content: flex-end;
+            }
+
+            .stats {
+                gap: 8px;
             }
 
             .stat-card {
-                padding: 17px;
+                padding: 11px;
+            }
+
+            .stat-card h3 {
+                font-size: 22px;
+            }
+
+            .quick-actions {
+                gap: 8px;
+            }
+
+            .quick-btn {
+                padding: 11px 9px;
             }
         }
-        @media (max-width: 720px) {
-    body {
-        overflow-x: hidden;
-    }
-
-    .login-wrap {
-        margin: 24px auto;
-        padding: 14px;
-    }
-
-    .login-card {
-        padding: 22px 18px;
-    }
-
-    .layout {
-        display: block;
-        width: 100%;
-    }
-
-    .sidebar {
-        position: relative;
-        width: 100%;
-        padding: 16px 14px;
-        border-right: 0;
-        border-bottom: 1px solid var(--border);
-    }
-
-    .sidebar.open {
-        display: block;
-    }
-
-    .sidebar-subtitle {
-        margin-bottom: 16px;
-    }
-
-    .menu-label {
-        margin: 16px 10px 7px;
-    }
-
-    .nav-btn {
-        padding: 12px;
-        min-height: 44px;
-    }
-
-    .topbar {
-        display: flex;
-        align-items: flex-start;
-        justify-content: space-between;
-        gap: 10px;
-        padding: 13px 14px;
-    }
-
-    .topbar > div:first-child {
-        flex: 1;
-        min-width: 0;
-        align-items: flex-start !important;
-        gap: 9px !important;
-    }
-
-    .topbar h1 {
-        font-size: 16px;
-        line-height: 1.35;
-        overflow-wrap: anywhere;
-    }
-
-    .topbar p {
-        font-size: 11px;
-        line-height: 1.45;
-        overflow-wrap: anywhere;
-    }
-
-    .menu-toggle {
-        flex: 0 0 auto;
-        min-width: 42px;
-        min-height: 42px;
-        padding: 9px 11px;
-    }
-
-    .top-actions {
-        flex: 0 0 auto;
-        gap: 6px;
-    }
-
-    #refreshAllButton {
-        padding: 10px;
-        min-height: 42px;
-        font-size: 12px;
-    }
-
-    .content {
-        padding: 14px 12px;
-    }
-
-    .welcome {
-        margin-bottom: 17px;
-    }
-
-    .welcome h2,
-    .section-heading h2 {
-        font-size: 20px;
-        line-height: 1.35;
-    }
-
-    .welcome p,
-    .section-heading p {
-        font-size: 12px;
-    }
-
-    .stats {
-        grid-template-columns: repeat(2, minmax(0, 1fr));
-        gap: 10px;
-        margin-bottom: 16px;
-    }
-
-    .stat-card,
-    .panel {
-        padding: 14px;
-        border-radius: 9px;
-    }
-
-    .stat-card p {
-        font-size: 11px;
-        line-height: 1.4;
-        margin-bottom: 10px;
-        overflow-wrap: anywhere;
-    }
-
-    .stat-card h3 {
-        font-size: 24px;
-    }
-
-    .panel {
-        margin-bottom: 14px;
-    }
-
-    .panel h2,
-    .panel h3 {
-        font-size: 16px;
-        line-height: 1.4;
-    }
-
-    .panel-description {
-        font-size: 12px;
-        margin-bottom: 14px;
-    }
-
-    .quick-actions {
-        grid-template-columns: repeat(2, minmax(0, 1fr));
-        gap: 9px;
-        margin-top: 14px;
-    }
-
-    .quick-btn {
-        min-width: 0;
-        padding: 12px 10px;
-        overflow-wrap: anywhere;
-    }
-
-    .quick-btn strong {
-        font-size: 12px;
-        line-height: 1.4;
-        margin-bottom: 6px;
-    }
-
-    .quick-btn span {
-        display: block;
-        font-size: 11px;
-        line-height: 1.45;
-    }
-
-    .toolbar {
-        display: flex;
-        flex-direction: column;
-        align-items: stretch;
-        gap: 9px;
-        margin: 14px 0;
-    }
-
-    .toolbar input,
-    .toolbar select,
-    .toolbar button {
-        width: 100%;
-        min-height: 43px;
-        flex: none;
-    }
-
-    input,
-    select {
-        font-size: 16px;
-    }
-
-    .primary,
-    .secondary,
-    .danger {
-        min-height: 42px;
-        padding: 11px 13px;
-    }
-
-    .table-wrapper {
-        margin-top: 13px;
-        overflow-x: auto;
-        -webkit-overflow-scrolling: touch;
-        border-radius: 7px;
-    }
-
-    table {
-        min-width: 620px;
-    }
-
-    th,
-    td {
-        padding: 11px 10px;
-    }
-
-    .action-buttons {
-        min-width: 120px;
-    }
-
-    .action-buttons button {
-        min-height: 34px;
-    }
-
-    .scanner-area {
-        max-width: 100%;
-    }
-
-    #reader {
-        width: 100%;
-        max-width: 100%;
-    }
-
-    #reader video {
-        width: 100% !important;
-        height: auto !important;
-    }
-
-    .result-box {
-        padding: 13px;
-    }
-
-    #qrCode {
-        padding: 10px;
-        max-width: 100%;
-        overflow: hidden;
-    }
-
-    #qrCode canvas,
-    #qrCode img {
-        max-width: 100%;
-        height: auto;
-    }
-
-    .manual-form {
-        max-width: 100%;
-    }
-
-    .footer {
-        padding: 18px 12px;
-        line-height: 1.5;
-    }
-}
-
-@media (max-width: 380px) {
-    .topbar {
-        flex-wrap: wrap;
-    }
-
-    .topbar > div:first-child {
-        width: 100%;
-        flex: 1 1 100%;
-    }
-
-    .top-actions {
-        width: 100%;
-        justify-content: flex-end;
-    }
-
-    .stats {
-        gap: 8px;
-    }
-
-    .stat-card {
-        padding: 11px;
-    }
-
-    .stat-card h3 {
-        font-size: 22px;
-    }
-
-    .quick-actions {
-        gap: 8px;
-    }
-
-    .quick-btn {
-        padding: 11px 9px;
-    }
-}
-
     </style>
 </head>
 
 <body>
-
-<!-- ADMIN LOGIN -->
 
 <section id="loginView" class="login-wrap">
     <div class="login-card">
@@ -891,16 +840,12 @@
             <label for="loginPassword">Password</label>
             <input id="loginPassword" type="password" autocomplete="current-password" required>
 
-            <button class="primary" id="loginButton" type="submit">
-                Sign In
-            </button>
+            <button class="primary" id="loginButton" type="submit">Sign In</button>
 
             <p id="loginMessage" class="message" role="status"></p>
         </form>
     </div>
 </section>
-
-<!-- MANAGEMENT PORTAL -->
 
 <div id="portalView" class="layout" hidden>
 
@@ -918,12 +863,10 @@
         <button class="nav-btn" data-section="sessions">📅 Programme Sessions</button>
 
         <div class="menu-label">Reports</div>
-
         <button class="nav-btn" data-section="reports">📊 Attendance Reports</button>
 
         <div class="menu-label">Account</div>
-
-        <button class="nav-btn" id="logoutButton">🚪 Sign Out</button>
+        <button class="nav-btn" id="logoutButton" type="button">🚪 Sign Out</button>
     </aside>
 
     <main class="main">
@@ -944,8 +887,6 @@
         </header>
 
         <div class="content">
-
-            <!-- OVERVIEW -->
 
             <section id="overview" class="section active">
                 <div class="welcome">
@@ -1025,8 +966,6 @@
                 </div>
             </section>
 
-            <!-- OPERATIVES -->
-
             <section id="operatives" class="section">
                 <div class="section-heading">
                     <h2>Operative Management</h2>
@@ -1036,16 +975,29 @@
                 <div class="panel">
                     <div class="toolbar">
                         <input id="operativeSearch" type="search" placeholder="Search name, phone or unit">
+
                         <select id="statusFilter">
                             <option value="">All statuses</option>
                             <option value="pending">Pending</option>
                             <option value="approved">Approved</option>
                             <option value="rejected">Rejected</option>
                         </select>
+
                         <button class="secondary" id="refreshOperatives" type="button">Refresh Records</button>
                     </div>
 
                     <p id="operativeMessage" class="message" role="status"></p>
+
+                    <div id="invitationResult" class="invitation-result" hidden>
+                        <h3>Biodata Invitation</h3>
+                        <p id="invitationResultMessage" class="message" role="status"></p>
+
+                        <input id="invitationLink" type="text" readonly aria-label="Biodata invitation link" hidden>
+
+                        <button id="copyInvitationLink" class="secondary" type="button" hidden>
+                            Copy Invitation Link
+                        </button>
+                    </div>
 
                     <div class="table-wrapper">
                         <table>
@@ -1066,8 +1018,6 @@
                     </div>
                 </div>
             </section>
-
-            <!-- QR GENERATOR -->
 
             <section id="qr" class="section">
                 <div class="section-heading">
@@ -1096,8 +1046,6 @@
                 </div>
             </section>
 
-            <!-- QR ATTENDANCE SCANNER -->
-
             <section id="scanner" class="section">
                 <div class="section-heading">
                     <h2>Scan Attendance</h2>
@@ -1124,8 +1072,6 @@
                     </div>
                 </div>
             </section>
-
-            <!-- MANUAL ATTENDANCE -->
 
             <section id="manual" class="section">
                 <div class="section-heading">
@@ -1154,8 +1100,6 @@
                 </div>
             </section>
 
-            <!-- PROGRAMME SESSIONS -->
-
             <section id="sessions" class="section">
                 <div class="section-heading">
                     <h2>Programme Sessions</h2>
@@ -1183,8 +1127,6 @@
                 </div>
             </section>
 
-            <!-- REPORTS -->
-
             <section id="reports" class="section">
                 <div class="section-heading">
                     <h2>Attendance Reports</h2>
@@ -1197,6 +1139,7 @@
                             <p>All Attendance Records</p>
                             <h3 id="reportTotal">—</h3>
                         </article>
+
                         <article class="stat-card">
                             <p>Filtered Records</p>
                             <h3 id="reportFiltered">—</h3>
@@ -1205,12 +1148,15 @@
 
                     <div class="toolbar">
                         <input id="reportSearch" type="search" placeholder="Search operative name">
+
                         <select id="reportUnitFilter">
                             <option value="">All Units</option>
                         </select>
+
                         <select id="reportProgrammeFilter">
                             <option value="">All Sessions</option>
                         </select>
+
                         <button class="secondary" id="refreshReports" type="button">Refresh</button>
                         <button class="primary" id="exportButton" type="button">Export Excel</button>
                     </div>
@@ -1249,54 +1195,60 @@
 <script>
 "use strict";
 
-// ================================================
-// SUPABASE CONFIGURATION
-// ================================================
-
 const SUPABASE_URL = "https://zhxkwivfvxqrnlfvxcum.supabase.co";
+const SUPABASE_KEY = "sb_publishable_RyxqpWZa4ZjTVbSt5pY8vQ_myKplV7A";
 
-const SUPABASE_KEY =
-    "sb_publishable_RyxqpWZa4ZjTVbSt5pY8vQ_myKplV7A";
+const db = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 
-const db = window.supabase.createClient(
-    SUPABASE_URL,
-    SUPABASE_KEY
-);
+let currentAdmin = null;
+let allOperatives = [];
+let allProgrammes = [];
+let allSessions = [];
+let allAttendance = [];
+let html5QrCode = null;
+let scannerBusy = false;
 
 const $ = id => document.getElementById(id);
 
-let currentUser = null;
-let allOperatives = [];
-let approvedOperatives = [];
-let allProgrammes = [];
-let allAttendance = [];
-
-let scanner = null;
-let scannerRunning = false;
-let scanLocked = false;
-
-const sectionTitles = {
-    overview: "Management Overview",
-    operatives: "Operative Management",
-    qr: "QR Code Generator",
-    scanner: "Scan Attendance",
-    manual: "Manual Attendance",
-    sessions: "Programme Sessions",
-    reports: "Attendance Reports"
-};
-
-$("year").textContent = new Date().getFullYear();
-
-// ================================================
-// COMMON HELPERS
-// ================================================
-
-function setMessage(id, text, type = "") {
+function showMessage(id, message, type = "error") {
     const element = $(id);
     if (!element) return;
 
-    element.textContent = text;
-    element.className = "message" + (type ? " " + type + "-text" : "");
+    element.textContent = message;
+    element.className = "message";
+
+    if (type === "success") {
+        element.classList.add("success-text");
+    } else if (type === "error") {
+        element.classList.add("error-text");
+    }
+
+    element.style.display = "block";
+}
+
+function clearMessage(id) {
+    const element = $(id);
+    if (!element) return;
+
+    element.textContent = "";
+    element.style.display = "none";
+}
+
+function setButtonLoading(button, loading, text = "Please wait...") {
+    if (!button) return;
+
+    if (loading) {
+        if (!button.dataset.originalText) {
+            button.dataset.originalText = button.textContent;
+        }
+
+        button.disabled = true;
+        button.textContent = text;
+    } else {
+        button.disabled = false;
+        button.textContent = button.dataset.originalText || "Submit";
+        delete button.dataset.originalText;
+    }
 }
 
 function escapeHTML(value) {
@@ -1305,15 +1257,61 @@ function escapeHTML(value) {
         "<": "&lt;",
         ">": "&gt;",
         '"': "&quot;",
-        "'": "&#39;"
+        "'": "&#039;"
     })[character]);
 }
 
-function showLogin(message = "") {
-    $("portalView").hidden = true;
+function formatDate(value) {
+    if (!value) return "—";
+
+    const date = new Date(value);
+
+    if (Number.isNaN(date.getTime())) return "—";
+
+    return date.toLocaleDateString("en-NG", {
+        day: "numeric",
+        month: "short",
+        year: "numeric"
+    });
+}
+
+function formatTime(value) {
+    if (!value) return "—";
+
+    const date = new Date(value);
+
+    if (Number.isNaN(date.getTime())) return "—";
+
+    return date.toLocaleTimeString("en-NG", {
+        hour: "2-digit",
+        minute: "2-digit"
+    });
+}
+
+function getToday() {
+    const now = new Date();
+    const year = now.getFullYear();
+    const month = String(now.getMonth() + 1).padStart(2, "0");
+    const day = String(now.getDate()).padStart(2, "0");
+
+    return `${year}-${month}-${day}`;
+}
+
+function getOperativeName(operative) {
+    return [
+        operative.first_name,
+        operative.middle_name,
+        operative.last_name
+    ].filter(Boolean).join(" ") ||
+        operative.full_name ||
+        operative.name ||
+        "Unnamed operative";
+}
+
+function showLogin() {
     $("loginView").hidden = false;
-    $("loginPassword").value = "";
-    setMessage("loginMessage", message);
+    $("portalView").hidden = true;
+    currentAdmin = null;
 }
 
 function showPortal() {
@@ -1321,33 +1319,50 @@ function showPortal() {
     $("portalView").hidden = false;
 }
 
-function navigate(sectionId) {
-    if (!$(sectionId)) return;
+function navigateTo(sectionId) {
+    const section = $(sectionId);
+    if (!section || !section.classList.contains("section")) return;
 
-    document.querySelectorAll(".section").forEach(section => {
-        section.classList.toggle("active", section.id === sectionId);
+    document.querySelectorAll(".section").forEach(item => {
+        item.classList.remove("active");
     });
 
-    document.querySelectorAll(".nav-btn[data-section]").forEach(button => {
+    section.classList.add("active");
+
+    document.querySelectorAll("[data-section]").forEach(button => {
         button.classList.toggle(
             "active",
             button.dataset.section === sectionId
         );
     });
 
-    $("pageTitle").textContent =
-        sectionTitles[sectionId] || "Management Portal";
+    const activeButton = document.querySelector(
+        `[data-section="${sectionId}"].nav-btn`
+    );
+
+    if (activeButton) {
+        $("pageTitle").textContent = activeButton.textContent.trim();
+    } else {
+        const quickButton = document.querySelector(
+            `.quick-btn[data-section="${sectionId}"]`
+        );
+
+        if (quickButton) {
+            $("pageTitle").textContent =
+                quickButton.querySelector("strong")?.textContent || "Management Portal";
+        }
+    }
 
     $("sidebar").classList.remove("open");
 
-    if (sectionId === "scanner") {
-        updateScannerControls();
+    if (sectionId === "reports") {
+        renderReports();
     }
 }
 
 document.querySelectorAll("[data-section]").forEach(button => {
     button.addEventListener("click", () => {
-        navigate(button.dataset.section);
+        navigateTo(button.dataset.section);
     });
 });
 
@@ -1355,50 +1370,56 @@ $("menuToggle").addEventListener("click", () => {
     $("sidebar").classList.toggle("open");
 });
 
-// ================================================
-// AUTHORIZATION
-// ================================================
-
-
-async function verifyAdmin() {
-    const { data, error } = await db.auth.getUser();
-
-    if (error || !data.user) {
-        currentUser = null;
+async function verifyAdmin(user) {
+    if (!user) {
         showLogin();
         return false;
     }
 
-    const { data: admin, error: adminError } = await db
+    const { data, error } = await db
         .from("admin_users")
-        .select("email, role")
-        .eq("user_id", data.user.id)
+        .select("user_id, role")
+        .eq("user_id", user.id)
         .maybeSingle();
 
-    if (
-        adminError ||
-        !admin ||
-        !["admin", "super_admin"].includes(admin.role)
-    ) {
-        currentUser = null;
+    if (error) {
+        console.error("Admin verification error:", error);
 
         await db.auth.signOut();
 
-        showLogin(
-            "Access denied. An authorised administrator account is required."
+        showLogin();
+
+        showMessage(
+            "loginMessage",
+            "Unable to verify administrator access. Please try again."
         );
 
         return false;
     }
 
-    currentUser = data.user;
+    if (!data || !["admin", "super_admin"].includes(data.role)) {
+        await db.auth.signOut();
 
-    $("adminWelcome").textContent =
-        "Welcome, " + (admin.email || "Administrator");
+        showLogin();
+
+        showMessage(
+            "loginMessage",
+            "Access denied. This account is not authorised to access the portal."
+        );
+
+        return false;
+    }
+
+    currentAdmin = {
+        ...user,
+        role: data.role
+    };
+
+    $("adminWelcome").textContent = user.email || "Administrator";
 
     showPortal();
 
-    await loadAllData();
+    await loadDashboard();
 
     return true;
 }
@@ -1406,1131 +1427,1103 @@ async function verifyAdmin() {
 $("loginForm").addEventListener("submit", async event => {
     event.preventDefault();
 
+    clearMessage("loginMessage");
+
+    const email = $("loginEmail").value.trim();
+    const password = $("loginPassword").value;
     const button = $("loginButton");
 
-    button.disabled = true;
-    button.textContent = "Verifying access...";
-    setMessage("loginMessage", "");
+    if (!email || !password) {
+        showMessage("loginMessage", "Enter your email address and password.");
+        return;
+    }
+
+    setButtonLoading(button, true, "Signing in...");
 
     try {
-        const { error } = await db.auth.signInWithPassword({
-            email: $("loginEmail").value.trim(),
-            password: $("loginPassword").value
+        const { data, error } = await db.auth.signInWithPassword({
+            email,
+            password
         });
 
         if (error) {
-            setMessage(
-                "loginMessage",
-                "You go tell me when you turn Admin.",
-                "error"
-            );
+            console.error("Supabase login error:", error);
+            showMessage("loginMessage", error.message);
             return;
         }
 
-        await verifyAdmin();
+        if (!data.user) {
+            showMessage("loginMessage", "Login could not be completed.");
+            return;
+        }
+
+        await verifyAdmin(data.user);
 
     } catch (error) {
         console.error("Login error:", error);
 
-        setMessage(
+        showMessage(
             "loginMessage",
-            "Could not connect to the authentication service.",
-            "error"
+            error.message || "Something went wrong while signing in."
         );
 
     } finally {
-        button.disabled = false;
-        button.textContent = "Sign In";
+        setButtonLoading(button, false);
     }
 });
 
 async function logout() {
-    await stopCamera();
-
-    const { error } = await db.auth.signOut();
-
-    if (error) {
-        alert("Could not sign out. Please try again.");
-        return;
+    try {
+        await stopAttendanceScanner();
+        await db.auth.signOut();
+    } catch (error) {
+        console.error("Logout error:", error);
     }
 
-    currentUser = null;
-    showLogin("Bye Bye oo");
+    currentAdmin = null;
+    showLogin();
 }
 
 $("logoutButton").addEventListener("click", logout);
 
+async function initialize() {
+    showLogin();
 
+    $("year").textContent = new Date().getFullYear();
 
-// ================================================
-// LOAD ALL PORTAL DATA
-// ================================================
+    try {
+        const { data, error } = await db.auth.getSession();
 
-async function loadAllData() {
-    if (!currentUser) return;
+        if (error) {
+            console.error("Session restore error:", error);
+            return;
+        }
 
-    await Promise.all([
+        if (data?.session?.user) {
+            await verifyAdmin(data.session.user);
+        }
+
+    } catch (error) {
+        console.error("Initialization error:", error);
+        showLogin();
+    }
+}
+
+/* DASHBOARD */
+
+async function loadDashboard() {
+    await Promise.allSettled([
         loadOperatives(),
         loadProgrammes(),
         loadAttendance()
     ]);
 
-    updateStatistics();
-    populateOperativeDropdowns();
-    updateScannerControls();
+    await loadSessions();
+
+    updateDashboardStats();
 }
 
-// ================================================
-// OPERATIVES AND APPROVALS
-// ================================================
+/* OPERATIVES */
 
 async function loadOperatives() {
-    setMessage("operativeMessage", "Loading operative records...");
-
     const { data, error } = await db
         .from("operatives")
-        .select(`
-            id,
-            full_name,
-            phone,
-            registered_at,
-            status,
-            qr_token,
-            units(name)
-        `)
-        .order("registered_at", { ascending: false });
+        .select("*")
+        .order("created_at", { ascending: false });
 
     if (error) {
-        console.error("Operative loading error:", error);
-
-        $("operativesTable").innerHTML =
-            '<tr><td colspan="6">Could not load operative records.</td></tr>';
-
-        setMessage(
-            "operativeMessage",
-            "Check database permissions and try again.",
-            "error"
-        );
-
+        console.error("Operatives error:", error);
+        showMessage("operativeMessage", "Unable to load operatives.");
         return;
     }
 
     allOperatives = data || [];
 
-    approvedOperatives = allOperatives.filter(
-        operative => operative.status === "approved"
-    );
-
     renderOperatives();
-    loadQrDropdown();
     populateOperativeDropdowns();
-    updateStatistics();
-
-    setMessage(
-        "operativeMessage",
-        `${allOperatives.length} operative record(s) loaded.`
-    );
+    populateUnitFilter();
+    updateDashboardStats();
 }
 
 function renderOperatives() {
-    const search = $("operativeSearch").value.toLowerCase().trim();
-    const statusFilter = $("statusFilter").value;
+    const table = $("operativesTable");
 
-    const records = allOperatives.filter(operative => {
-        const name = operative.full_name || "";
-        const phone = operative.phone || "";
-        const unit = operative.units?.name || "";
+    const search = $("operativeSearch").value.trim().toLowerCase();
+    const statusFilter = $("statusFilter").value.toLowerCase();
 
-        return (
-            `${name} ${phone} ${unit}`.toLowerCase().includes(search) &&
-            (!statusFilter || operative.status === statusFilter)
-        );
+    const filtered = allOperatives.filter(operative => {
+        const name = getOperativeName(operative).toLowerCase();
+        const phone = String(
+            operative.phone || operative.phone_number || ""
+        ).toLowerCase();
+
+        const unit = String(operative.unit || "").toLowerCase();
+        const status = String(operative.status || "").toLowerCase();
+
+        const matchesSearch =
+            name.includes(search) ||
+            phone.includes(search) ||
+            unit.includes(search);
+
+        const matchesStatus =
+            !statusFilter || status === statusFilter;
+
+        return matchesSearch && matchesStatus;
     });
 
-    if (!records.length) {
-        $("operativesTable").innerHTML =
-            '<tr><td colspan="6">No matching operative records.</td></tr>';
+    if (!filtered.length) {
+        table.innerHTML = `
+            <tr>
+                <td colspan="6">No operatives found.</td>
+            </tr>
+        `;
         return;
     }
 
-    $("operativesTable").innerHTML = records.map(operative => {
-        const status = ["pending", "approved", "rejected"].includes(
-            operative.status
-        ) ? operative.status : "pending";
+    table.innerHTML = filtered.map(operative => {
+        const id = escapeHTML(operative.id);
+        const status = String(operative.status || "pending").toLowerCase();
 
-        const date = operative.registered_at
-            ? new Date(operative.registered_at).toLocaleDateString()
-            : "Unknown";
-
-        let action = "Reviewed";
+        let action = "";
 
         if (status === "pending") {
             action = `
                 <div class="action-buttons">
-                    <button class="approve-button" data-action="approve"
-                        data-id="${escapeHTML(operative.id)}">Approve</button>
-                    <button class="reject-button" data-action="reject"
-                        data-id="${escapeHTML(operative.id)}">Reject</button>
-                </div>`;
+                    <button class="approve-button"
+                        data-action="approve" data-id="${id}">
+                        Approve
+                    </button>
+
+                    <button class="reject-button"
+                        data-action="reject" data-id="${id}">
+                        Reject
+                    </button>
+                </div>
+            `;
+        } else if (status === "approved") {
+            action = `
+                <button class="invitation-button"
+                    data-invitation="send" data-id="${id}">
+                    Send Biodata Invitation
+                </button>
+            `;
+        } else {
+            action = "Reviewed";
         }
 
         return `
             <tr>
-                <td>${escapeHTML(operative.full_name)}</td>
-                <td>${escapeHTML(operative.phone)}</td>
-                <td>${escapeHTML(operative.units?.name || "Unknown unit")}</td>
-                <td>${escapeHTML(date)}</td>
-                <td><span class="status-badge status-${status}">
-                    ${escapeHTML(status)}
-                </span></td>
+                <td>${escapeHTML(getOperativeName(operative))}</td>
+                <td>${escapeHTML(operative.phone || operative.phone_number || "—")}</td>
+                <td>${escapeHTML(operative.unit || "—")}</td>
+                <td>${formatDate(operative.created_at)}</td>
+                <td>
+                    <span class="status-badge status-${escapeHTML(status)}">
+                        ${escapeHTML(status)}
+                    </span>
+                </td>
                 <td>${action}</td>
-            </tr>`;
+            </tr>
+        `;
     }).join("");
 }
 
 $("operativeSearch").addEventListener("input", renderOperatives);
 $("statusFilter").addEventListener("change", renderOperatives);
+$("refreshOperatives").addEventListener("click", loadOperatives);
 
 $("operativesTable").addEventListener("click", async event => {
-    const button = event.target.closest("button[data-action][data-id]");
-    if (!button || !currentUser) return;
+    const invitationButton = event.target.closest(
+        'button[data-invitation="send"]'
+    );
 
-    const operativeId = button.dataset.id;
-    const newStatus = button.dataset.action === "approve"
-        ? "approved"
-        : "rejected";
-
-    if (!confirm(`Are you sure you want to ${newStatus} this application?`)) {
+    if (invitationButton) {
+        await sendBiodataInvitation(invitationButton);
         return;
     }
 
-    button.disabled = true;
+    const actionButton = event.target.closest("button[data-action]");
 
-    setMessage("operativeMessage", "Updating application...");
+    if (!actionButton) return;
 
-    const { data, error } = await db
-        .from("operatives")
-        .update({ status: newStatus })
-        .eq("id", operativeId)
-        .eq("status", "pending")
-        .select("id");
+    const operativeId = actionButton.dataset.id;
+    const action = actionButton.dataset.action;
 
-    if (error) {
-        console.error("Approval update error:", error);
+    if (!operativeId || !["approve", "reject"].includes(action)) return;
 
-        setMessage(
+    const confirmed = confirm(
+        action === "approve"
+            ? "Approve this operative?"
+            : "Reject this application?"
+    );
+
+    if (!confirmed) return;
+
+    setButtonLoading(actionButton, true, "Processing...");
+
+    try {
+        const { error } = await db
+            .from("operatives")
+            .update({
+                status: action === "approve" ? "approved" : "rejected"
+            })
+            .eq("id", operativeId);
+
+        if (error) throw error;
+
+        if (action === "approve") {
+            const { error: qrError } = await db.functions.invoke(
+                "send-operative-qr",
+                {
+                    body: {
+                        operative_id: operativeId
+                    }
+                }
+            );
+
+            if (qrError) {
+                console.error("QR notification error:", qrError);
+            }
+        }
+
+        showMessage(
             "operativeMessage",
-            "Could not update this application.",
-            "error"
-        );
-
-        button.disabled = false;
-        return;
-    }
-
-    if (!data || data.length === 0) {
-        setMessage(
-            "operativeMessage",
-            "The application may already have been reviewed.",
-            "error"
+            action === "approve"
+                ? "Operative approved successfully."
+                : "Application rejected successfully.",
+            "success"
         );
 
         await loadOperatives();
+
+    } catch (error) {
+        console.error("Operative update error:", error);
+
+        showMessage(
+            "operativeMessage",
+            error.message || "Unable to update operative."
+        );
+
+    } finally {
+        setButtonLoading(actionButton, false);
+    }
+});
+
+/* BIODATA INVITATIONS */
+
+function resetInvitationResult() {
+    $("invitationResult").hidden = true;
+    $("invitationResultMessage").textContent = "";
+    $("invitationLink").value = "";
+    $("invitationLink").hidden = true;
+    $("copyInvitationLink").hidden = true;
+}
+
+async function sendBiodataInvitation(button) {
+    const operativeId = button.dataset.id;
+
+    if (!operativeId) return;
+
+    resetInvitationResult();
+
+    const operative = allOperatives.find(
+        item => String(item.id) === String(operativeId)
+    );
+
+    if (!operative || String(operative.status).toLowerCase() !== "approved") {
+        alert("Only approved operatives can receive biodata invitations.");
         return;
     }
 
-    if (newStatus === "approved") {
-        setMessage("operativeMessage", "Approved. Refreshing records...");
+    const confirmed = confirm(
+        "Send a new biodata invitation to this operative?\n\n" +
+        "Any previous unused invitation will be invalidated."
+    );
 
-        try {
-            const { data: result, error: functionError } =
-                await db.functions.invoke("send-operative-qr", {
-                    body: { operative_id: operativeId }
-                });
+    if (!confirmed) return;
 
-            if (functionError || result?.error) {
-                console.warn(
-                    "QR email was not delivered:",
-                    functionError || result
-                );
+    setButtonLoading(button, true, "Sending...");
 
-                setMessage(
-                    "operativeMessage",
-                    "Operative approved. QR email delivery failed or is not configured."
-                );
-            } else {
-                setMessage(
-                    "operativeMessage",
-                    "Operative approved. Email function returned successfully."
-                );
+    try {
+        const { data, error } = await db.functions.invoke(
+            "send-biodata-invitation",
+            {
+                body: {
+                    operative_id: operativeId
+                }
             }
-        } catch (error) {
-            console.error("QR email function error:", error);
+        );
 
-            setMessage(
-                "operativeMessage",
-                "Operative approved, but QR email delivery is unavailable."
-            );
+        if (error) {
+            let message = error.message || "Unable to send invitation.";
+
+            try {
+                if (error.context && typeof error.context.json === "function") {
+                    const response = await error.context.json();
+                    message = response.error || response.message || message;
+                }
+            } catch (_) {}
+
+            throw new Error(message);
         }
-    } else {
-        setMessage("operativeMessage", "Application rejected.");
+
+        $("invitationResult").hidden = false;
+
+        if (data?.preview && data?.invitation_url) {
+            $("invitationResultMessage").textContent =
+                "Email delivery is not configured. Copy this link and share it with the operative. The invitation expires in 48 hours.";
+
+            $("invitationResultMessage").className = "message success-text";
+
+            $("invitationLink").value = data.invitation_url;
+            $("invitationLink").hidden = false;
+            $("copyInvitationLink").hidden = false;
+
+        } else {
+            $("invitationResultMessage").textContent =
+                data?.message || "Invitation sent successfully.";
+
+            $("invitationResultMessage").className = "message success-text";
+        }
+
+    } catch (error) {
+        console.error("Biodata invitation error:", error);
+
+        $("invitationResult").hidden = false;
+
+        showMessage(
+            "invitationResultMessage",
+            error.message || "Unable to create biodata invitation."
+        );
+
+    } finally {
+        setButtonLoading(button, false);
+    }
+}
+
+$("copyInvitationLink").addEventListener("click", async () => {
+    const input = $("invitationLink");
+
+    if (!input.value) return;
+
+    try {
+        await navigator.clipboard.writeText(input.value);
+    } catch (_) {
+        input.hidden = false;
+        input.select();
+        document.execCommand("copy");
     }
 
-    await loadOperatives();
-    await loadAttendance();
+    $("copyInvitationLink").textContent = "Copied!";
+
+    setTimeout(() => {
+        $("copyInvitationLink").textContent = "Copy Invitation Link";
+    }, 2000);
 });
 
-// ================================================
-// STATISTICS
-// ================================================
-
-function getTodayRange() {
-    const now = new Date();
-
-    const start = new Date(
-        now.getFullYear(),
-        now.getMonth(),
-        now.getDate()
-    );
-
-    const end = new Date(
-        now.getFullYear(),
-        now.getMonth(),
-        now.getDate() + 1
-    );
-
-    return {
-        start: start.toISOString(),
-        end: end.toISOString()
-    };
-}
-
-async function updateStatistics() {
-    const { start, end } = getTodayRange();
-
-    const { count, error } = await db
-        .from("attendance")
-        .select("id", { count: "exact", head: true });
-
-    if (error) {
-        console.error("Attendance count error:", error);
-    }
-
-    const { count: today, error: todayError } = await db
-        .from("attendance")
-        .select("id", { count: "exact", head: true })
-        .gte("attendance_time", start)
-        .lt("attendance_time", end);
-
-    if (todayError) {
-        console.error("Today's attendance count error:", todayError);
-    }
-
-    $("totalCount").textContent = allOperatives.length;
-    $("approvedCount").textContent = allOperatives.filter(
-        item => item.status === "approved"
-    ).length;
-
-    $("pendingCount").textContent = allOperatives.filter(
-        item => item.status === "pending"
-    ).length;
-
-    $("rejectedCount").textContent = allOperatives.filter(
-        item => item.status === "rejected"
-    ).length;
-
-    $("attendanceCount").textContent = count ?? "—";
-    $("todayCount").textContent = today ?? "—";
-}
-
-// ================================================
-// PROGRAMME SESSIONS
-// ================================================
+/* PROGRAMMES AND SESSIONS */
 
 async function loadProgrammes() {
-    setMessage("sessionsMessage", "Loading programme sessions...");
-
     const { data, error } = await db
         .from("programmes")
-        .select("id, name, programme_date")
-        .like("name", "YMR 2026%")
-        .order("programme_date", { ascending: true })
-        .order("name", { ascending: true });
+        .select("*")
+        .order("created_at", { ascending: false });
 
     if (error) {
-        console.error("Programme loading error:", error);
+        console.error("Programmes error:", error);
 
-        $("sessionsTable").innerHTML =
-            '<tr><td colspan="2">Could not load sessions.</td></tr>';
+        showMessage(
+            "scanMessage",
+            "Unable to load programmes: " + error.message
+        );
 
-        setMessage("sessionsMessage", "Check database permissions.", "error");
+        showMessage(
+            "sessionsMessage",
+            "Unable to load programmes: " + error.message
+        );
+
         return;
     }
 
     allProgrammes = data || [];
 
-    const selects = [
+    const selectors = [
         $("programmeSelect"),
-        $("manualProgramme")
+        $("manualProgramme"),
+        $("reportProgrammeFilter")
     ];
 
-    selects.forEach(select => {
-        const oldValue = select.value;
+    selectors.forEach(select => {
+        if (!select) return;
 
-        select.innerHTML = '<option value="">Select a session</option>';
+        const selectedValue = select.value;
+        const firstOption = select.options[0]?.outerHTML ||
+            '<option value="">Select programme</option>';
+
+        select.innerHTML = firstOption;
 
         allProgrammes.forEach(programme => {
             const option = document.createElement("option");
+
             option.value = programme.id;
-            option.textContent = programme.name;
+            option.textContent =
+                programme.name ||
+                programme.title ||
+                programme.programme_name ||
+                "Programme";
+
             select.appendChild(option);
         });
 
-        if (allProgrammes.some(item => item.id === oldValue)) {
-            select.value = oldValue;
-        }
+        select.value = selectedValue;
     });
 
-    $("sessionsTable").innerHTML = allProgrammes.length
-        ? allProgrammes.map(programme => `
-            <tr>
-                <td>${escapeHTML(programme.name)}</td>
-                <td>${escapeHTML(programme.programme_date || "Not set")}</td>
-            </tr>`).join("")
-        : '<tr><td colspan="2">No YMR 2026 sessions found.</td></tr>';
+    $("startScanner").disabled = allProgrammes.length === 0;
 
-    populateReportFilters();
-    updateScannerControls();
-
-    setMessage(
-        "sessionsMessage",
-        `${allProgrammes.length} session(s) loaded.`
-    );
+    renderReports();
 }
 
-$("refreshSessions").addEventListener("click", loadProgrammes);
+/*
+   The portal uses the programmes table as its session source.
+   There is no separate sessions table in the current database.
+*/
 
-// ================================================
-// QR CODE GENERATOR
-// ================================================
+async function loadSessions() {
+    allSessions = allProgrammes || [];
 
-function loadQrDropdown() {
-    const select = $("qrOperativeSelect");
-    const oldValue = select.value;
+    renderSessions();
+}
 
-    select.innerHTML = '<option value="">Choose an approved operative</option>';
+function renderSessions() {
+    const table = $("sessionsTable");
 
-    approvedOperatives.forEach(operative => {
+    if (!allSessions.length) {
+        table.innerHTML = `
+            <tr>
+                <td colspan="2">No programme sessions found.</td>
+            </tr>
+        `;
+        return;
+    }
+
+    table.innerHTML = allSessions.map(session => {
+        const name =
+            session.name ||
+            session.title ||
+            session.programme_name ||
+            session.session_name ||
+            session.period ||
+            "Programme Session";
+
+        const date =
+            session.session_date ||
+            session.programme_date ||
+            session.date;
+
+        return `
+            <tr>
+                <td>${escapeHTML(name)}</td>
+                <td>${formatDate(date)}</td>
+            </tr>
+        `;
+    }).join("");
+}
+
+$("refreshSessions").addEventListener("click", async () => {
+    const button = $("refreshSessions");
+
+    setButtonLoading(button, true, "Refreshing...");
+
+    try {
+        await loadProgrammes();
+        await loadSessions();
+    } finally {
+        setButtonLoading(button, false);
+    }
+});
+
+function populateOperativeDropdowns() {
+    const selectors = [
+        $("qrOperativeSelect"),
+        $("manualOperative")
+    ];
+
+    selectors.forEach(select => {
+        if (!select) return;
+
+        const selectedValue = select.value;
+
+        select.innerHTML = `
+            <option value="">Select operative</option>
+        `;
+
+        allOperatives
+            .filter(operative =>
+                String(operative.status).toLowerCase() === "approved"
+            )
+            .forEach(operative => {
+                const option = document.createElement("option");
+
+                option.value = operative.id;
+                option.textContent = getOperativeName(operative);
+
+                select.appendChild(option);
+            });
+
+        select.value = selectedValue;
+    });
+}
+
+function populateUnitFilter() {
+    const select = $("reportUnitFilter");
+    const selectedValue = select.value;
+
+    const units = [
+        ...new Set(
+            allOperatives
+                .map(operative => operative.unit)
+                .filter(Boolean)
+        )
+    ].sort();
+
+    select.innerHTML = '<option value="">All Units</option>';
+
+    units.forEach(unit => {
         const option = document.createElement("option");
-        option.value = operative.id;
-        option.textContent =
-            `${operative.full_name} — ${operative.units?.name || "Unknown unit"}`;
-
+        option.value = unit;
+        option.textContent = unit;
         select.appendChild(option);
     });
 
-    if (approvedOperatives.some(item => item.id === oldValue)) {
-        select.value = oldValue;
-    }
-
-    if (!approvedOperatives.length) {
-        setMessage("qrMessage", "No approved operatives available.");
-    }
+    select.value = selectedValue;
 }
 
-$("generateQrButton").addEventListener("click", async () => {
+/* QR GENERATOR */
+
+$("generateQrButton").addEventListener("click", () => {
+    clearMessage("qrMessage");
+
     const operativeId = $("qrOperativeSelect").value;
 
     if (!operativeId) {
-        setMessage("qrMessage", "Select an approved operative first.", "error");
+        showMessage("qrMessage", "Select an operative first.");
         return;
     }
 
-    if (typeof window.QRCode !== "function") {
-        setMessage("qrMessage", "QR library failed to load.", "error");
+    const operative = allOperatives.find(
+        item => String(item.id) === String(operativeId)
+    );
+
+    if (!operative) {
+        showMessage("qrMessage", "Operative not found.");
         return;
     }
 
-    const operative = approvedOperatives.find(item => item.id === operativeId);
+    try {
+        $("qrCode").innerHTML = "";
 
-    if (!operative || !operative.qr_token) {
-        setMessage("qrMessage", "Could not find a valid QR token.", "error");
-        return;
+        $("qrOperativeName").textContent = getOperativeName(operative);
+        $("qrOperativeUnit").textContent = operative.unit || "—";
+
+        const qrValue = String(operative.qr_code || operative.id);
+
+        new QRCode($("qrCode"), {
+            text: qrValue,
+            width: 220,
+            height: 220,
+            correctLevel: QRCode.CorrectLevel.H
+        });
+
+        $("qrResult").hidden = false;
+        $("downloadQrButton").disabled = false;
+
+    } catch (error) {
+        console.error("QR generation error:", error);
+        showMessage("qrMessage", "Unable to generate QR code.");
     }
-
-    $("qrCode").innerHTML = "";
-
-    new QRCode($("qrCode"), {
-        text: operative.qr_token,
-        width: 220,
-        height: 220,
-        colorDark: "#000000",
-        colorLight: "#ffffff",
-        correctLevel: QRCode.CorrectLevel.H
-    });
-
-    $("qrOperativeName").textContent = operative.full_name;
-    $("qrOperativeUnit").textContent =
-        "Sub-unit: " + (operative.units?.name || "Unknown unit");
-
-    $("qrResult").hidden = false;
-    $("downloadQrButton").disabled = false;
-
-    setMessage("qrMessage", "QR code generated successfully.", "success");
 });
 
 $("downloadQrButton").addEventListener("click", () => {
     const canvas = $("qrCode").querySelector("canvas");
     const image = $("qrCode").querySelector("img");
 
-    let url = "";
+    let imageUrl = "";
 
     if (canvas) {
-        url = canvas.toDataURL("image/png");
+        imageUrl = canvas.toDataURL("image/png");
     } else if (image) {
-        url = image.src;
+        imageUrl = image.src;
     }
 
-    if (!url) {
-        setMessage("qrMessage", "Generate a QR code first.", "error");
+    if (!imageUrl) {
+        showMessage("qrMessage", "Generate a QR code first.");
         return;
     }
 
     const link = document.createElement("a");
-    link.href = url;
-    link.download = "Flaming-Security-QR.png";
-    document.body.appendChild(link);
+
+    link.href = imageUrl;
+    link.download = "operative-qr-code.png";
+
     link.click();
-    link.remove();
 });
 
-// ================================================
-// MANUAL ATTENDANCE DROPDOWN
-// ================================================
-
-function populateOperativeDropdowns() {
-    const select = $("manualOperative");
-    const oldValue = select.value;
-
-    select.innerHTML = '<option value="">Select an approved operative</option>';
-
-    approvedOperatives.forEach(operative => {
-        const option = document.createElement("option");
-
-        option.value = operative.id;
-        option.textContent =
-            `${operative.full_name} — ${operative.units?.name || "Unknown unit"}`;
-
-        select.appendChild(option);
-    });
-
-    if (approvedOperatives.some(item => item.id === oldValue)) {
-        select.value = oldValue;
-    }
-}
-
-// ================================================
-// ATTENDANCE SCANNER
-// ================================================
-
-function updateScannerControls() {
-    const authorized = Boolean(currentUser);
-    const sessionSelected = Boolean($("programmeSelect").value);
-
-    $("startScanner").disabled =
-        !authorized ||
-        !sessionSelected ||
-        scannerRunning ||
-        scanLocked;
-
-    $("stopScanner").disabled = !scannerRunning;
-}
-
-$("programmeSelect").addEventListener("change", () => {
-    updateScannerControls();
-
-    setMessage(
-        "scanMessage",
-        $("programmeSelect").value
-            ? "Session selected. Start the camera to scan."
-            : "Select an attendance session first."
-    );
-});
-
-async function stopCamera() {
-    if (scanner && scannerRunning) {
-        try {
-            await scanner.stop();
-        } catch (error) {
-            console.warn("Camera stop error:", error);
-        }
-    }
-
-    scannerRunning = false;
-    updateScannerControls();
-}
-
-$("startScanner").addEventListener("click", async () => {
-    if (!currentUser) {
-        setMessage("scanMessage", "Please sign in first.", "error");
-        return;
-    }
-
-    if (!$("programmeSelect").value) {
-        setMessage("scanMessage", "Select a session first.", "error");
-        return;
-    }
-
-    if (scannerRunning || scanLocked) return;
-
-    if (typeof Html5Qrcode === "undefined") {
-        setMessage("scanMessage", "QR scanner library failed to load.", "error");
-        return;
-    }
-
-    $("startScanner").disabled = true;
-
-    try {
-        if (!scanner) {
-            scanner = new Html5Qrcode("reader");
-        }
-
-        setMessage(
-            "scanMessage",
-            "Starting camera. Allow camera access if prompted."
-        );
-
-        await scanner.start(
-            { facingMode: "environment" },
-            {
-                fps: 10,
-                qrbox: { width: 250, height: 250 }
-            },
-            async decodedText => {
-                if (scanLocked) return;
-
-                scanLocked = true;
-                updateScannerControls();
-
-                try {
-                    await stopCamera();
-                    await recordAttendance(decodedText.trim(), "qr");
-                } catch (error) {
-                    console.error("Attendance scan error:", error);
-
-                    setMessage(
-                        "scanMessage",
-                        "An error occurred while recording attendance.",
-                        "error"
-                    );
-                } finally {
-                    scanLocked = false;
-                    updateScannerControls();
-                }
-            },
-            () => {}
-        );
-
-        scannerRunning = true;
-        updateScannerControls();
-
-        setMessage(
-            "scanMessage",
-            "Camera active. Scan an operative's QR code."
-        );
-
-    } catch (error) {
-        console.error("Camera error:", error);
-
-        scannerRunning = false;
-        updateScannerControls();
-
-        setMessage(
-            "scanMessage",
-            "Camera failed. Allow camera access and use HTTPS or localhost.",
-            "error"
-        );
-    }
-});
-
-$("stopScanner").addEventListener("click", async () => {
-    await stopCamera();
-
-    setMessage("scanMessage", "Camera stopped.");
-});
-
-// ================================================
-// RECORD QR OR MANUAL ATTENDANCE
-// ================================================
-
-async function recordAttendance(value, method) {
-    const programmeId = method === "manual"
-        ? $("manualProgramme").value
-        : $("programmeSelect").value;
-
-    if (!programmeId) {
-        const target = method === "manual" ? "manualMessage" : "scanMessage";
-        setMessage(target, "Select a programme session first.", "error");
-        return false;
-    }
-
-    let operative;
-
-    if (method === "manual") {
-        operative = approvedOperatives.find(item => item.id === value);
-
-        if (!operative) {
-            setMessage(
-                "manualMessage",
-                "Select an approved operative.",
-                "error"
-            );
-            return false;
-        }
-    } else {
-        $("attendanceResult").textContent = "Verifying QR code...";
-
-        const { data, error } = await db
-            .from("operatives")
-            .select("id, full_name, status, units(name)")
-            .eq("qr_token", value)
-            .eq("status", "approved")
-            .maybeSingle();
-
-        if (error) {
-            console.error("QR lookup error:", error);
-
-            $("attendanceResult").textContent =
-                "Could not verify the QR code.";
-
-            setMessage("scanMessage", "Attendance was not recorded.", "error");
-            return false;
-        }
-
-        operative = data;
-    }
-
-    if (!operative) {
-        $("attendanceResult").textContent =
-            "Invalid QR code or operative not approved.";
-
-        setMessage("scanMessage", "Attendance was not recorded.", "error");
-        return false;
-    }
-
-    const { error: insertError } = await db
-        .from("attendance")
-        .insert({
-            operative_id: operative.id,
-            programme_id: programmeId,
-            marking_method: method
-        });
-
-    if (insertError) {
-        console.error("Attendance insertion error:", insertError);
-
-        if (insertError.code === "23505") {
-            const message =
-                `${operative.full_name} already has attendance for this session.`;
-
-            $("attendanceResult").textContent = message;
-            setMessage("scanMessage", message, "error");
-            setMessage("manualMessage", message, "error");
-        } else {
-            const message = "Attendance could not be saved. Check permissions.";
-
-            $("attendanceResult").textContent = message;
-            setMessage("scanMessage", message, "error");
-            setMessage("manualMessage", message, "error");
-        }
-
-        return false;
-    }
-
-    const programme = allProgrammes.find(item => item.id === programmeId);
-
-    const message =
-        `${operative.full_name} — attendance recorded for ${programme?.name || "selected session"}.`;
-
-    $("attendanceResult").innerHTML = "";
-
-    const heading = document.createElement("h3");
-    heading.className = "success-text";
-    heading.textContent = "Attendance recorded successfully!";
-
-    const details = [
-        "Operative: " + operative.full_name,
-        "Unit: " + (operative.units?.name || "Unknown unit"),
-        "Session: " + (programme?.name || "Selected session"),
-        "Method: " + method.toUpperCase(),
-        "Time: " + new Date().toLocaleString()
-    ];
-
-    $("attendanceResult").appendChild(heading);
-
-    details.forEach(detail => {
-        const paragraph = document.createElement("p");
-        paragraph.textContent = detail;
-        $("attendanceResult").appendChild(paragraph);
-    });
-
-    setMessage("scanMessage", message, "success");
-    setMessage("manualMessage", message, "success");
-
-    await loadAttendance();
-    await updateStatistics();
-
-    return true;
-}
-
-$("manualAttendanceForm").addEventListener("submit", async event => {
-    event.preventDefault();
-
-    const button = $("markManualButton");
-
-    button.disabled = true;
-    button.textContent = "Saving...";
-
-    try {
-        await recordAttendance($("manualOperative").value, "manual");
-    } catch (error) {
-        console.error("Manual attendance error:", error);
-
-        setMessage(
-            "manualMessage",
-            "An unexpected error occurred.",
-            "error"
-        );
-    } finally {
-        button.disabled = false;
-        button.textContent = "Mark Attendance";
-    }
-});
-
-// ================================================
-// ATTENDANCE REPORTS
-// ================================================
+/* ATTENDANCE */
 
 async function loadAttendance() {
-    setMessage("reportMessage", "Loading attendance records...");
-
     const { data, error } = await db
         .from("attendance")
-        .select(`
-            id,
-            attendance_time,
-            marking_method,
-            operatives(full_name, units(name)),
-            programmes(name, programme_date)
-        `)
-        .order("attendance_time", { ascending: false });
+        .select("*")
+        .order("attendance_date", { ascending: false });
 
     if (error) {
-        console.error("Attendance loading error:", error);
+        console.error("Attendance error:", error);
 
-        $("attendanceTable").innerHTML =
-            '<tr><td colspan="6">Could not load attendance records.</td></tr>';
+        showMessage(
+            "reportMessage",
+            "Unable to load attendance: " + error.message
+        );
 
-        setMessage("reportMessage", "Could not load attendance records.", "error");
         return;
     }
 
     allAttendance = data || [];
 
-    populateReportFilters();
-    renderAttendance();
-
-    setMessage(
-        "reportMessage",
-        `${allAttendance.length} attendance record(s) loaded.`
-    );
+    updateDashboardStats();
+    renderReports();
 }
 
-function populateReportFilters() {
-    const selectedUnit = $("reportUnitFilter").value;
-    const selectedProgramme = $("reportProgrammeFilter").value;
+function updateDashboardStats() {
+    const total = allOperatives.length;
 
-    const units = new Set();
-    const programmes = new Set();
+    const approved = allOperatives.filter(
+        operative => operative.status === "approved"
+    ).length;
 
-    allAttendance.forEach(record => {
-        const unit = record.operatives?.units?.name;
-        const programme = record.programmes?.name;
+    const pending = allOperatives.filter(
+        operative => operative.status === "pending"
+    ).length;
 
-        if (unit) units.add(unit);
-        if (programme) programmes.add(programme);
-    });
+    const rejected = allOperatives.filter(
+        operative => operative.status === "rejected"
+    ).length;
 
-    $("reportUnitFilter").innerHTML = '<option value="">All Units</option>';
+    const today = getToday();
 
-    [...units].sort().forEach(unit => {
-        const option = document.createElement("option");
-        option.value = unit;
-        option.textContent = unit;
-        $("reportUnitFilter").appendChild(option);
-    });
+    const todayAttendance = allAttendance.filter(record => {
+        const date = record.attendance_date || record.created_at || record.date;
 
-    $("reportProgrammeFilter").innerHTML =
-        '<option value="">All Sessions</option>';
+        return date && String(date).startsWith(today);
+    }).length;
 
-    [...programmes].sort().forEach(programme => {
-        const option = document.createElement("option");
-        option.value = programme;
-        option.textContent = programme;
-        $("reportProgrammeFilter").appendChild(option);
-    });
-
-    $("reportUnitFilter").value = selectedUnit;
-    $("reportProgrammeFilter").value = selectedProgramme;
+    $("totalCount").textContent = total;
+    $("approvedCount").textContent = approved;
+    $("pendingCount").textContent = pending;
+    $("rejectedCount").textContent = rejected;
+    $("attendanceCount").textContent = allAttendance.length;
+    $("todayCount").textContent = todayAttendance;
 }
 
-function getFilteredAttendance() {
-    const search = $("reportSearch").value.toLowerCase().trim();
-    const unit = $("reportUnitFilter").value;
-    const programme = $("reportProgrammeFilter").value;
+async function recordAttendance(operativeId, programmeId) {
+    const attendanceData = {
+        operative_id: operativeId,
+        programme_id: programmeId,
+        attendance_date: getToday()
+    };
 
-    return allAttendance.filter(record => {
-        const name = record.operatives?.full_name || "";
-        const unitName = record.operatives?.units?.name || "";
-        const programmeName = record.programmes?.name || "";
+    const { error } = await db
+        .from("attendance")
+        .insert(attendanceData);
 
-        return (
-            name.toLowerCase().includes(search) &&
-            (!unit || unitName === unit) &&
-            (!programme || programmeName === programme)
+    if (error) throw error;
+}
+
+function alreadyMarkedToday(operativeId, programmeId) {
+    return allAttendance.some(record => {
+        const date = record.attendance_date || record.created_at || record.date;
+
+        return String(record.operative_id) === String(operativeId) &&
+            String(record.programme_id) === String(programmeId) &&
+            date &&
+            String(date).startsWith(getToday());
+    });
+}
+
+/* MANUAL ATTENDANCE */
+
+$("manualAttendanceForm").addEventListener("submit", async event => {
+    event.preventDefault();
+
+    clearMessage("manualMessage");
+
+    const operativeId = $("manualOperative").value;
+    const programmeId = $("manualProgramme").value;
+
+    if (!operativeId || !programmeId) {
+        showMessage(
+            "manualMessage",
+            "Select an operative and programme."
         );
-    });
-}
-
-function renderAttendance() {
-    const records = getFilteredAttendance();
-
-    $("reportTotal").textContent = allAttendance.length;
-    $("reportFiltered").textContent = records.length;
-
-    if (!records.length) {
-        $("attendanceTable").innerHTML =
-            '<tr><td colspan="6">No matching attendance records.</td></tr>';
         return;
     }
 
-    $("attendanceTable").innerHTML = records.map(record => `
-        <tr>
-            <td>${escapeHTML(record.operatives?.full_name || "Unknown operative")}</td>
-            <td>${escapeHTML(record.operatives?.units?.name || "Unknown unit")}</td>
-            <td>${escapeHTML(record.programmes?.name || "Unknown programme")}</td>
-            <td>${escapeHTML(record.programmes?.programme_date || "")}</td>
-            <td>${escapeHTML(record.attendance_time ? new Date(record.attendance_time).toLocaleString() : "N/A")}</td>
-            <td>${escapeHTML(record.marking_method || "N/A")}</td>
-        </tr>
-    `).join("");
+    if (alreadyMarkedToday(operativeId, programmeId)) {
+        showMessage(
+            "manualMessage",
+            "This operative has already been marked present today."
+        );
+        return;
+    }
+
+    const button = $("markManualButton");
+
+    setButtonLoading(button, true, "Recording...");
+
+    try {
+        await recordAttendance(operativeId, programmeId);
+
+        showMessage(
+            "manualMessage",
+            "Attendance recorded successfully.",
+            "success"
+        );
+
+        await loadAttendance();
+
+    } catch (error) {
+        console.error("Manual attendance error:", error);
+
+        showMessage(
+            "manualMessage",
+            error.message || "Unable to record attendance."
+        );
+
+    } finally {
+        setButtonLoading(button, false);
+    }
+});
+
+/* QR SCANNER */
+
+async function startAttendanceScanner() {
+    clearMessage("scanMessage");
+
+    const programmeId = $("programmeSelect").value;
+
+    if (!programmeId) {
+        showMessage("scanMessage", "Select a programme first.");
+        return;
+    }
+
+    if (typeof Html5Qrcode === "undefined") {
+        showMessage("scanMessage", "QR scanner library could not be loaded.");
+        return;
+    }
+
+    try {
+        if (!html5QrCode) {
+            html5QrCode = new Html5Qrcode("reader");
+        }
+
+        $("startScanner").disabled = true;
+        $("stopScanner").disabled = false;
+
+        await html5QrCode.start(
+            { facingMode: "environment" },
+            {
+                fps: 10,
+                qrbox: {
+                    width: 250,
+                    height: 250
+                }
+            },
+            async decodedText => {
+                if (scannerBusy) return;
+
+                scannerBusy = true;
+
+                try {
+                    await processScannedCode(decodedText, programmeId);
+                } finally {
+                    setTimeout(() => {
+                        scannerBusy = false;
+                    }, 2000);
+                }
+            },
+            () => {}
+        );
+
+    } catch (error) {
+        console.error("Scanner start error:", error);
+
+        $("startScanner").disabled = false;
+        $("stopScanner").disabled = true;
+
+        showMessage(
+            "scanMessage",
+            "Unable to start camera. Check camera permission and try again."
+        );
+    }
 }
 
-$("reportSearch").addEventListener("input", renderAttendance);
-$("reportUnitFilter").addEventListener("change", renderAttendance);
-$("reportProgrammeFilter").addEventListener("change", renderAttendance);
+async function stopAttendanceScanner() {
+    if (!html5QrCode) return;
+
+    try {
+        if (html5QrCode.isScanning) {
+            await html5QrCode.stop();
+        }
+
+        $("startScanner").disabled = false;
+        $("stopScanner").disabled = true;
+
+    } catch (error) {
+        console.error("Scanner stop error:", error);
+    }
+}
+
+async function processScannedCode(decodedText, programmeId) {
+    const operative = allOperatives.find(item =>
+        String(item.id) === String(decodedText) ||
+        String(item.qr_code) === String(decodedText)
+    );
+
+    if (!operative) {
+        showMessage("scanMessage", "QR code does not match any operative.");
+        return;
+    }
+
+    if (String(operative.status).toLowerCase() !== "approved") {
+        showMessage("scanMessage", "This operative is not approved.");
+        return;
+    }
+
+    if (alreadyMarkedToday(operative.id, programmeId)) {
+        showMessage(
+            "scanMessage",
+            `${getOperativeName(operative)} has already been marked present today.`
+        );
+        return;
+    }
+
+    try {
+        await recordAttendance(operative.id, programmeId);
+
+        $("attendanceResult").innerHTML = `
+            <p class="success-text">
+                <strong>Attendance recorded successfully</strong><br>
+                ${escapeHTML(getOperativeName(operative))}
+            </p>
+        `;
+
+        showMessage(
+            "scanMessage",
+            "Attendance recorded successfully.",
+            "success"
+        );
+
+        await loadAttendance();
+
+    } catch (error) {
+        console.error("Attendance recording error:", error);
+
+        showMessage(
+            "scanMessage",
+            error.message || "Unable to record attendance."
+        );
+    }
+}
+
+$("startScanner").addEventListener("click", startAttendanceScanner);
+$("stopScanner").addEventListener("click", stopAttendanceScanner);
+
+/* REPORTS */
+
+function getReportRows() {
+    const search = $("reportSearch").value.trim().toLowerCase();
+    const unitFilter = $("reportUnitFilter").value;
+    const programmeFilter = $("reportProgrammeFilter").value;
+
+    return allAttendance.map(record => {
+        const operative = allOperatives.find(
+            item => String(item.id) === String(record.operative_id)
+        );
+
+        const programme = allProgrammes.find(
+            item => String(item.id) === String(record.programme_id)
+        );
+
+        return {
+            record,
+            operative,
+            operativeName: operative
+                ? getOperativeName(operative)
+                : "Unknown operative",
+            unit: operative?.unit || "—",
+            programmeName:
+                programme?.name ||
+                programme?.title ||
+                programme?.programme_name ||
+                "—"
+        };
+    }).filter(item => {
+        const matchesSearch =
+            item.operativeName.toLowerCase().includes(search);
+
+        const matchesUnit =
+            !unitFilter || item.unit === unitFilter;
+
+        const matchesProgramme =
+            !programmeFilter ||
+            String(item.record.programme_id) === String(programmeFilter);
+
+        return matchesSearch && matchesUnit && matchesProgramme;
+    });
+}
+
+function renderReports() {
+    const table = $("attendanceTable");
+
+    const rows = getReportRows();
+
+    $("reportTotal").textContent = allAttendance.length;
+    $("reportFiltered").textContent = rows.length;
+
+    if (!rows.length) {
+        table.innerHTML = `
+            <tr>
+                <td colspan="6">No attendance records found.</td>
+            </tr>
+        `;
+        return;
+    }
+
+    table.innerHTML = rows.map(item => {
+        const record = item.record;
+
+        const attendanceDate =
+            record.attendance_date ||
+            record.created_at ||
+            record.date;
+
+        const attendanceTime =
+            record.attendance_time ||
+            record.created_at;
+
+        const method =
+            record.method ||
+            record.attendance_method ||
+            record.source ||
+            "—";
+
+        return `
+            <tr>
+                <td>${escapeHTML(item.operativeName)}</td>
+                <td>${escapeHTML(item.unit)}</td>
+                <td>${escapeHTML(item.programmeName)}</td>
+                <td>${formatDate(attendanceDate)}</td>
+                <td>${formatTime(attendanceTime)}</td>
+                <td>${escapeHTML(method)}</td>
+            </tr>
+        `;
+    }).join("");
+}
+
+$("reportSearch").addEventListener("input", renderReports);
+$("reportUnitFilter").addEventListener("change", renderReports);
+$("reportProgrammeFilter").addEventListener("change", renderReports);
 
 $("refreshReports").addEventListener("click", async () => {
     await loadAttendance();
-    await updateStatistics();
+    renderReports();
 });
 
-// ================================================
-// EXCEL EXPORT
-// ================================================
+/* EXCEL EXPORT */
 
-async function loadExcelJS() {
-    if (window.ExcelJS) return window.ExcelJS;
-
-    await new Promise((resolve, reject) => {
-        const script = document.createElement("script");
-
-        script.src =
-            "https://cdn.jsdelivr.net/npm/exceljs@4.4.0/dist/exceljs.min.js";
-
-        script.onload = resolve;
-        script.onerror = reject;
-
-        document.head.appendChild(script);
-    });
-
-    if (!window.ExcelJS) {
-        throw new Error("ExcelJS failed to load.");
-    }
-
-    return window.ExcelJS;
-}
-
-$("exportButton").addEventListener("click", async () => {
-    const records = getFilteredAttendance();
-    const button = $("exportButton");
-
-    if (!records.length) {
-        setMessage("reportMessage", "No records to export.", "error");
+function exportAttendance() {
+    if (typeof XLSX === "undefined") {
+        showMessage(
+            "reportMessage",
+            "Excel export library could not be loaded."
+        );
         return;
     }
 
-    button.disabled = true;
-    button.textContent = "Preparing Excel...";
+    const rows = getReportRows();
+
+    if (!rows.length) {
+        showMessage(
+            "reportMessage",
+            "There are no attendance records to export."
+        );
+        return;
+    }
+
+    const exportRows = rows.map(item => {
+        const record = item.record;
+
+        return {
+            "Operative Name": item.operativeName,
+            "Unit": item.unit,
+            "Programme": item.programmeName,
+            "Programme Date": formatDate(
+                record.attendance_date || record.created_at || record.date
+            ),
+            "Attendance Time": formatTime(
+                record.attendance_time || record.created_at
+            ),
+            "Method": record.method ||
+                record.attendance_method ||
+                record.source ||
+                "—"
+        };
+    });
+
+    const worksheet = XLSX.utils.json_to_sheet(exportRows);
+    const workbook = XLSX.utils.book_new();
+
+    XLSX.utils.book_append_sheet(
+        workbook,
+        worksheet,
+        "Attendance"
+    );
+
+    XLSX.writeFile(
+        workbook,
+        `YMR-2026-Attendance-${getToday()}.xlsx`
+    );
+}
+
+$("exportButton").addEventListener("click", exportAttendance);
+
+/* REFRESH */
+
+$("refreshAllButton").addEventListener("click", async () => {
+    const button = $("refreshAllButton");
+
+    setButtonLoading(button, true, "Refreshing...");
 
     try {
-        const ExcelJS = await loadExcelJS();
-        const workbook = new ExcelJS.Workbook();
+        await loadDashboard();
 
-        workbook.creator = "Flaming Security";
-        workbook.title = "Flaming Security Attendance Report";
-
-        const worksheet = workbook.addWorksheet("Attendance Report");
-
-        worksheet.columns = [
-            { header: "No.", key: "number", width: 8 },
-            { header: "Operative", key: "operative", width: 32 },
-            { header: "Unit", key: "unit", width: 30 },
-            { header: "Programme", key: "programme", width: 42 },
-            { header: "Programme Date", key: "programmeDate", width: 20 },
-            { header: "Attendance Time", key: "attendanceTime", width: 25 },
-            { header: "Method", key: "method", width: 15 }
-        ];
-
-        worksheet.addRow([]);
-        worksheet.insertRow(1, [
-            "FLAMING SECURITY — OPERATIVE ATTENDANCE REPORT"
-        ]);
-
-        worksheet.mergeCells("A1:G1");
-
-        worksheet.getCell("A1").font = {
-            bold: true,
-            size: 16
-        };
-
-        worksheet.getCell("A1").alignment = {
-            horizontal: "center"
-        };
-
-        worksheet.getRow(2).values = [
-            "No.",
-            "Operative",
-            "Unit",
-            "Programme",
-            "Programme Date",
-            "Attendance Time",
-            "Method"
-        ];
-
-        worksheet.getRow(2).font = { bold: true };
-
-        records.forEach((record, index) => {
-            worksheet.addRow({
-                number: index + 1,
-                operative: record.operatives?.full_name || "Unknown operative",
-                unit: record.operatives?.units?.name || "Unknown unit",
-                programme: record.programmes?.name || "Unknown programme",
-                programmeDate: record.programmes?.programme_date || "",
-                attendanceTime: record.attendance_time
-                    ? new Date(record.attendance_time).toLocaleString()
-                    : "",
-                method: record.marking_method || "N/A"
-            });
-        });
-
-        worksheet.autoFilter = {
-            from: "A2",
-            to: "G" + (records.length + 2)
-        };
-
-        worksheet.views = [{ state: "frozen", ySplit: 2 }];
-
-        const buffer = await workbook.xlsx.writeBuffer();
-
-        const blob = new Blob([buffer], {
-            type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
-        });
-
-        const url = URL.createObjectURL(blob);
-        const link = document.createElement("a");
-
-        link.href = url;
-        link.download = "Flaming_Security_Attendance_Report.xlsx";
-
-        document.body.appendChild(link);
-        link.click();
-        link.remove();
-
-        setTimeout(() => URL.revokeObjectURL(url), 2000);
-
-        setMessage(
-            "reportMessage",
-            `Excel report downloaded: ${records.length} records.`,
+        showMessage(
+            "operativeMessage",
+            "Portal data refreshed successfully.",
             "success"
         );
 
     } catch (error) {
-        console.error("Excel export error:", error);
+        console.error("Refresh error:", error);
 
-        setMessage(
-            "reportMessage",
-            "Excel export failed. Check your internet connection.",
-            "error"
-        );
     } finally {
-        button.disabled = false;
-        button.textContent = "Export Excel";
+        setButtonLoading(button, false);
     }
 });
 
-// ================================================
-// REFRESH
-// ================================================
-
-$("refreshOperatives").addEventListener("click", loadOperatives);
-
-$("refreshAllButton").addEventListener("click", async () => {
-    $("refreshAllButton").disabled = true;
-
-    try {
-        await loadAllData();
-    } finally {
-        $("refreshAllButton").disabled = false;
-    }
-});
-
-// ================================================
-// INITIALIZE AND RESTORE SESSION
-// ================================================
-
-window.addEventListener("beforeunload", () => {
-    if (scannerRunning && scanner) {
-        scanner.stop().catch(() => {});
-    }
-});
-
-async function initialize() {
-    $("startScanner").disabled = true;
-    $("stopScanner").disabled = true;
-
-    try {
-        const { data, error } = await db.auth.getSession();
-
-        if (error) {
-            showLogin("Could not check your session. Please sign in.");
-            return;
-        }
-
-        if (data.session) {
-            await verifyAdmin();
-        } else {
-            showLogin();
-        }
-
-    } catch (error) {
-        console.error("Portal initialization error:", error);
-
-        showLogin("Unable to connect. Check your internet connection.");
-    }
-}
+/* START */
 
 initialize();
+
 </script>
 
 </body>
