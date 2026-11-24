@@ -478,6 +478,96 @@
             margin: 12px 0;
         }
 
+        /* Biodata viewer */
+        .biodata-viewer {
+            margin-top: 15px;
+            padding: 18px;
+            background: #0b1223;
+            border: 1px solid var(--border);
+            border-radius: 9px;
+        }
+
+        .biodata-viewer-head {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 12px;
+            margin-bottom: 14px;
+        }
+
+        .biodata-viewer-head h3 {
+            margin: 0;
+            font-size: 1.05rem;
+        }
+
+        .biodata-viewer-body {
+            display: grid;
+            grid-template-columns: 140px minmax(0, 1fr);
+            gap: 18px;
+            align-items: start;
+        }
+
+        .biodata-photo {
+            width: 140px;
+            height: 170px;
+            object-fit: cover;
+            border-radius: 8px;
+            border: 1px solid var(--border);
+            background: #141c30;
+        }
+
+        .biodata-viewer > .message {
+            margin-bottom: 12px;
+        }
+
+        .biodata-group {
+            margin-bottom: 16px;
+        }
+
+        .biodata-group h4 {
+            margin: 0 0 8px;
+            font-size: .78rem;
+            letter-spacing: .08em;
+            text-transform: uppercase;
+            color: var(--accent);
+        }
+
+        .biodata-list {
+            display: grid;
+            grid-template-columns: minmax(130px, 40%) minmax(0, 1fr);
+            gap: 6px 14px;
+            margin: 0;
+            font-size: .9rem;
+        }
+
+        .biodata-list dt {
+            color: var(--muted);
+        }
+
+        .biodata-list dd {
+            margin: 0;
+            overflow-wrap: anywhere;
+        }
+
+        .view-biodata-button {
+            margin-top: 6px;
+        }
+
+        @media (max-width: 720px) {
+            .biodata-viewer-body {
+                grid-template-columns: 1fr;
+            }
+
+            .biodata-list {
+                grid-template-columns: 1fr;
+                gap: 2px;
+            }
+
+            .biodata-list dd {
+                margin-bottom: 8px;
+            }
+        }
+
         .scanner-area {
             max-width: 520px;
         }
@@ -997,6 +1087,18 @@
                         <button id="copyInvitationLink" class="secondary" type="button" hidden>
                             Copy Invitation Link
                         </button>
+                    </div>
+
+                    <div id="biodataViewer" class="biodata-viewer" hidden>
+                        <div class="biodata-viewer-head">
+                            <h3 id="biodataViewerTitle">Operative Biodata</h3>
+                            <button id="closeBiodataViewer" class="secondary" type="button">Close</button>
+                        </div>
+                        <p id="biodataViewerMessage" class="message" role="status"></p>
+                        <div id="biodataViewerBody" class="biodata-viewer-body" hidden>
+                            <img id="biodataPhoto" class="biodata-photo" alt="Passport photograph" hidden>
+                            <div id="biodataDetails"></div>
+                        </div>
                     </div>
 
                     <div class="table-wrapper">
@@ -1523,12 +1625,161 @@ async function loadDashboard() {
     updateDashboardStats();
 }
 
+/* BIODATA VIEWER
+   operative_biodata: readable by admins. operative_welfare: super admins only (RLS).
+   Passport photos live in the private "operative-passports" bucket; a short-lived
+   signed URL is created for display. */
+
+const biodataLabels = {
+    alternate_phone: "Alternate phone",
+    nationality: "Nationality",
+    local_government_area: "Local government area",
+    occupation: "Occupation",
+    church_name: "Church",
+    parish_or_province: "Parish / province",
+    pastor_name: "Pastor",
+    born_again: "Born again",
+    born_again_since: "Born again since",
+    immersion_baptism: "Water baptism",
+    active_church_worker: "Active church worker",
+    church_department: "Church department",
+    previous_ymr_attendance: "Attended YMR before",
+    previous_fl_service: "Served with Flaming Security before",
+    years_of_service: "Years of service",
+    previous_deployment_area: "Previous deployment area",
+    previous_service_details: "Previous service details",
+    reason_for_joining: "Reason for joining",
+    preferred_deployment_unit: "Preferred unit",
+    accommodation_required: "Accommodation required",
+    accommodation_type: "Accommodation type",
+    accommodation_price: "Accommodation price",
+    accommodation_notes: "Accommodation notes",
+    referee_one_name: "Referee 1",
+    referee_one_phone: "Referee 1 phone",
+    referee_one_relationship_duration: "Known referee 1 for",
+    referee_two_name: "Referee 2",
+    referee_two_phone: "Referee 2 phone",
+    referee_two_relationship_duration: "Known referee 2 for"
+};
+
+const welfareLabels = {
+    next_of_kin_name: "Next of kin",
+    next_of_kin_relationship: "Relationship",
+    next_of_kin_phone: "Next of kin phone",
+    next_of_kin_address: "Next of kin address",
+    blood_group: "Blood group",
+    genotype: "Genotype",
+    medical_condition: "Medical condition",
+    medical_condition_details: "Medical details",
+    allergies: "Allergies",
+    allergy_details: "Allergy details",
+    dietary_restrictions: "Dietary restrictions",
+    other_welfare_information: "Other welfare information"
+};
+
+function formatBiodataValue(value) {
+    if (value === true) return "Yes";
+    if (value === false) return "No";
+    if (Array.isArray(value)) return value.join(", ");
+    return String(value);
+}
+
+function renderBiodataGroup(title, record, labels) {
+    const rows = Object.entries(labels)
+        .filter(([key]) => record[key] !== null && record[key] !== undefined && record[key] !== "")
+        .map(([key, label]) => `
+            <dt>${escapeHTML(label)}</dt>
+            <dd>${escapeHTML(formatBiodataValue(record[key]))}</dd>`)
+        .join("");
+
+    return `
+        <div class="biodata-group">
+            <h4>${escapeHTML(title)}</h4>
+            ${rows ? `<dl class="biodata-list">${rows}</dl>` : '<p class="message">Nothing provided.</p>'}
+        </div>`;
+}
+
+async function showBiodata(operativeId) {
+    const operative = allOperatives.find(item => item.id === operativeId);
+    const viewer = $("biodataViewer");
+    const body = $("biodataViewerBody");
+    const photo = $("biodataPhoto");
+
+    viewer.hidden = false;
+    body.hidden = true;
+    photo.hidden = true;
+    photo.removeAttribute("src");
+    $("biodataDetails").innerHTML = "";
+    $("biodataViewerTitle").textContent =
+        "Biodata — " + (operative ? getOperativeName(operative) : "Operative");
+    showMessage("biodataViewerMessage", "Loading biodata...", "info");
+    viewer.scrollIntoView({ behavior: "smooth", block: "start" });
+
+    const [biodataResult, welfareResult] = await Promise.all([
+        db.from("operative_biodata").select("*").eq("operative_id", operativeId).maybeSingle(),
+        db.from("operative_welfare").select("*").eq("operative_id", operativeId).maybeSingle()
+    ]);
+
+    if (biodataResult.error) {
+        console.error("Biodata load error:", biodataResult.error);
+        showMessage("biodataViewerMessage", "Unable to load biodata.");
+        return;
+    }
+
+    const biodata = biodataResult.data;
+
+    if (!biodata) {
+        showMessage(
+            "biodataViewerMessage",
+            "This operative has not submitted biodata yet. Send them a biodata invitation."
+        );
+        return;
+    }
+
+    let html = renderBiodataGroup("Personal & church", biodata, biodataLabels);
+
+    if (welfareResult.data) {
+        html += renderBiodataGroup("Welfare & medical", welfareResult.data, welfareLabels);
+    } else {
+        html += `
+            <div class="biodata-group">
+                <h4>Welfare &amp; medical</h4>
+                <p class="message">Welfare and medical details are visible to super admins only.</p>
+            </div>`;
+    }
+
+    $("biodataDetails").innerHTML = html;
+    body.hidden = false;
+    showMessage(
+        "biodataViewerMessage",
+        "Submitted " + formatDate(biodata.updated_at || biodata.created_at) + ".",
+        "success"
+    );
+
+    if (biodata.passport_photo_path) {
+        const { data: signed, error: photoError } = await db.storage
+            .from("operative-passports")
+            .createSignedUrl(biodata.passport_photo_path, 300);
+
+        if (photoError || !signed?.signedUrl) {
+            console.warn("Passport photo unavailable:", photoError);
+        } else {
+            photo.src = signed.signedUrl;
+            photo.hidden = false;
+        }
+    }
+}
+
+$("closeBiodataViewer").addEventListener("click", () => {
+    $("biodataViewer").hidden = true;
+});
+
 /* OPERATIVES */
 
 async function loadOperatives() {
     const { data, error } = await db
         .from("operatives")
-        .select("*")
+        .select("*, units(name)")
         .order("created_at", { ascending: false });
 
     if (error) {
@@ -1537,7 +1788,11 @@ async function loadOperatives() {
         return;
     }
 
-    allOperatives = data || [];
+    // operatives stores unit_id; the rest of the portal reads operative.unit (the name).
+    allOperatives = (data || []).map(operative => ({
+        ...operative,
+        unit: operative.units?.name || operative.unit || ""
+    }));
 
     renderOperatives();
     populateOperativeDropdowns();
@@ -1606,6 +1861,10 @@ function renderOperatives() {
                     data-invitation="send" data-id="${id}">
                     Send Biodata Invitation
                 </button>
+                <button class="secondary view-biodata-button"
+                    data-biodata="view" data-id="${id}">
+                    View Biodata
+                </button>
             `;
         } else {
             action = "Reviewed";
@@ -1639,6 +1898,13 @@ $("operativesTable").addEventListener("click", async event => {
 
     if (invitationButton) {
         await sendBiodataInvitation(invitationButton);
+        return;
+    }
+
+    const biodataButton = event.target.closest('button[data-biodata="view"]');
+
+    if (biodataButton) {
+        await showBiodata(biodataButton.dataset.id);
         return;
     }
 

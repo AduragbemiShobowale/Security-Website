@@ -4,61 +4,31 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <meta name="theme-color" content="#ffffff">
+    <meta name="theme-color" content="#07152e">
+    <meta name="robots" content="noindex">
+    <link rel="icon" href="assets/logo.png">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@500;600;700&family=Inter:wght@400;500;600;700&family=IBM+Plex+Mono:wght@500;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/style.css">
     <meta name="description" content="Biodata and Welfare Completion - Flaming Security.">
 
     <title>Biodata & Welfare | Flaming Security</title>
 
     <style>
         :root {
-            --bg: #f5f6f8;
+            --bg: #f6f4ef;
             --surface: #ffffff;
-            --border: #e3e5e9;
-            --text: #20232a;
-            --muted: #707783;
-            --accent: #b58a45;
-            --accent-dark: #967039;
+            --border: #e3e1dc;
+            --text: #1a1f2b;
+            --muted: #5a6070;
+            --accent: #e24a10;
+            --accent-dark: #b93a0b;
             --danger: #c83f46;
             --success: #24834b;
             --input: #ffffff;
         }
 
-        * {
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
-        }
-
-        body {
-            background: var(--bg);
-            color: var(--text);
-            font-family: Arial, sans-serif;
-            line-height: 1.6;
-        }
-
-        .header {
-            padding: 20px 6%;
-            background: #ffffff;
-            border-bottom: 1px solid var(--border);
-        }
-
-        .brand {
-            font-size: 19px;
-            font-weight: 800;
-            letter-spacing: 1.3px;
-        }
-
-        .brand span {
-            color: var(--accent);
-        }
-
-        .header p {
-            color: var(--muted);
-            font-size: 12px;
-            margin-top: 3px;
-        }
-
-        .container {
+        .biodata-main {
             width: min(900px, 92%);
             margin: 38px auto;
         }
@@ -89,10 +59,10 @@
 
         .notice {
             padding: 15px 17px;
-            border: 1px solid #eadcc3;
-            background: #fbf7ef;
+            border: 1px solid #f3c7b0;
+            background: #fff6f1;
             border-radius: 9px;
-            color: #73582e;
+            color: #8a3a12;
             margin-bottom: 22px;
             font-size: 13px;
         }
@@ -136,8 +106,8 @@
             grid-column: 1 / -1;
         }
 
-        label,
-        .field-label {
+        .biodata-main label,
+        .biodata-main .field-label {
             display: block;
             font-size: 13px;
             font-weight: 600;
@@ -148,9 +118,11 @@
             color: var(--danger);
         }
 
-        input,
-        select,
-        textarea {
+        #biodata-form input,
+
+        #biodata-form select,
+
+        #biodata-form textarea {
             width: 100%;
             background: var(--input);
             color: var(--text);
@@ -163,24 +135,24 @@
             min-height: 46px;
         }
 
-        input:focus,
-        select:focus,
-        textarea:focus {
+        #biodata-form input:focus,
+        #biodata-form select:focus,
+        #biodata-form textarea:focus {
             border-color: var(--accent);
-            box-shadow: 0 0 0 3px rgba(181, 138, 69, .10);
+            box-shadow: 0 0 0 3px rgba(226, 74, 16, .12);
         }
 
-        input::placeholder,
-        textarea::placeholder {
+        #biodata-form input::placeholder,
+        #biodata-form textarea::placeholder {
             color: #9aa0a9;
         }
 
-        textarea {
+        #biodata-form textarea {
             resize: vertical;
             min-height: 95px;
         }
 
-        select option {
+        #biodata-form select option {
             background: #ffffff;
             color: var(--text);
         }
@@ -197,14 +169,14 @@
         }
 
         .photo-upload {
-            border: 1px dashed #c9b18a;
+            border: 1px dashed #e8a07f;
             border-radius: 10px;
             padding: 22px 15px;
             text-align: center;
-            background: #fdfbf7;
+            background: #fff8f4;
         }
 
-        .photo-upload input {
+        #biodata-form .photo-upload input {
             max-width: 100%;
             border: none;
             background: transparent;
@@ -238,10 +210,11 @@
             margin: 0;
         }
 
-        .consent-box input {
-            width: 17px;
-            height: 17px;
-            min-height: 17px;
+        #biodata-form .consent-box input {
+            width: 20px;
+            height: 20px;
+            min-height: 20px;
+            padding: 0;
             flex-shrink: 0;
             margin-top: 3px;
             accent-color: var(--accent);
@@ -310,21 +283,10 @@
             font-size: 14px;
         }
 
-        footer {
-            text-align: center;
-            padding: 25px 15px;
-            color: var(--muted);
-            border-top: 1px solid var(--border);
-            font-size: 11px;
-            background: #ffffff;
-        }
 
         @media (max-width: 650px) {
-            .header {
-                padding: 17px 5%;
-            }
 
-            .container {
+            .biodata-main {
                 width: 92%;
                 margin: 25px auto;
             }
@@ -348,14 +310,16 @@
                 grid-column: auto;
             }
 
-            input,
-            select,
-            textarea {
+            #biodata-form input,
+
+            #biodata-form select,
+
+            #biodata-form textarea {
                 font-size: 16px;
                 min-height: 48px;
             }
 
-            textarea {
+            #biodata-form textarea {
                 min-height: 100px;
             }
 
@@ -367,21 +331,75 @@
                 padding: 18px 12px;
             }
 
-            footer {
-                padding: 22px 12px;
-            }
+        }
+
+        .biodata-main {
+            font-size: 15px;
+            line-height: 1.6;
+            color: var(--text);
+        }
+
+        body {
+            background: var(--bg);
+        }
+
+        .intro h1 {
+            text-transform: uppercase;
+        }
+
+        .section-heading h2 {
+            font-size: clamp(1.1rem, 4vw, 1.35rem);
+            margin: 0;
+        }
+
+        .biodata-main label,
+        .biodata-main .field-label {
+            font-size: 14px;
+            line-height: 1.45;
+        }
+
+        .biodata-main .hint,
+        .biodata-main .section-heading p {
+            font-size: 13px;
+        }
+
+        .submit-btn {
+            font-family: var(--mono, monospace);
+            letter-spacing: .08em;
+            text-transform: uppercase;
+            background: linear-gradient(135deg, var(--ember, #e24a10), var(--gold, #f07718));
+        }
+
+        .submit-btn:hover {
+            filter: brightness(.95);
+            background: linear-gradient(135deg, var(--ember, #e24a10), var(--gold, #f07718));
         }
     </style>
 </head>
 
 <body>
 
-<header class="header">
-    <div class="brand">FLAMING <span>SECURITY</span></div>
-    <p>Serving with Excellence</p>
+<header class="site-header">
+  <nav class="nav">
+    <a href="index.html" class="brand">
+      <img src="assets/logo.png" alt="Flaming Security logo">
+      <span class="brand-text">Flaming Security<span>Serving with Excellence</span></span>
+    </a>
+    <button class="nav-toggle" aria-label="Toggle menu" aria-expanded="false">☰</button>
+    <ul class="nav-links">
+      <li><a href="index.html">Home</a></li>
+      <li><a href="about.html">About</a></li>
+      <li><a href="impact.html">Impact</a></li>
+      <li><a href="leadership.html">Leadership</a></li>
+      <li><a href="units.html">Units &amp; KPIs</a></li>
+      <li><a href="operative-registration.html">Operative Registration</a></li>
+      <li><a href="services.html" class="book-badge">Book Us</a></li>
+      <li><a href="contact.html" class="cta">Contact</a></li>
+    </ul>
+  </nav>
 </header>
 
-<main class="container">
+<main class="biodata-main">
 
     <div class="intro">
         <small>Operative Information</small>
@@ -812,12 +830,62 @@
 </main>
 
 <footer>
-    Flaming Security | Serving with Excellence
-    <br>
-    YMR 2026
+  <div class="container">
+    <div class="footer-grid">
+      <div>
+        <div class="footer-brand">
+          <img src="assets/logo.png" alt="Flaming Security logo">
+          <strong style="color:#fff;font-family:var(--display);text-transform:uppercase;letter-spacing:.04em;">Flaming Security</strong>
+        </div>
+        <p style="color:rgba(255,255,255,.5);font-size:.88rem;max-width:30ch;">Serving with Excellence · Integrity · Vigilance · Christian Character.</p>
+        <div class="social-links">
+          <a href="https://wa.me/2349068549539" class="social-link" aria-label="WhatsApp" target="_blank" rel="noopener"><svg viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347zM12 0C5.373 0 0 5.373 0 12c0 2.138.566 4.14 1.546 5.877L.057 23.997l6.305-1.654A11.954 11.954 0 0012 24c6.627 0 12-5.373 12-12S18.627 0 12 0zm0 21.894a9.878 9.878 0 01-5.034-1.374l-.36-.214-3.742.981.999-3.648-.235-.374A9.846 9.846 0 012.106 12C2.106 6.58 6.58 2.106 12 2.106S21.894 6.58 21.894 12 17.42 21.894 12 21.894z"/></svg></a>
+        </div>
+        <div class="footer-admin"><a href="portal.html">Admin Portal</a></div>
+      </div>
+
+      <div>
+        <h4>Navigate</h4>
+        <ul>
+          <li><a href="about.html">About Us</a></li>
+          <li><a href="impact.html">Our Impact</a></li>
+          <li><a href="leadership.html">Leadership</a></li>
+          <li><a href="units.html">Units &amp; KPIs</a></li>
+          <li><a href="operative-registration.html">Register as an Operative</a></li>
+          <li><a href="services.html">Book Our Services</a></li>
+          <li><a href="contact.html">Contact</a></li>
+        </ul>
+      </div>
+
+      <div>
+        <h4>Our Units</h4>
+        <ul>
+          <li>Central Intelligence</li>
+          <li>Advance Team</li>
+          <li>Access Control</li>
+          <li>Ground Control</li>
+          <li>Traffic · Market · Welfare</li>
+        </ul>
+      </div>
+
+      <div>
+        <h4>Reach Us</h4>
+        <ul>
+          <li><a href="mailto:flamingsecurity@gmail.com">flamingsecurity@gmail.com</a></li>
+          <li>Km 46, Lagos–Ibadan Exp. Way, Mowe, Ogun State</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="footer-bottom">
+      <span>© <span id="year"></span> Flaming Security. All rights reserved.</span>
+      <span>Serving with Excellence · Integrity · Vigilance · Christian Character</span>
+    </div>
+  </div>
 </footer>
 
 <script src="js/supabase-config.js"></script>
+<script src="js/main.js"></script>
 
 <script>
     const form = document.getElementById("biodata-form");
@@ -837,6 +905,17 @@
             behavior: "smooth",
             block: "center"
         });
+    }
+
+    // Tell people straight away if they opened the page without a valid invitation link,
+    // instead of after they have filled in the whole form.
+    if (!token || !/^[a-f0-9]{64}$/i.test(token)) {
+        form.style.display = "none";
+        showMessage(
+            "This page needs the personal link from your biodata invitation email. " +
+            "Open the link in that email, or contact Flaming Security Administration for a new invitation.",
+            "error"
+        );
     }
 
     photoInput.addEventListener("change", () => {

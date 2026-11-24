@@ -128,10 +128,29 @@ Deno.serve(async (req: Request) => {
       );
 
       if (error.code === "23505") {
+        // The unique index names on operatives contain "phone" or "email".
+        const detail = `${error.message || ""} ${error.details || ""}`.toLowerCase();
+        const which = detail.includes("phone")
+          ? "phone number"
+          : detail.includes("email")
+          ? "email address"
+          : "email address or phone number";
+
         return jsonResponse(
           req,
-          { error: "An application with these details already exists." },
+          {
+            error: `This ${which} is already registered, so you do not need to register again. ` +
+              "Contact your unit head if you need to update your details.",
+          },
           409,
+        );
+      }
+
+      if (error.code === "23514" || /valid phone number/i.test(error.message || "")) {
+        return jsonResponse(
+          req,
+          { error: "Please enter a full phone number (at least 10 digits)." },
+          400,
         );
       }
 

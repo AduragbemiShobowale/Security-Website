@@ -1998,3 +1998,14 @@ video {
     bottom: 166px;
   }
 }
+
+/* FOOTER: give "Reach Us" the full row on phones so the email address isn't split mid-word */
+@media (max-width: 800px) {
+  .footer-grid > :last-child {
+    grid-column: 1 / -1;
+  }
+
+  .footer-grid a[href^="mailto:"] {
+    overflow-wrap: anywhere;
+  }
+}

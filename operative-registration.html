@@ -18,29 +18,39 @@
 
     <style>
         .registration-section {
-            max-width: 850px;
-            margin: 50px auto;
-            padding: 25px;
+            max-width: 860px;
+            margin: 40px auto 56px;
+            padding: 0 20px;
+        }
+
+        .registration-section > .card {
+            padding: 32px;
         }
 
         .registration-form {
             display: grid;
-            gap: 22px;
+            gap: 20px;
+            margin-top: 8px;
         }
 
         .form-section {
-            border: 1px solid rgba(255,255,255,0.12);
-            border-radius: 10px;
-            padding: 22px;
-            margin-top: 15px;
+            border: 1px solid var(--line, #e3e1dc);
+            border-radius: 8px;
+            padding: 24px;
+            background: #fff;
         }
 
         .form-section h2 {
-            margin-bottom: 18px;
+            font-size: clamp(1.25rem, 4.5vw, 1.6rem);
+            margin: 0 0 18px;
         }
 
         .form-field {
-            margin-bottom: 20px;
+            margin-bottom: 18px;
+        }
+
+        .form-field:last-child {
+            margin-bottom: 0;
         }
 
         .registration-form label,
@@ -48,102 +58,127 @@
             display: block;
             margin-bottom: 8px;
             font-weight: 600;
+            line-height: 1.45;
         }
 
         .registration-form input:not([type="checkbox"]):not([type="radio"]),
         .registration-form select,
         .registration-form textarea {
             width: 100%;
-            padding: 12px;
-            border: 1px solid #ccc;
+            min-height: 46px;
+            padding: 11px 12px;
+            border: 1px solid #c9ccd2;
             border-radius: 6px;
             font: inherit;
+            font-size: 16px; /* 16px stops iPhone zooming into the field */
+            background: #fff;
+            color: var(--ink, #1a1f2b);
             box-sizing: border-box;
         }
 
-        .choice {
-            display: flex !important;
-            align-items: center;
-            gap: 5px;
-            margin: 10px 0;
-            font-weight: 400 !important;
+        .registration-form input:focus,
+        .registration-form select:focus,
+        .registration-form textarea:focus {
+            outline: 2px solid var(--ember, #e24a10);
+            outline-offset: 1px;
         }
 
-        .choice input {
-            margin-right: 9px;
-        }
-
-        .form-note {
-            font-size: 0.9rem;
-            line-height: 1.6;
-            opacity: 0.85;
-        }
-
-        .registration-form button {
-            padding: 14px;
+        /* Radio buttons and checkboxes: box lines up with the first line of text */
+        .registration-form .choice {
+            display: flex;
+            align-items: flex-start;
+            gap: 10px;
+            margin: 10px 0 0;
+            font-weight: 400;
+            line-height: 1.5;
             cursor: pointer;
         }
 
-        .registration-form .declaration {
-            display: flex;
-            gap: 10px;
-            align-items: flex-start;
-        }
-
-        .registration-form .declaration input {
+        .registration-form .choice input {
+            flex: 0 0 auto;
             width: 20px;
             height: 20px;
-            flex: 0 0 auto;
-            margin-top: 2px;
+            margin: 2px 0 0;
+            accent-color: var(--ember, #e24a10);
         }
 
-        .registration-form .declaration label {
-            margin: 0;
-            font-weight: 400;
-            line-height: 1.5;
+        .form-note {
+            font-size: 0.92rem;
+            line-height: 1.6;
+            color: var(--ink-soft, #5a6070);
+            margin: 0 0 10px;
         }
 
-        @media (max-width: 600px) {
-            .registration-section {
-                margin: 24px auto;
-                padding: 0 16px;
-            }
+        .declaration-box {
+            line-height: 1.7;
+            padding: 16px 18px;
+            border-radius: 6px;
+            background: #f6f5f2;
+            border-left: 3px solid var(--ember, #e24a10);
+            margin-bottom: 16px;
+        }
+
+        .declaration-box p {
+            margin: 0 0 10px;
+        }
+
+        .declaration-box p:last-child {
+            margin-bottom: 0;
+        }
+
+        .registration-form button[type="submit"] {
+            width: 100%;
+            justify-content: center;
+            padding: 16px;
+            cursor: pointer;
         }
 
         #registration-message {
-            margin-top: 15px;
+            margin: 14px 0 0;
             font-weight: 600;
+            line-height: 1.5;
+        }
+
+        #registration-message:empty {
+            display: none;
         }
 
         #whatsapp-group-result {
             display: none;
-            margin-top: 20px;
-            padding: 20px;
+            margin-top: 18px;
+            padding: 18px;
             border-radius: 8px;
-            border: 1px solid rgba(37, 211, 102, 0.4);
+            border: 1px solid rgba(37, 211, 102, 0.45);
+            background: rgba(37, 211, 102, 0.06);
+        }
+
+        #whatsapp-group-result h3 {
+            margin: 0 0 6px;
         }
 
         #whatsapp-group-result a {
             display: inline-block;
             margin-top: 12px;
-        }
-
-        .declaration-box {
-            line-height: 1.8;
-            padding: 15px;
-            border-radius: 8px;
-            background: rgba(128,128,128,0.08);
-            margin-bottom: 15px;
+            padding: 12px 20px;
+            border-radius: 6px;
+            background: #25d366;
+            color: #fff;
+            font-weight: 700;
+            text-decoration: none;
         }
 
         @media (max-width: 600px) {
             .registration-section {
-                margin: 20px auto;
-                padding: 12px;
+                margin: 20px auto 32px;
+                padding: 0 12px;
+            }
+
+            .registration-section > .card {
+                padding: 20px 16px;
             }
 
             .form-section {
-                padding: 15px;
+                padding: 18px 14px;
             }
         }
     </style>
@@ -161,6 +196,7 @@
     <ul class="nav-links">
       <li><a href="index.html">Home</a></li>
       <li><a href="about.html">About</a></li>
+      <li><a href="impact.html">Impact</a></li>
       <li><a href="leadership.html">Leadership</a></li>
       <li><a href="units.html">Units &amp; KPIs</a></li>
       <li><a href="operative-registration.html">Operative Registration</a></li>
@@ -180,12 +216,12 @@
         <h1>YMR 2026 Volunteer Registration</h1>
 
         <p>
-            Welcome to the FLAMING Security YMR 2026 Volunteer Registration Portal.
+            Welcome to the Flaming Security YMR 2026 Volunteer Registration Portal.
         </p>
 
         <p class="form-note">
             This form is for individuals interested in registering as volunteers
-            under FLAMING Security during YMR 2026.
+            under Flaming Security during YMR 2026.
         </p>
 
         <p class="form-note">
@@ -453,7 +489,7 @@
                 <div class="declaration-box">
 
                     <p>
-                        I understand that FLAMING Security is a volunteer service
+                        I understand that Flaming Security is a volunteer service
                         ministry for YMR 2026.
                     </p>
 
@@ -481,7 +517,7 @@
                         Submission of this form does not automatically guarantee
                         selection or deployment. Final decisions remain subject
                         to screening, verification, operational requirements
-                        and FLAMING Security leadership approval.
+                        and Flaming Security leadership approval.
                     </p>
 
                 </div>
@@ -574,8 +610,65 @@
     </div>
 
 </section>
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.js"></script>
+</main>
+
+<footer>
+  <div class="container">
+    <div class="footer-grid">
+      <div>
+        <div class="footer-brand">
+          <img src="assets/logo.png" alt="Flaming Security logo">
+          <strong style="color:#fff;font-family:var(--display);text-transform:uppercase;letter-spacing:.04em;">Flaming Security</strong>
+        </div>
+        <p style="color:rgba(255,255,255,.5);font-size:.88rem;max-width:30ch;">Serving with Excellence · Integrity · Vigilance · Christian Character.</p>
+        <div class="social-links">
+          <a href="https://wa.me/2349068549539" class="social-link" aria-label="WhatsApp" target="_blank" rel="noopener"><svg viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347zM12 0C5.373 0 0 5.373 0 12c0 2.138.566 4.14 1.546 5.877L.057 23.997l6.305-1.654A11.954 11.954 0 0012 24c6.627 0 12-5.373 12-12S18.627 0 12 0zm0 21.894a9.878 9.878 0 01-5.034-1.374l-.36-.214-3.742.981.999-3.648-.235-.374A9.846 9.846 0 012.106 12C2.106 6.58 6.58 2.106 12 2.106S21.894 6.58 21.894 12 17.42 21.894 12 21.894z"/></svg></a>
+        </div>
+        <div class="footer-admin"><a href="portal.html">Admin Portal</a></div>
+      </div>
+
+      <div>
+        <h4>Navigate</h4>
+        <ul>
+          <li><a href="about.html">About Us</a></li>
+          <li><a href="impact.html">Our Impact</a></li>
+          <li><a href="leadership.html">Leadership</a></li>
+          <li><a href="units.html">Units &amp; KPIs</a></li>
+          <li><a href="operative-registration.html">Register as an Operative</a></li>
+          <li><a href="services.html">Book Our Services</a></li>
+          <li><a href="contact.html">Contact</a></li>
+        </ul>
+      </div>
+
+      <div>
+        <h4>Our Units</h4>
+        <ul>
+          <li>Central Intelligence</li>
+          <li>Advance Team</li>
+          <li>Access Control</li>
+          <li>Ground Control</li>
+          <li>Traffic · Market · Welfare</li>
+        </ul>
+      </div>
+
+      <div>
+        <h4>Reach Us</h4>
+        <ul>
+          <li><a href="mailto:flamingsecurity@gmail.com">flamingsecurity@gmail.com</a></li>
+          <li>Km 46, Lagos–Ibadan Exp. Way, Mowe, Ogun State</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="footer-bottom">
+      <span>© <span id="year"></span> Flaming Security. All rights reserved.</span>
+      <span>Serving with Excellence · Integrity · Vigilance · Christian Character</span>
+    </div>
+  </div>
+</footer>
+
 <script src="js/supabase-config.js"></script>
 <script src="js/registration.js"></script>
+<script src="js/main.js"></script>
 </body>
 </html>
