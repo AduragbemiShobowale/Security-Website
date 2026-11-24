@@ -11,7 +11,7 @@ const whatsappGroups = {
     "Access Control & Crowd Management": "https://chat.whatsapp.com/J1I8XsO5OjX8So8LG3u29d",
     "Market Control": "https://chat.whatsapp.com/KVv1rqRBATI76E5W1aGgke",
     "Traffic Control": "https://chat.whatsapp.com/KVv1rqRBATI76E5W1aGgke",
-    "Management & Welfare": "https://chat.whatsapp.com/H5mjlhiOGqX2sTWTX7NyXG?s=cl&p=i&ilr=4&iam=0",
+    "Management & Welfare": "https://chat.whatsapp.com/H5mjlhiOGqX2sTWTX7NyXG",
     "Advance Unit": "https://chat.whatsapp.com/K0a2f9UdAsyDVn4nkdlgb4"
 };
 
