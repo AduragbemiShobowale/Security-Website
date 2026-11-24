@@ -1,4 +1,3 @@
-
 "use strict";
 
 const form = document.getElementById("registration-form");
@@ -7,14 +6,41 @@ const button = document.getElementById("submit-button");
 
 const whatsappGroups = {
     "Ground Control": "https://chat.whatsapp.com/K9LXgLxnQB24snvvt8MV5x",
-    "All Personnel": "https://chat.whatsapp.com/HGE2mjrvfdK0Pez51VmL4f",
+    "All Personnel Unit": "https://chat.whatsapp.com/HGE2mjrvfdK0Pez51VmL4f",
     "Central Intelligence": "https://chat.whatsapp.com/IQUdb7l0lPDCCl4aUC8Aff",
-    "Access Control": "https://chat.whatsapp.com/J1I8XsO5OjX8So8LG3u29d",
+    "Access Control & Crowd Management": "https://chat.whatsapp.com/J1I8XsO5OjX8So8LG3u29d",
     "Market Control": "https://chat.whatsapp.com/KVv1rqRBATI76E5W1aGgke",
-    "Traffic": "https://chat.whatsapp.com/KVv1rqRBATI76E5W1aGgke",
+    "Traffic Control": "https://chat.whatsapp.com/KVv1rqRBATI76E5W1aGgke",
     "Management & Welfare": "https://chat.whatsapp.com/H5mjlhiOGqX2sTWTX7NyXG",
-    "Advance Team": "https://chat.whatsapp.com/K0a2f9UdAsyDVn4nkdlgb4"
+    "Advance Unit": "https://chat.whatsapp.com/K0a2f9UdAsyDVn4nkdlgb4"
 };
+
+const unitIds = {
+    "Central Intelligence": 1,
+    "Advance Unit": 2,
+    "Access Control & Crowd Management": 3,
+    "Ground Control": 4,
+    "Management & Welfare": 5,
+    "All Personnel Unit": 7,
+    "Market Control": 8,
+    "Traffic Control": 9
+};
+
+function getValue(data, name) {
+    const value = data.get(name);
+    return value === null ? "" : String(value).trim();
+}
+
+function toBoolean(value) {
+    return ["yes", "true", "1"].includes(
+        String(value).trim().toLowerCase()
+    );
+}
+
+function showMessage(text, isError = false) {
+    message.textContent = text;
+    message.style.color = isError ? "#dc3545" : "#198754";
+}
 
 if (form && message && button) {
     form.addEventListener("submit", async function (event) {
@@ -22,116 +48,142 @@ if (form && message && button) {
 
         if (!form.reportValidity()) return;
 
+        const formData = new FormData(form);
+
+        const groupResult = document.getElementById("whatsapp-group-result");
+        const groupLinkElement = document.getElementById("whatsapp-group-link");
+
+        if (groupResult) {
+            groupResult.style.display = "none";
+        }
+
         button.disabled = true;
         button.textContent = "Submitting...";
-        message.textContent = "";
 
-        const oldJoinButton = document.getElementById("whatsapp-join-button");
-        if (oldJoinButton) oldJoinButton.remove();
-
-        const fullName = document.getElementById("full_name").value.trim();
-        const email = document.getElementById("email").value.trim().toLowerCase();
-        const phone = document.getElementById("phone").value.trim();
-        const dateOfBirth = document.getElementById("date_of_birth").value;
-        const address = document.getElementById("residential_address").value.trim();
-        const selectedUnit = document.getElementById("sub_unit").value.trim();
-        const declared = document.getElementById("declaration").checked;
+        showMessage("Please wait while your registration is being submitted.");
 
         try {
-            // Load the original database's available units.
-            const { data: units, error: unitsError } = await supabaseClient
-                .from("units")
-                .select("id, name");
+            const fullName = getValue(formData, "full_name");
 
-            if (unitsError) throw unitsError;
+            const contactEmail = getValue(
+                formData,
+                "contact_email"
+            ).toLowerCase();
 
-            // Match website unit labels to the original database names.
-            const unitAliases = {
-                "Advance Team": ["Advance Operatives", "Advance Team"],
-                "Market Control": [
-                    "Market&Traffic Marshals",
-                    "Market & Traffic Marshals",
-                    "Market Control"
-                ],
-                "Traffic": [
-                    "Market&Traffic Marshals",
-                    "Market & Traffic Marshals",
-                    "Traffic"
-                ],
-                "Management & Welfare": [
-                    "Welfare",
-                    "Management & Welfare"
-                ],
-                "All Personnel": [
-                    "All Personnels",
-                    "All Personnel"
-                ]
-            };
+            const emailAddress = getValue(
+                formData,
+                "email_address"
+            ).toLowerCase();
 
-            const acceptedNames = [
-                selectedUnit,
-                ...(unitAliases[selectedUnit] || [])
-            ].map(name => name.trim().toLowerCase());
+            const phone = getValue(formData, "phone");
 
-            const matchingUnit = (units || []).find(unit =>
-                acceptedNames.includes(String(unit.name).trim().toLowerCase())
+            const selectedUnit = getValue(
+                formData,
+                "preferred_deployment_unit"
             );
 
-            if (!matchingUnit) {
+            if (!contactEmail || !emailAddress) {
+                throw new Error("Both email fields are required.");
+            }
+
+            if (contactEmail !== emailAddress) {
                 throw new Error(
-                    "This unit could not be matched to the original database. Please contact the administrator."
+                    "Your email addresses do not match. Please check them."
                 );
             }
 
-            // Save registration to the original database.
-            const operative = {
+            const unitId = unitIds[selectedUnit];
+
+            if (!unitId) {
+                throw new Error("Please select a valid deployment unit.");
+            }
+
+            const application = {
                 full_name: fullName,
-                email: email,
                 phone: phone,
-                dob: dateOfBirth || null,
-                residential_address: address,
-                unit_id: matchingUnit.id,
-                status: "pending",
-                declaration: declared
+                email: contactEmail,
+                date_of_birth: getValue(formData, "date_of_birth") || null,
+                gender: getValue(formData, "gender"),
+                state_of_origin: getValue(formData, "state_of_origin"),
+                residential_address: getValue(formData, "residential_address"),
+                unit_id: unitId,
+                experience: getValue(formData, "experience"),
+                experience_details: getValue(formData, "experience_details"),
+                declaration: toBoolean(
+                    getValue(formData, "declaration")
+                ),
+                registration_consent: toBoolean(
+                    getValue(formData, "registration_consent")
+                )
             };
 
-            const { error: insertError } = await supabaseClient
-                .from("operatives")
-                .insert([operative]);
-
-            if (insertError) {
-                console.error("Registration error:", insertError);
-
-                if (insertError.code === "23505") {
-                    throw new Error(
-                        "This email address is already registered. Contact your unit head if you need to update your details."
-                    );
-                }
-
-                if (insertError.code === "23503") {
-                    throw new Error(
-                        "The selected unit is invalid. Please contact the administrator."
-                    );
-                }
-
-                if (insertError.code === "42501") {
-                    throw new Error(
-                        "The database denied this registration. Please contact the administrator."
-                    );
-                }
-
+            if (
+                !application.full_name ||
+                !application.phone ||
+                !application.declaration ||
+                !application.registration_consent
+            ) {
                 throw new Error(
-                    "Registration failed: " +
-                    (insertError.message || "Please try again.")
+                    "Please complete all required registration fields and accept the declaration and consent."
                 );
             }
 
-            message.textContent =
-                "Registration successful. Join your sub-unit WhatsApp group below.";
+            const response = await fetch(
+                `${SUPABASE_URL}/functions/v1/submit-registration`,
+                {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json",
+                        apikey: SUPABASE_KEY
+                    },
+                    body: JSON.stringify({
+                        application: application
+                    })
+                }
+            );
+
+            let result;
+
+            try {
+                result = await response.json();
+            } catch {
+                throw new Error(
+                    "The server returned an invalid response."
+                );
+            }
+
+            if (!response.ok || !result.success) {
+                throw new Error(
+                    result.error ||
+                    "Registration failed. Please try again."
+                );
+            }
+
+            form.reset();
+
+            showMessage(
+                "Your registration was successful. Please join your assigned WhatsApp group."
+            );
 
             const groupLink = whatsappGroups[selectedUnit];
 
-            if (groupLink) {
+            if (groupLink && groupResult && groupLinkElement) {
+                groupLinkElement.href = groupLink;
+                groupLinkElement.textContent = "Join Your WhatsApp Group";
+                groupLinkElement.target = "_blank";
+                groupLinkElement.rel = "noopener noreferrer";
+
+                groupResult.style.display = "block";
+
+            } else if (groupLink) {
+                const existingButton = document.getElementById(
+                    "whatsapp-join-button"
+                );
+
+                if (existingButton) {
+                    existingButton.remove();
+                }
+
                 const joinButton = document.createElement("a");
 
                 joinButton.id = "whatsapp-join-button";
@@ -141,21 +193,18 @@ if (form && message && button) {
                 joinButton.textContent = "Join Your WhatsApp Group";
 
                 joinButton.style.cssText =
-                    "display:inline-block;margin-top:15px;padding:12px 20px;background:#25D366;color:#fff;text-decoration:none;border-radius:6px;font-weight:bold;";
+                    "display:inline-block;margin-top:15px;padding:13px 22px;background:#25D366;color:#fff;text-decoration:none;border-radius:6px;font-weight:bold;";
 
                 message.insertAdjacentElement("afterend", joinButton);
-            } else {
-                message.textContent =
-                    "Registration successful. Please contact the administrator for your WhatsApp group link.";
             }
-
-            form.reset();
 
         } catch (error) {
             console.error("Registration error:", error);
 
-            message.textContent =
-                error.message || "Connection failed. Please try again.";
+            showMessage(
+                error.message || "Connection failed. Please try again.",
+                true
+            );
 
         } finally {
             button.disabled = false;
@@ -163,4 +212,3 @@ if (form && message && button) {
         }
     });
 }
-

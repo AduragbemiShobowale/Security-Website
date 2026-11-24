@@ -15,6 +15,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@500;600;700&family=Inter:wght@400;500;600;700&family=IBM+Plex+Mono:wght@500;600&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="css/style.css">
+
 <style>
   .convener-card{
     display:grid;grid-template-columns:280px 1fr;gap:40px;align-items:start;
@@ -79,7 +80,138 @@
   .program-chip .sub{font-size:.76rem;color:var(--ink-soft);margin-top:6px;}
   .program-chip.current .sub{color:rgba(255,255,255,.6);}
 
-  /* Code of conduct */
+  /* OUR CORE VALUES */
+  .values-section{
+    position:relative;
+    overflow:hidden;
+    background:#F7F7F8;
+    padding:90px 0;
+    isolation:isolate;
+  }
+  .values-section::before{
+    content:"";
+    position:absolute;
+    inset:0;
+    background-image:url("assets/logo.png");
+    background-repeat:no-repeat;
+    background-position:center;
+    background-size:min(440px,75vw);
+    opacity:.035;
+    pointer-events:none;
+    z-index:-1;
+  }
+  .values-heading{
+    max-width:720px;
+    margin:0 auto 44px;
+    text-align:center;
+  }
+  .values-heading .eyebrow{
+    color:#E8601C;
+    justify-content:center;
+  }
+  .values-heading h2{
+    color:#0F172A;
+    margin-bottom:12px;
+  }
+  .values-heading p{
+    max-width:55ch;
+    margin:0 auto;
+    color:#626B79;
+    line-height:1.75;
+  }
+  .values-grid{
+    display:grid;
+    grid-template-columns:repeat(3,minmax(0,1fr));
+    gap:20px;
+  }
+  .value-card{
+    position:relative;
+    min-height:235px;
+    padding:28px 26px;
+    border-radius:12px;
+    background:#0F172A;
+    color:#fff;
+    overflow:hidden;
+    box-shadow:0 12px 30px rgba(15,23,42,.12);
+    display:flex;
+    flex-direction:column;
+    transition:transform .3s ease,box-shadow .3s ease;
+  }
+  .value-card:nth-child(even){background:#1B2A44;}
+  .value-card:hover{
+    transform:translateY(-7px);
+    box-shadow:0 20px 38px rgba(15,23,42,.2);
+  }
+  .value-card::after{
+    content:"";
+    position:absolute;
+    width:150px;
+    height:150px;
+    right:-65px;
+    bottom:-75px;
+    border:1px solid rgba(245,166,35,.12);
+    border-radius:50%;
+    box-shadow:0 0 0 18px rgba(245,166,35,.025),0 0 0 36px rgba(245,166,35,.02);
+    pointer-events:none;
+  }
+  .value-icon{
+    width:54px;
+    height:54px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    border:1px solid rgba(245,166,35,.35);
+    border-radius:12px;
+    color:#F5A623;
+    background:rgba(245,166,35,.08);
+    margin-bottom:25px;
+  }
+  .value-icon svg{
+    width:27px;
+    height:27px;
+    fill:none;
+    stroke:currentColor;
+    stroke-width:1.7;
+    stroke-linecap:round;
+    stroke-linejoin:round;
+  }
+  .value-card h3{
+    color:#fff;
+    font-family:var(--display);
+    font-size:1.25rem;
+    text-transform:uppercase;
+    letter-spacing:.035em;
+    margin:0 0 10px;
+  }
+  .value-card p{
+    color:rgba(255,255,255,.72);
+    font-size:.88rem;
+    line-height:1.75;
+    margin:0;
+    max-width:38ch;
+  }
+  .value-card .value-index{
+    position:absolute;
+    top:25px;
+    right:25px;
+    font-family:var(--mono);
+    font-size:.68rem;
+    letter-spacing:.1em;
+    color:rgba(245,166,35,.65);
+  }
+  @media(max-width:900px){
+    .values-grid{grid-template-columns:repeat(2,minmax(0,1fr));}
+  }
+  @media(max-width:560px){
+    .values-section{padding:65px 0;}
+    .values-heading{margin-bottom:30px;text-align:left;}
+    .values-heading .eyebrow{justify-content:flex-start;}
+    .values-grid{grid-template-columns:1fr;gap:14px;}
+    .value-card{min-height:205px;padding:24px;}
+    .value-icon{margin-bottom:20px;}
+  }
+
+  /* CODE OF CONDUCT */
   .coc-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:18px;}
   @media(max-width:840px){.coc-grid{grid-template-columns:1fr 1fr;}}
   @media(max-width:500px){.coc-grid{grid-template-columns:1fr;}}
@@ -93,16 +225,414 @@
   .coc-item:hover{transform:translateY(-2px);}
   .coc-item h4{font-size:.92rem;margin-bottom:6px;}
   .coc-item p{font-size:.84rem;margin:0;}
+
+  /* PARTNERSHIPS & COLLABORATORS */
+  .partners-section{
+    position:relative;
+    overflow:hidden;
+    padding:90px 0;
+    background:#0F172A;
+    isolation:isolate;
+  }
+  .partners-section::before{
+    content:"";
+    position:absolute;
+    inset:0;
+    background:
+      radial-gradient(circle at 10% 20%,rgba(232,96,28,.10),transparent 35%),
+      radial-gradient(circle at 90% 80%,rgba(245,166,35,.07),transparent 35%);
+    pointer-events:none;
+    z-index:-1;
+  }
+  .partners-heading{
+    max-width:680px;
+    margin:0 auto 48px;
+    text-align:center;
+  }
+  .partners-heading .eyebrow{
+    color:#F5A623;
+    justify-content:center;
+  }
+  .partners-heading h2{
+    color:#fff;
+    margin-bottom:14px;
+  }
+  .partners-heading p{
+    color:rgba(255,255,255,.65);
+    line-height:1.8;
+    max-width:55ch;
+    margin:0 auto;
+  }
+  .partners-grid{
+    display:grid;
+    grid-template-columns:repeat(3,minmax(0,1fr));
+    gap:18px;
+  }
+  .partner-card{
+    min-height:190px;
+    padding:24px 20px;
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    justify-content:center;
+    gap:18px;
+    background:rgba(255,255,255,.97);
+    border:1px solid rgba(255,255,255,.12);
+    border-radius:10px;
+    text-align:center;
+    transition:transform .3s ease,box-shadow .3s ease,border-color .3s ease;
+  }
+  .partner-card:hover{
+    transform:translateY(-6px);
+    border-color:#F5A623;
+    box-shadow:0 18px 35px rgba(0,0,0,.25);
+  }
+  .partner-logo-wrap{
+    width:100%;
+    height:105px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+  }
+  .partner-logo-wrap img{
+    display:block;
+    max-width:100%;
+    max-height:100%;
+    width:auto;
+    height:auto;
+    object-fit:contain;
+    transition:transform .3s ease;
+  }
+  .partner-card:hover .partner-logo-wrap img{
+    transform:scale(1.06);
+  }
+  .partner-card h3{
+    color:#172033;
+    font-family:var(--display);
+    font-size:1rem;
+    letter-spacing:.035em;
+    text-transform:uppercase;
+    margin:0;
+  }
+  .partners-footnote{
+    margin:32px auto 0;
+    max-width:650px;
+    text-align:center;
+    color:rgba(255,255,255,.48);
+    font-size:.78rem;
+    line-height:1.7;
+  }
+
+  /* FLAMING SECURITY UNIT BADGES */
+  .units-badges{
+    margin-top:75px;
+    padding-top:55px;
+    border-top:1px solid rgba(255,255,255,.12);
+  }
+  .units-badges-heading{
+    text-align:center;
+    max-width:650px;
+    margin:0 auto 35px;
+  }
+  .units-badges-heading .eyebrow{
+    color:#F5A623;
+    justify-content:center;
+  }
+  .units-badges-heading h2{
+    color:#fff;
+    margin-bottom:12px;
+  }
+  .units-badges-heading p{
+    color:rgba(255,255,255,.6);
+    line-height:1.75;
+    margin:0 auto;
+    max-width:55ch;
+  }
+  .units-badges-grid{
+    display:grid;
+    grid-template-columns:repeat(4,minmax(0,1fr));
+    gap:16px;
+  }
+  .unit-badge-card{
+    padding:20px 14px;
+    min-height:155px;
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    justify-content:center;
+    gap:14px;
+    text-align:center;
+    background:rgba(255,255,255,.06);
+    border:1px solid rgba(255,255,255,.12);
+    border-radius:9px;
+    transition:transform .3s ease,background .3s ease,border-color .3s ease;
+  }
+  .unit-badge-card:hover{
+    transform:translateY(-5px);
+    background:rgba(255,255,255,.11);
+    border-color:#F5A623;
+  }
+  .unit-badge-card img{
+    width:75px;
+    height:75px;
+    object-fit:contain;
+    display:block;
+    transition:transform .3s ease;
+  }
+  .unit-badge-card:hover img{transform:scale(1.08);}
+  .unit-badge-card h3{
+    color:#fff;
+    font-family:var(--display);
+    font-size:.85rem;
+    letter-spacing:.04em;
+    text-transform:uppercase;
+    margin:0;
+  }
+
+  /* JOINT TASK FORCE OPERATIONS */
+  .jtf-section{
+    position:relative;
+    overflow:hidden;
+    padding:85px 0;
+    background:#F4F5F7;
+  }
+  .jtf-content{
+    display:grid;
+    grid-template-columns:1fr 1.2fr;
+    gap:55px;
+    align-items:center;
+  }
+  .jtf-heading .eyebrow{color:#E8601C;}
+  .jtf-heading h2{
+    color:#0F172A;
+    margin:12px 0 18px;
+  }
+  .jtf-heading p{
+    color:#626B79;
+    font-size:.93rem;
+    line-height:1.85;
+    margin:0;
+  }
+  .jtf-panel{
+    padding:32px;
+    border-radius:12px;
+    background:#0F172A;
+    box-shadow:0 18px 40px rgba(15,23,42,.13);
+  }
+  .jtf-panel h3{
+    color:#fff;
+    font-family:var(--display);
+    font-size:1.2rem;
+    text-transform:uppercase;
+    letter-spacing:.04em;
+    margin:0 0 12px;
+  }
+  .jtf-panel p{
+    color:rgba(255,255,255,.65);
+    font-size:.87rem;
+    line-height:1.8;
+    margin:0 0 22px;
+  }
+  .jtf-agencies{
+    display:flex;
+    flex-wrap:wrap;
+    gap:10px;
+  }
+  .jtf-agency{
+    display:inline-flex;
+    align-items:center;
+    padding:9px 14px;
+    border:1px solid rgba(245,166,35,.35);
+    border-radius:5px;
+    background:rgba(245,166,35,.08);
+    color:#F5A623;
+    font-family:var(--mono);
+    font-size:.72rem;
+    letter-spacing:.04em;
+  }
+  .jtf-note{
+    margin-top:20px;
+    color:rgba(255,255,255,.4);
+    font-size:.72rem;
+    line-height:1.65;
+  }
+
+  @media(max-width:760px){
+    .partners-section{padding:68px 0;}
+    .partners-grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:12px;}
+    .partner-card{min-height:160px;padding:18px 12px;gap:14px;}
+    .partner-logo-wrap{height:85px;}
+    .partner-card h3{font-size:.84rem;}
+    .units-badges{margin-top:55px;padding-top:40px;}
+    .units-badges-grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:12px;}
+    .unit-badge-card{min-height:140px;padding:16px 10px;}
+    .unit-badge-card img{width:65px;height:65px;}
+    .unit-badge-card h3{font-size:.76rem;}
+    .jtf-section{padding:65px 0;}
+    .jtf-content{grid-template-columns:1fr;gap:28px;}
+    .jtf-panel{padding:25px 20px;}
+  }
+  @media(max-width:380px){
+    .partners-grid{grid-template-columns:1fr 1fr;}
+    .partner-card{min-height:145px;}
+    .partner-logo-wrap{height:72px;}
+  }
+  /* FLAMING AT A GLANCE */
+.glance-section{
+  padding:85px 0;
+  background:#F7F7F8;
+}
+
+.glance-heading{
+  max-width:680px;
+  margin:0 auto 38px;
+  text-align:center;
+}
+
+.glance-heading .eyebrow{
+  color:#E8601C;
+  justify-content:center;
+}
+
+.glance-heading h2{
+  color:#0F172A;
+  margin:10px 0 12px;
+}
+
+.glance-heading p{
+  color:#626B79;
+  line-height:1.75;
+  margin:0 auto;
+}
+
+.glance-grid{
+  display:grid;
+  grid-template-columns:repeat(3,minmax(0,1fr));
+  grid-auto-rows:250px;
+  gap:14px;
+}
+
+.glance-item{
+  position:relative;
+  overflow:hidden;
+  border-radius:9px;
+  background:#0F172A;
+  cursor:pointer;
+  border:1px solid rgba(15,23,42,.08);
+}
+
+.glance-item:nth-child(1),
+.glance-item:nth-child(6){
+  grid-row:span 2;
+}
+
+.glance-item img{
+  width:100%;
+  height:100%;
+  display:block;
+  object-fit:cover;
+  transition:transform .55s ease,filter .4s ease;
+}
+
+.glance-item::after{
+  content:"";
+  position:absolute;
+  inset:0;
+  background:linear-gradient(
+    180deg,
+    transparent 55%,
+    rgba(7,21,46,.25)
+  );
+  pointer-events:none;
+}
+
+.glance-item:hover img{
+  transform:scale(1.06);
+  filter:brightness(.85);
+}
+
+/* IMAGE LIGHTBOX */
+.glance-lightbox{
+  position:fixed;
+  inset:0;
+  z-index:9999;
+  display:none;
+  align-items:center;
+  justify-content:center;
+  padding:25px;
+  background:rgba(5,12,27,.96);
+  backdrop-filter:blur(8px);
+}
+
+.glance-lightbox.active{
+  display:flex;
+}
+
+.glance-lightbox img{
+  max-width:100%;
+  max-height:88vh;
+  object-fit:contain;
+  border-radius:5px;
+  animation:glanceZoom .25s ease;
+}
+
+.glance-close{
+  position:absolute;
+  top:20px;
+  right:25px;
+  width:44px;
+  height:44px;
+  border:1px solid rgba(255,255,255,.25);
+  border-radius:50%;
+  background:rgba(255,255,255,.08);
+  color:#fff;
+  font-size:28px;
+  cursor:pointer;
+}
+
+@keyframes glanceZoom{
+  from{opacity:0;transform:scale(.96);}
+  to{opacity:1;transform:scale(1);}
+}
+
+@media(max-width:760px){
+  .glance-section{padding:65px 0;}
+  .glance-heading{
+    text-align:left;
+    margin-bottom:28px;
+  }
+  .glance-heading .eyebrow{
+    justify-content:flex-start;
+  }
+  .glance-grid{
+    grid-template-columns:repeat(2,minmax(0,1fr));
+    grid-auto-rows:165px;
+    gap:10px;
+  }
+  .glance-item:nth-child(1),
+  .glance-item:nth-child(6){
+    grid-row:span 2;
+  }
+}
+
+@media(max-width:380px){
+  .glance-grid{
+    grid-auto-rows:140px;
+    gap:8px;
+  }
+}
 </style>
 </head>
+
 <body>
 
-<!-- Announcement bar -->
+<!-- ANNOUNCEMENT BAR -->
 <div class="announcement-bar" id="ann-bar">
   <span class="pulse-dot"></span>
   <span>🔥 Now accepting event bookings for 2026 — <a href="services.html">Book Flaming Security for your event</a></span>
   <button class="announcement-close" onclick="document.getElementById('ann-bar').style.display='none'" aria-label="Close">&times;</button>
 </div>
+
 <header class="site-header">
   <nav class="nav">
     <a href="index.html" class="brand">
@@ -113,6 +643,7 @@
     <ul class="nav-links">
       <li><a href="index.html">Home</a></li>
       <li><a href="about.html">About</a></li>
+      <li><a href="impact.html">Impact</a></li>
       <li><a href="leadership.html">Leadership</a></li>
       <li><a href="units.html">Units &amp; KPIs</a></li>
       <li><a href="operative-registration.html">Operative Registration</a></li>
@@ -130,24 +661,90 @@
   </div>
 </section>
 
-<!-- MANDATE + VALUES -->
-<section>
-  <div class="container grid grid-2" style="gap:56px;">
-    <div class="reveal">
-      <div class="eyebrow">Our Mandate</div>
-      <h2>Security as an act of service.</h2>
-      <p>Every YMR gathering brings ministers, guests and thousands of attendees into one space. Flaming Security exists to make that space safe — scouting venues before anyone else arrives, holding the perimeter during the event, and following up with every volunteer after it ends. We are now in our sixth year of structured induction training and deployment.</p>
-      <p>We operate on a simple principle: firmness paired with courtesy. Every attendee is treated with dignity. Every post is held until properly relieved. Every incident is reported up the chain, not sat on until convenient.</p>
+<!-- OUR CORE VALUES -->
+<section class="values-section">
+  <div class="container">
+    <div class="values-heading reveal">
+      <div class="eyebrow">The Standard We Uphold</div>
+      <h2>Our Core Values.</h2>
+      <p>These principles shape how we serve, how we work together and how we represent the department on and off the field.</p>
     </div>
-    <div class="reveal" style="transition-delay:.1s;">
-      <div class="eyebrow">Core Values</div>
-      <h2>What we hold ourselves to.</h2>
-      <div class="policy-list">
-        <div style="display:flex;gap:14px;padding:14px 0;border-top:1px solid var(--line-soft);"><span class="num">01</span><div><strong>Excellence</strong><p style="margin:0;">A long-term standard of professionalism — never compromised for short-term convenience.</p></div></div>
-        <div style="display:flex;gap:14px;padding:14px 0;border-top:1px solid var(--line-soft);"><span class="num">02</span><div><strong>Integrity</strong><p style="margin:0;">Confidentiality of internal matters is mandatory. Gossip and disclosure to outsiders is not tolerated.</p></div></div>
-        <div style="display:flex;gap:14px;padding:14px 0;border-top:1px solid var(--line-soft);"><span class="num">03</span><div><strong>Vigilance</strong><p style="margin:0;">Situational awareness at every post — scanning zones, knowing your baseline, watching behaviour.</p></div></div>
-        <div style="display:flex;gap:14px;padding:14px 0;border-top:1px solid var(--line-soft);"><span class="num">04</span><div><strong>Christian Character</strong><p style="margin:0;">A mindset of forgiveness and respect; zero tolerance for harassment of attendees or fellow volunteers.</p></div></div>
-      </div>
+
+    <div class="values-grid">
+      <article class="value-card reveal">
+        <span class="value-index">01</span>
+        <div class="value-icon">
+          <svg viewBox="0 0 24 24" aria-hidden="true">
+            <path d="M12 3v3"/><path d="M9 7l3 2 3-2"/><path d="M8 11l4 3 4-3"/>
+            <path d="M9 10l-2 5"/><path d="M15 10l2 5"/><path d="M7 15l-2 4"/>
+            <path d="M17 15l2 4"/><path d="M5 21h14"/><path d="M10 5l2-2 2 2"/>
+          </svg>
+        </div>
+        <h3>Faith-Led Service</h3>
+        <p>Kindness, patience and humility guide every action.</p>
+      </article>
+
+      <article class="value-card reveal" style="transition-delay:.06s;">
+        <span class="value-index">02</span>
+        <div class="value-icon">
+          <svg viewBox="0 0 24 24" aria-hidden="true">
+            <path d="M12 3v17"/><path d="M5 7h14"/><path d="M7 7l-4 7h8L7 7z"/>
+            <path d="M17 7l-4 7h8l-4-7z"/><path d="M8 21h8"/><path d="M6 18h12"/>
+          </svg>
+        </div>
+        <h3>Moral Uprightness</h3>
+        <p>Integrity and honesty at all times, no compromise.</p>
+      </article>
+
+      <article class="value-card reveal" style="transition-delay:.12s;">
+        <span class="value-index">03</span>
+        <div class="value-icon">
+          <svg viewBox="0 0 24 24" aria-hidden="true">
+            <path d="M2 12s3.6-7 10-7 10 7 10 7-3.6 7-10 7S2 12 2 12z"/>
+            <circle cx="12" cy="12" r="3"/><circle cx="12" cy="12" r=".8"/>
+          </svg>
+        </div>
+        <h3>Vigilance</h3>
+        <p>Stay alert; actively monitor surroundings at all times.</p>
+      </article>
+
+      <article class="value-card reveal" style="transition-delay:.18s;">
+        <span class="value-index">04</span>
+        <div class="value-icon">
+          <svg viewBox="0 0 24 24" aria-hidden="true">
+            <path d="M3 12l4-4 4 2 3-2 7 4"/><path d="M3 12l5 5 3-2 3 2 7-5"/>
+            <path d="M7 8l2-3 4 2 2-1 4 3"/><path d="M8 17l2 2 2-1"/><path d="M14 17l2 2 2-2"/>
+          </svg>
+        </div>
+        <h3>Firmness with Respect</h3>
+        <p>Enforce protocol firmly but treat all with dignity.</p>
+      </article>
+
+      <article class="value-card reveal" style="transition-delay:.24s;">
+        <span class="value-index">05</span>
+        <div class="value-icon">
+          <svg viewBox="0 0 24 24" aria-hidden="true">
+            <circle cx="12" cy="7" r="3"/><circle cx="5" cy="10" r="2.2"/>
+            <circle cx="19" cy="10" r="2.2"/><path d="M6 20v-2a6 6 0 0112 0v2"/>
+            <path d="M2 19v-1a3.5 3.5 0 014-3.5"/><path d="M22 19v-1a3.5 3.5 0 00-4-3.5"/>
+          </svg>
+        </div>
+        <h3>Team Spirit</h3>
+        <p>Support one another; communicate openly across units.</p>
+      </article>
+
+      <article class="value-card reveal" style="transition-delay:.30s;">
+        <span class="value-index">06</span>
+        <div class="value-icon">
+          <svg viewBox="0 0 24 24" aria-hidden="true">
+            <path d="M8 4H6a2 2 0 00-2 2v14h16V6a2 2 0 00-2-2h-2"/>
+            <rect x="8" y="2" width="8" height="4" rx="1"/>
+            <path d="M8 12l2 2 5-5"/><path d="M8 18h8"/>
+          </svg>
+        </div>
+        <h3>Accountability</h3>
+        <p>Own your post and your actions; report with honesty.</p>
+      </article>
     </div>
   </div>
 </section>
@@ -161,7 +758,6 @@
       <p style="max-width:54ch;margin:0 auto;">Flaming Security serves under the YMR convener and his wife — whose ministry of revival, worship and women's empowerment shapes the culture every volunteer upholds on the field.</p>
     </div>
 
-    <!-- P. Daniel -->
     <div class="convener-card reveal" style="margin-bottom:28px;">
       <div class="convener-photo">
         <img src="assets/leaders/pdaniel.jpg" alt="Pastor Daniel Olawande — YMR Convener" loading="lazy">
@@ -186,7 +782,6 @@
       </div>
     </div>
 
-    <!-- Nifemi -->
     <div class="convener-card reveal" style="transition-delay:.1s;">
       <div class="convener-photo">
         <img src="assets/leaders/nifemi.jpg" alt="Pastor Nifemi Olawande — Co-Convener" loading="lazy">
@@ -222,43 +817,15 @@
       <p style="max-width:52ch;margin:0 auto;">Every year, Flaming Security deploys around a theme that reflects the season of the ministry. Six years of training. One consistent standard.</p>
     </div>
     <div class="programs-grid">
-      <div class="program-chip reveal">
-        <div class="yr">2017</div>
-        <div class="theme">The Emergence</div>
-        <div class="sub">Fire for needed impact</div>
-      </div>
-      <div class="program-chip reveal" style="transition-delay:.04s;">
-        <div class="yr">2018</div>
-        <div class="theme">Explosive Exploits</div>
-      </div>
-      <div class="program-chip reveal" style="transition-delay:.08s;">
-        <div class="yr">2019</div>
-        <div class="theme">Fire to Take the City</div>
-      </div>
-      <div class="program-chip reveal" style="transition-delay:.12s;">
-        <div class="yr">2020</div>
-        <div class="theme">Go in This Thy Might</div>
-      </div>
-      <div class="program-chip reveal" style="transition-delay:.16s;">
-        <div class="yr">2021</div>
-        <div class="theme">Weapons of War</div>
-      </div>
-      <div class="program-chip reveal" style="transition-delay:.20s;">
-        <div class="yr">2022</div>
-        <div class="theme">Witnesses</div>
-      </div>
-      <div class="program-chip reveal" style="transition-delay:.24s;">
-        <div class="yr">2023</div>
-        <div class="theme">The Rain</div>
-      </div>
-      <div class="program-chip reveal" style="transition-delay:.28s;">
-        <div class="yr">2024</div>
-        <div class="theme">Floodgates</div>
-      </div>
-      <div class="program-chip reveal" style="transition-delay:.32s;">
-        <div class="yr">2025</div>
-        <div class="theme">The New Army</div>
-      </div>
+      <div class="program-chip reveal"><div class="yr">2017</div><div class="theme">The Emergence</div><div class="sub">Fire for needed impact</div></div>
+      <div class="program-chip reveal" style="transition-delay:.04s;"><div class="yr">2018</div><div class="theme">Explosive Exploits</div></div>
+      <div class="program-chip reveal" style="transition-delay:.08s;"><div class="yr">2019</div><div class="theme">Fire to Take the City</div></div>
+      <div class="program-chip reveal" style="transition-delay:.12s;"><div class="yr">2020</div><div class="theme">Go in This Thy Might</div></div>
+      <div class="program-chip reveal" style="transition-delay:.16s;"><div class="yr">2021</div><div class="theme">Weapons of War</div></div>
+      <div class="program-chip reveal" style="transition-delay:.20s;"><div class="yr">2022</div><div class="theme">Witnesses</div></div>
+      <div class="program-chip reveal" style="transition-delay:.24s;"><div class="yr">2023</div><div class="theme">The Rain</div></div>
+      <div class="program-chip reveal" style="transition-delay:.28s;"><div class="yr">2024</div><div class="theme">Floodgates</div></div>
+      <div class="program-chip reveal" style="transition-delay:.32s;"><div class="yr">2025</div><div class="theme">The New Army</div></div>
       <div class="program-chip current reveal" style="transition-delay:.36s;">
         <div class="yr">2026 — Announced</div>
         <div class="theme">City Takers</div>
@@ -277,42 +844,15 @@
       <p style="max-width:52ch;margin:0 auto;">From the moment you're deployed to the moment you're stood down, these standards are non-negotiable — for General Personnel, Unit Heads and command officers alike.</p>
     </div>
     <div class="coc-grid">
-      <div class="coc-item reveal">
-        <h4>Punctuality &amp; Uniform</h4>
-        <p>Report at least 20–30 minutes before call-up in full, clean, pressed uniform. Late arrivals are excluded from that session's service. Incorrect uniform = same consequence.</p>
-      </div>
-      <div class="coc-item reveal" style="transition-delay:.06s;">
-        <h4>Post Discipline</h4>
-        <p>No post may be left without a formal handover approved by a Unit Head or Assistant Unit Head. Abandoning post without authorization is a serious breach.</p>
-      </div>
-      <div class="coc-item reveal" style="transition-delay:.12s;">
-        <h4>Incident Reporting</h4>
-        <p>Incidents are escalated immediately through the chain of command. Nothing is held until after the event. If in doubt, report up — do not make unilateral decisions on the floor.</p>
-      </div>
-      <div class="coc-item reveal" style="transition-delay:.18s;">
-        <h4>Zero Tolerance Items</h4>
-        <p>Weapons, alcohol, drugs, explosives and unauthorized recording gear are banned for all personnel — including any attached military or paramilitary staff — without exception.</p>
-      </div>
-      <div class="coc-item reveal" style="transition-delay:.24s;">
-        <h4>Attendee Dignity</h4>
-        <p>Every attendee is treated with courtesy and respect. Harassment — physical, verbal or otherwise — of any attendee or fellow volunteer results in immediate removal from the department.</p>
-      </div>
-      <div class="coc-item reveal" style="transition-delay:.30s;">
-        <h4>Confidentiality</h4>
-        <p>Internal matters — personnel decisions, incident details, command communications — stay internal. Disclosure to outsiders or social media without authorization is a disciplinary matter.</p>
-      </div>
-      <div class="coc-item reveal" style="transition-delay:.36s;">
-        <h4>Chain of Command</h4>
-        <p>The chain of command is respected regardless of a volunteer's personal status or seniority outside the department. Only authorized officers may give orders on the field.</p>
-      </div>
-      <div class="coc-item reveal" style="transition-delay:.42s;">
-        <h4>Equipment Accountability</h4>
-        <p>All issued gear is your responsibility. Damage or loss in your care is paid for by you — repair cost for repairable items, replacement cost for total losses. See the Equipment Policy page.</p>
-      </div>
-      <div class="coc-item reveal" style="transition-delay:.48s;">
-        <h4>Christian Character On and Off Post</h4>
-        <p>Volunteers represent the ministry — not only during the event. Conduct unbecoming of a Christian minister before, during or after deployment is subject to review.</p>
-      </div>
+      <div class="coc-item reveal"><h4>Punctuality &amp; Uniform</h4><p>Report at least 20–30 minutes before call-up in full, clean, pressed uniform. Late arrivals are excluded from that session's service. Incorrect uniform = same consequence.</p></div>
+      <div class="coc-item reveal" style="transition-delay:.06s;"><h4>Post Discipline</h4><p>No post may be left without a formal handover approved by a Unit Head or Assistant Unit Head. Abandoning post without authorization is a serious breach.</p></div>
+      <div class="coc-item reveal" style="transition-delay:.12s;"><h4>Incident Reporting</h4><p>Incidents are escalated immediately through the chain of command. Nothing is held until after the event. If in doubt, report up — do not make unilateral decisions on the floor.</p></div>
+      <div class="coc-item reveal" style="transition-delay:.18s;"><h4>Zero Tolerance Items</h4><p>Weapons, alcohol, drugs, explosives and unauthorized recording gear are banned for all personnel — including any attached military or paramilitary staff — without exception.</p></div>
+      <div class="coc-item reveal" style="transition-delay:.24s;"><h4>Attendee Dignity</h4><p>Every attendee is treated with courtesy and respect. Harassment — physical, verbal or otherwise — of any attendee or fellow volunteer results in immediate removal from the department.</p></div>
+      <div class="coc-item reveal" style="transition-delay:.30s;"><h4>Confidentiality</h4><p>Internal matters — personnel decisions, incident details, command communications — stay internal. Disclosure to outsiders or social media without authorization is a disciplinary matter.</p></div>
+      <div class="coc-item reveal" style="transition-delay:.36s;"><h4>Chain of Command</h4><p>The chain of command is respected regardless of a volunteer's personal status or seniority outside the department. Only authorized officers may give orders on the field.</p></div>
+      <div class="coc-item reveal" style="transition-delay:.42s;"><h4>Equipment Accountability</h4><p>All issued gear is your responsibility. Damage or loss in your care is paid for by you — repair cost for repairable items, replacement cost for total losses. See the Equipment Policy page.</p></div>
+      <div class="coc-item reveal" style="transition-delay:.48s;"><h4>Christian Character On and Off Post</h4><p>Volunteers represent the ministry — not only during the event. Conduct unbecoming of a Christian minister before, during or after deployment is subject to review.</p></div>
     </div>
     <div class="callout" style="margin-top:32px;">
       <h4>Breaches &amp; Consequences</h4>
@@ -347,13 +887,197 @@
       <div class="tl-item">
         <span class="when">Beyond YMR</span>
         <h3 style="font-size:1.05rem;">Community Outreach Support</h3>
-        <p>Personnel have supported large-scale evangelical outreach events across Lagos, including the Lagos Holy Ghost Festival at UNILAG, working alongside LASTMA, LNSC and partner cadet corps.</p>
+        <p>Personnel have supported large-scale evangelical outreach events across Lagos, including the Lagos Holy Ghost Festival at UNILAG, with operational coordination involving relevant public safety agencies and partner cadet teams.</p>
       </div>
     </div>
   </div>
 </section>
 
+<!-- PARTNERSHIPS -->
+<section class="partners-section">
+  <div class="container">
 
+    <div class="partners-heading reveal">
+      <div class="eyebrow">Working Together</div>
+      <h2>Partners &amp; Collaborators.</h2>
+      <p>
+        We value the organisations and teams whose collaboration,
+        support and shared commitment contribute to safer and
+        better-coordinated operations.
+      </p>
+    </div>
+
+    <!-- OFFICIAL PARTNERS AND ORGANISATIONAL BADGES -->
+    <div class="partners-grid">
+
+      <article class="partner-card reveal">
+        <div class="partner-logo-wrap">
+          <img src="assets/partners/ymr.jpg" alt="Young Ministers' Retreat logo" loading="lazy">
+        </div>
+        <h3>Young Ministers' Retreat</h3>
+      </article>
+
+      <article class="partner-card reveal" style="transition-delay:.04s;">
+        <div class="partner-logo-wrap">
+          <img src="assets/partners/kf.jpg" alt="Kingsford logo" loading="lazy">
+        </div>
+        <h3>Kingsford</h3>
+      </article>
+
+      <article class="partner-card reveal" style="transition-delay:.08s;">
+        <div class="partner-logo-wrap">
+          <img src="assets/partners/iccon.jpg" alt="Cadet Initiative logo" loading="lazy">
+        </div>
+        <h3>Cadet Initiative</h3>
+      </article>
+
+      <article class="partner-card reveal" style="transition-delay:.12s;">
+        <div class="partner-logo-wrap">
+          <img src="assets/partners/jmbs.jpg" alt="JMBS logo" loading="lazy">
+        </div>
+        <h3>JMBS</h3>
+      </article>
+
+      <article class="partner-card reveal" style="transition-delay:.16s;">
+        <div class="partner-logo-wrap">
+          <img src="assets/logo.png" alt="Flaming Security logo" loading="lazy">
+        </div>
+        <h3>Flaming Security</h3>
+      </article>
+
+    </div>
+
+</section>
+
+<!-- JOINT TASK FORCE OPERATIONS -->
+<section class="jtf-section">
+  <div class="container">
+    <div class="jtf-content">
+
+      <div class="jtf-heading reveal">
+        <div class="eyebrow">Operational Experience</div>
+        <h2>Joint Task Force Operations.</h2>
+        <p>
+          Through one of our leading programmes, Flaming Security
+          has participated in coordinated Joint Task Force (JTF)
+          operations and operational engagements involving public
+          safety and security agencies.
+        </p>
+      </div>
+
+      <div class="jtf-panel reveal">
+        <h3>Inter-Agency Operational Collaboration</h3>
+        <p>
+          These engagements have involved coordination with
+          recognised agencies and public safety organisations,
+          supporting a shared approach to operational readiness,
+          public safety and effective field coordination.
+        </p>
+
+        <div class="jtf-agencies">
+          <span class="jtf-agency">NPF</span>
+          <span class="jtf-agency">LASTMA</span>
+          <span class="jtf-agency">LNSC</span>
+          <span class="jtf-agency">DSS</span>
+        </div>
+
+      
+      </div>
+
+    </div>
+  </div>
+</section>
+<!-- FLAMING AT A GLANCE -->
+<section class="glance-section">
+  <div class="container">
+
+    <div class="glance-heading reveal">
+      <div class="eyebrow">On the Field</div>
+      <h2>Flaming at a Glance.</h2>
+      <p>A look at our operatives in action.</p>
+    </div>
+
+    <div class="glance-grid">
+
+      <div class="glance-item reveal" onclick="openGlance(this)">
+        <img src="assets/images/op1.jpeg" alt="Flaming Security operatives on duty" loading="lazy">
+      </div>
+
+      <div class="glance-item reveal" onclick="openGlance(this)">
+        <img src="assets/images/op2.jpeg" alt="Flaming Security operatives on duty" loading="lazy">
+      </div>
+
+      <div class="glance-item reveal" onclick="openGlance(this)">
+        <img src="assets/images/op3.jpeg" alt="Flaming Security operatives on duty" loading="lazy">
+      </div>
+
+      <div class="glance-item reveal" onclick="openGlance(this)">
+        <img src="assets/images/op4.jpeg" alt="Flaming Security operatives on duty" loading="lazy">
+      </div>
+
+      <div class="glance-item reveal" onclick="openGlance(this)">
+        <img src="assets/images/op5.jpeg" alt="Flaming Security operatives on duty" loading="lazy">
+      </div>
+
+      <div class="glance-item reveal" onclick="openGlance(this)">
+        <img src="assets/images/op6.jpeg" alt="Flaming Security operatives on duty" loading="lazy">
+      </div>
+
+      <div class="glance-item reveal" onclick="openGlance(this)">
+        <img src="assets/images/op7.jpeg" alt="Flaming Security operatives on duty" loading="lazy">
+      </div>
+
+      <div class="glance-item reveal" onclick="openGlance(this)">
+        <img src="assets/images/op8.jpeg" alt="Flaming Security operatives on duty" loading="lazy">
+      </div>
+
+      <div class="glance-item reveal" onclick="openGlance(this)">
+        <img src="assets/images/op9.jpeg" alt="Flaming Security operatives on duty" loading="lazy">
+      </div>
+
+      <div class="glance-item reveal" onclick="openGlance(this)">
+        <img src="assets/images/op10.jpeg" alt="Flaming Security operatives on duty" loading="lazy">
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- IMAGE LIGHTBOX -->
+<div class="glance-lightbox" id="glance-lightbox" onclick="closeGlance(event)">
+  <button class="glance-close" aria-label="Close image">&times;</button>
+  <img src="" alt="Flaming Security operative">
+</div>
+
+<script>
+function openGlance(item){
+  const lightbox=document.getElementById('glance-lightbox');
+  const image=item.querySelector('img');
+
+  lightbox.querySelector('img').src=image.src;
+  lightbox.classList.add('active');
+  document.body.style.overflow='hidden';
+}
+
+function closeGlance(event){
+  if(event.target.id==='glance-lightbox' ||
+     event.target.classList.contains('glance-close')){
+    const lightbox=document.getElementById('glance-lightbox');
+    lightbox.classList.remove('active');
+    lightbox.querySelector('img').src='';
+    document.body.style.overflow='';
+  }
+}
+
+document.addEventListener('keydown',function(event){
+  if(event.key==='Escape'){
+    const lightbox=document.getElementById('glance-lightbox');
+    lightbox.classList.remove('active');
+    lightbox.querySelector('img').src='';
+    document.body.style.overflow='';
+  }
+});
+</script>
 <!-- NEWSLETTER -->
 <div class="newsletter-bar">
   <div class="container newsletter-inner">
@@ -389,6 +1113,7 @@
         <h4>Navigate</h4>
         <ul>
           <li><a href="about.html">About Us</a></li>
+          <li><a href="impact.html">Our Impact</a></li>
           <li><a href="leadership.html">Leadership</a></li>
           <li><a href="units.html">Units &amp; KPIs</a></li>
           <li><a href="operative-registration.html">Register as an Operative</a></li>
@@ -421,22 +1146,20 @@
   </div>
 </footer>
 
-<!-- WhatsApp Float -->
+<!-- WHATSAPP FLOAT -->
 <a href="https://wa.me/2349068549539?text=Hello%20Flaming%20Security%2C%20I'd%20like%20to%20enquire%20about%20your%20services." class="wa-float" target="_blank" rel="noopener" aria-label="Chat on WhatsApp">
   <svg viewBox="0 0 24 24" fill="#fff"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347zM12 0C5.373 0 0 5.373 0 12c0 2.138.566 4.14 1.546 5.877L.057 23.997l6.305-1.654A11.954 11.954 0 0012 24c6.627 0 12-5.373 12-12S18.627 0 12 0zm0 21.894a9.878 9.878 0 01-5.034-1.374l-.36-.214-3.742.981.999-3.648-.235-.374A9.846 9.846 0 012.106 12C2.106 6.58 6.58 2.106 12 2.106S21.894 6.58 21.894 12 17.42 21.894 12 21.894z"/></svg>
 </a>
 
-
 <script>
 function handleNewsletter(e){
   e.preventDefault();
-  var email = e.target.querySelector('input').value;
-  window.location.href = 'mailto:flamingsecurity@gmail.com?subject=Newsletter%20Subscription&body=Please%20add%20me%20to%20your%20mailing%20list%3A%20' + encodeURIComponent(email);
+  var email=e.target.querySelector('input').value;
+  window.location.href='mailto:flamingsecurity@gmail.com?subject=Newsletter%20Subscription&body=Please%20add%20me%3A%20'+encodeURIComponent(email);
 }
 </script>
 
-
-<!-- Sticky Booking Bar -->
+<!-- STICKY BOOKING BAR -->
 <div class="sticky-book" id="sticky-book">
   <div class="sticky-book-text"><strong>Need security for your event?</strong> We're accepting bookings for 2026.</div>
   <div class="sticky-book-actions">
@@ -444,9 +1167,11 @@ function handleNewsletter(e){
     <a href="https://wa.me/2349068549539?text=Hello%2C%20I'd%20like%20to%20book%20Flaming%20Security." target="_blank" rel="noopener" class="btn btn-ghost" style="padding:10px 20px;font-size:.72rem;color:#25D366;border-color:#25D366;">WhatsApp</a>
   </div>
 </div>
+
 <button class="back-top" id="back-top" aria-label="Back to top" onclick="window.scrollTo({top:0,behavior:'smooth'})">
   <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 4l-8 8h5v8h6v-8h5z"/></svg>
 </button>
+
 <nav class="mobile-bottom-nav" aria-label="Mobile navigation">
   <a href="index.html"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"/></svg>Home</a>
   <a href="about.html"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z"/></svg>About</a>
@@ -454,16 +1179,26 @@ function handleNewsletter(e){
   <a href="leadership.html"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M16 11c1.66 0 2.99-1.34 2.99-3S17.66 5 16 5c-1.66 0-3 1.34-3 3s1.34 3 3 3zm-8 0c1.66 0 2.99-1.34 2.99-3S9.66 5 8 5 5 6.34 5 8s1.34 3 3 3zm0 2c-2.33 0-7 1.17-7 3.5V19h14v-2.5c0-2.33-4.67-3.5-7-3.5zm8 0c-.29 0-.62.02-.97.05 1.16.84 1.97 1.97 1.97 3.45V19h6v-2.5c0-2.33-4.67-3.5-7-3.5z"/></svg>Team</a>
   <a href="contact.html"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M20 4H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4l-8 5-8-5V6l8 5 8-5v2z"/></svg>Contact</a>
 </nav>
+
 <script>
 (function(){
   var sticky=document.getElementById('sticky-book');
   var backTop=document.getElementById('back-top');
   var triggered=false;
+
   window.addEventListener('scroll',function(){
     var y=window.scrollY;
-    if(y>500&&!triggered){sticky.classList.add('visible');triggered=true;}
-    if(y<300&&triggered){sticky.classList.remove('visible');triggered=false;}
-    if(backTop){y>400?backTop.classList.add('visible'):backTop.classList.remove('visible');}
+    if(y>500&&!triggered){
+      sticky.classList.add('visible');
+      triggered=true;
+    }
+    if(y<300&&triggered){
+      sticky.classList.remove('visible');
+      triggered=false;
+    }
+    if(backTop){
+      y>400?backTop.classList.add('visible'):backTop.classList.remove('visible');
+    }
   });
 })();
 </script>
